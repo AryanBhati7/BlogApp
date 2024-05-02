@@ -1,12 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import authService from "./appwrite/auth";
+import { login, logout } from "./features/authSlice";
+import Header from "./components/Header/Header";
+import Footer from "./components/Header/Footer";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
-  return (
+  useEffect(() => {
+    authService
+      .getCurrentUser()
+      .then((userData) => {
+        if (userData) {
+          dispatch(login({ userData }));
+        } else {
+          dispatch(logout());
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  return !loading ? (
     <>
-      <h1>Blog App - Mega React Project</h1>
+      <div>Logged In</div>
+      <Header />
+      <Footer />
     </>
+  ) : (
+    <div>Not logged in</div>
   );
 }
 
