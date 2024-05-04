@@ -1,5 +1,5 @@
-import config from "../config/config";
-import { Client, Account, Databases } from "appwrite";
+import conf from "./conf/conf";
+import { Client, ID, Storage, Query, Databases } from "appwrite";
 
 export class Service {
   client = new Client();
@@ -8,8 +8,8 @@ export class Service {
 
   constructor() {
     this.client
-      .setEndpoint(config.appwriteURL)
-      .setProject(config.appwriteProjectID);
+      .setEndpoint(conf.appwriteURL)
+      .setProject(conf.appwriteProjectID);
     this.databases = new Databases(this.client);
     this.bucket = new Storage(this.client);
   }
@@ -59,7 +59,7 @@ export class Service {
       );
       return true;
     } catch (error) {
-      console.log("Appwrite serive :: deleterPost :: error", error);
+      console.log("Appwrite serive :: deletePost :: error", error);
       return false;
     }
   }
@@ -72,15 +72,18 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite serive :: getPost :: error", error);
+      return false;
     }
   }
 
-  async getPosts(queries = [Query.equalTo("status", "active")]) {
+  async getPosts(queries = [Query.equal("status", "active")]) {
     try {
       return await this.databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
         queries
+        //we can add more queries according to our need
+        //[Query.equal("status", "active")]
       );
     } catch (error) {
       console.log("Appwrite serive :: getPosts :: error", error);
@@ -92,7 +95,7 @@ export class Service {
   async uploadFile(file) {
     try {
       return await this.bucket.createFile(
-        config.appwriteBucketID,
+        conf.appwriteBucketID,
         ID.unique(),
         file
       );
@@ -103,7 +106,7 @@ export class Service {
   }
   async deleteFile(fileId) {
     try {
-      await this.bucket.deleteFile(config.appwriteBucketID, fileId);
+      await this.bucket.deleteFile(conf.appwriteBucketID, fileId);
       return true;
     } catch (error) {
       console.log("Appwrite serive :: deleteFile :: error", error);
@@ -112,7 +115,7 @@ export class Service {
   }
   async getFilePreview(fileId) {
     try {
-      return await this.bucket.getFilePreview(config.appwriteBucketID, fileId);
+      return this.bucket.getFilePreview(conf.appwriteBucketID, fileId);
     } catch (error) {
       console.log("Appwrite serive :: getFilePreview :: error", error);
       return false;
