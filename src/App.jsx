@@ -5,6 +5,7 @@ import { login, logout } from "./features/authSlice";
 import Header from "./components/index";
 import Footer from "./components/index";
 import conf from "./conf/conf";
+import LogoutBtn from "./components/Header/LogoutBtn";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -25,11 +26,12 @@ function App() {
 
   return !loading ? (
     <>
-      <div className="min-h-screen bg-slate-600 text-white text-3xl text-center">
+      {/* <div className="min-h-screen bg-slate-600 text-white text-3xl text-center">
         Logged In {conf.appwriteURL}
       </div>
       <Header />
-      <Footer />
+      <Footer /> */}
+      <LogoutBtn />
     </>
   ) : (
     <div>Not logged in</div>
