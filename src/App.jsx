@@ -1,14 +1,12 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
 import { login, logout } from "./features/authSlice";
-import Header from "./components/index";
-import Footer from "./components/index";
-import conf from "./conf/conf";
-import LogoutBtn from "./components/Header/LogoutBtn";
+import { Footer, Header } from "./components/index";
+import { Outlet } from "react-router-dom";
 
 function App() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,17 +23,16 @@ function App() {
   }, []);
 
   return !loading ? (
-    <>
-      {/* <div className="min-h-screen bg-slate-600 text-white text-3xl text-center">
-        Logged In {conf.appwriteURL}
+    <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
+      <div className="w-full block">
+        <Header />
+        <main>
+          TODO: <Outlet />
+        </main>
+        <Footer />
       </div>
-      <Header />
-      <Footer /> */}
-      <LogoutBtn />
-    </>
-  ) : (
-    <div>Not logged in</div>
-  );
+    </div>
+  ) : null;
 }
 
 export default App;

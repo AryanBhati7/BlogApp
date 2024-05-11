@@ -35,6 +35,7 @@ function Header() {
       active: authStatus,
     },
   ];
+
   return (
     <header className="py-3 shadow bg-gray-500">
       <Container>
