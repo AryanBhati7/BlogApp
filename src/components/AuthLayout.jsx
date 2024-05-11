@@ -1,4 +1,4 @@
-import Reac, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +14,9 @@ export default function Protected({ children, authentication = true }) {
     // } else if (authStatus === false) {
     //     navigate("/login")
     // }
+
+    // let authValue = authStatus ===true ? true : false
+
     if (authentication && authStatus !== authentication) {
       navigate("/login");
     } else if (!authentication && authStatus !== authentication) {
