@@ -17,8 +17,11 @@ export default function Post() {
   useEffect(() => {
     if (slug) {
       appwriteService.getPost(slug).then((post) => {
-        if (post) setPost(post);
-        else navigate("/");
+        if (post) {
+          setPost(post);
+          console.log(post);
+          console.log(post.featuredImage);
+        } else navigate("/");
       });
     } else navigate("/");
   }, [slug, navigate]);
@@ -31,6 +34,7 @@ export default function Post() {
       }
     });
   };
+  // console.log(appwriteService.getFilePreview(post.featuredImage));
 
   return post ? (
     <div className="py-8">

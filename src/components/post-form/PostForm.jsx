@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, Input, Select, RTE } from "../index";
 import appwriteService from "../../appwrite/config";
 
-function PostForm({}) {
+function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
+        //if post is there then display that post value
         title: post?.title || "",
         slug: post?.slug || "",
         content: post?.content || "",
@@ -16,12 +17,12 @@ function PostForm({}) {
       },
     });
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     if (post) {
-      const file = data.image[0]
-        ? appwriteService.uploadFile(data.image[0])
+      const file = data.featuredImage[0]
+        ? appwriteService.uploadFile(data.featuredImage[0])
         : null;
 
       if (file) {
@@ -35,17 +36,18 @@ function PostForm({}) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      const file = await appwriteService.uploadFile(data.image[0]);
-      if (file) {
-        const fileID = file.$id;
-        data.featuredImage = fileID;
-        const dbPost = await appwriteService.createPost({
-          ...data,
-          userId: userData.$id,
-        });
-        if (dbPost) {
-          navigate(`/post/${dbPost.$id}`);
-        }
+      const file = await appwriteService.uploadFile(data.featuredImage[0]);
+      const fileId = file.$id;
+      console.log(fileId);
+      data.featuredImage = fileId;
+
+      const dbPost = await appwriteService.createPost({
+        ...data,
+        userId: userData.$id,
+      });
+
+      if (dbPost) {
+        navigate(`/post/${dbPost.$id}`);
       }
     }
   };
@@ -55,12 +57,11 @@ function PostForm({}) {
       // const slug = value.toLowerCase().replace(/ /g, "-")
       // setValue("slug", slug)
       // return slug
-
       return value
         .trim()
         .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]+/g, "-")
-        .replace(/\s/g, "-");
+        .replace(/[^a-zA-Z\d\s]/g, "") // remove non-alphanumeric characters
+        .replace(/\s+/g, "-"); // replace one or more spaces with a hyphen
     }
     return "";
   }, []);
@@ -110,7 +111,7 @@ function PostForm({}) {
           type="file"
           className="mb-4"
           accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("image", { required: !post })}
+          {...register("featuredImage", { required: !post })}
         />
         {post && (
           <div className="w-full mb-4">
