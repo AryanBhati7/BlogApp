@@ -43,7 +43,6 @@ export class Service {
           content,
           featuredImage,
           status,
-          userId,
         }
       );
     } catch (error) {
@@ -113,13 +112,8 @@ export class Service {
       return false;
     }
   }
-  async getFilePreview(fileId) {
-    try {
-      return this.bucket.getFilePreview(conf.appwriteBucketID, fileId);
-    } catch (error) {
-      console.log("Appwrite serive :: getFilePreview :: error", error);
-      return false;
-    }
+  getFilePreview(fileId) {
+    return this.bucket.getFilePreview(conf.appwriteBucketID, fileId);
   }
 }
 const service = new Service();

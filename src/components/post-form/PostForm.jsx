@@ -16,6 +16,7 @@ function PostForm({ post }) {
         status: post?.status || "active",
       },
     });
+
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
 
@@ -90,6 +91,7 @@ function PostForm({ post }) {
         <Input
           label="Slug :"
           placeholder="Slug"
+          readOnly
           className="mb-4"
           {...register("slug", { required: true })}
           onInput={(e) => {
@@ -102,7 +104,7 @@ function PostForm({ post }) {
           label="Content :"
           name="content"
           control={control}
-          defaultValues={getValues("content")}
+          defaultValue={getValues("content")}
         />
       </div>
       <div className="w-1/3 px-2">

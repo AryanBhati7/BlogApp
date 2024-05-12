@@ -19,13 +19,10 @@ export default function Post() {
       appwriteService.getPost(slug).then((post) => {
         if (post) {
           setPost(post);
-          console.log(post);
-          console.log(post.featuredImage);
         } else navigate("/");
       });
     } else navigate("/");
   }, [slug, navigate]);
-
   const deletePost = () => {
     appwriteService.deletePost(post.$id).then((status) => {
       if (status) {
@@ -34,7 +31,6 @@ export default function Post() {
       }
     });
   };
-  // console.log(appwriteService.getFilePreview(post.featuredImage));
 
   return post ? (
     <div className="py-8">
