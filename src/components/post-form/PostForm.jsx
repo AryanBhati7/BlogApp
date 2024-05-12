@@ -6,12 +6,26 @@ import { Button, Input, Select, RTE } from "../index";
 import appwriteService from "../../appwrite/config";
 
 function PostForm({ post }) {
+  const slugTransform = useCallback((value) => {
+    if (value && typeof value === "string") {
+      // const slug = value.toLowerCase().replace(/ /g, "-")
+      // setValue("slug", slug)
+      // return slug
+      return value
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-zA-Z\d\s]/g, "") // remove non-alphanumeric characters
+        .replace(/\s+/g, "-"); // replace one or more spaces with a hyphen
+    }
+    return "";
+  }, []);
+
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
         //if post is there then display that post value
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post ? slugTransform(post.title) : "",
         content: post?.content || "",
         status: post?.status || "active",
       },
@@ -53,21 +67,8 @@ function PostForm({ post }) {
     }
   };
 
-  const slugTransform = useCallback((value) => {
-    if (value && typeof value === "string") {
-      // const slug = value.toLowerCase().replace(/ /g, "-")
-      // setValue("slug", slug)
-      // return slug
-      return value
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-zA-Z\d\s]/g, "") // remove non-alphanumeric characters
-        .replace(/\s+/g, "-"); // replace one or more spaces with a hyphen
-    }
-    return "";
-  }, []);
-
   React.useEffect(() => {
+    console.log(post);
     const subscription = watch((value, { name }) => {
       if (name === "title") {
         setValue("slug", slugTransform(value.title, { shouldValidate: true }));
@@ -91,14 +92,9 @@ function PostForm({ post }) {
         <Input
           label="Slug :"
           placeholder="Slug"
-          readOnly
           className="mb-4"
+          disabled
           {...register("slug", { required: true })}
-          onInput={(e) => {
-            setValue("slug", slugTransform(e.currentTarget.value), {
-              shouldValidate: true,
-            });
-          }}
         />
         <RTE
           label="Content :"
