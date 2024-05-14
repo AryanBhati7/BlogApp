@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { login } from "../features/authSlice";
 import { useDispatch } from "react-redux";
 import { Input, Logo, Button } from "./index";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import authService from "../appwrite/auth";
 
 function Signup() {
@@ -23,6 +23,23 @@ function Signup() {
       }
     } catch (error) {
       setError(error.message);
+    }
+  };
+
+  const googleAuth = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const userData = await authService.googleLogin();
+      if (userData) {
+        dispatch(login(userData));
+        const userData = await authService.getCurrentUser();
+        if (userData) dispatch(login(userData));
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error.message);
+      console.log(error.message);
     }
   };
 
@@ -82,6 +99,9 @@ function Signup() {
             />
             <Button type="submit" className="w-full">
               Create Account
+            </Button>
+            <Button onClick={(e) => googleAuth(e)} className="w-full">
+              Sign in using Google
             </Button>
           </div>
         </form>

@@ -13,6 +13,7 @@ import Post from "./pages/Post.jsx";
 import AddPost from "./pages/AddPost.jsx";
 import Login from "./pages/Login.jsx";
 import { AuthLayout } from "./components/index.js";
+import Error from "./pages/Error.jsx";
 
 const router = createBrowserRouter([
   {
@@ -70,13 +71,15 @@ const router = createBrowserRouter([
         path: "/post/:slug",
         element: <Post />,
       },
+      {
+        path: "/error",
+        element: <Error />,
+      },
     ],
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

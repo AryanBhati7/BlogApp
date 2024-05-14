@@ -1,5 +1,5 @@
 import conf from "../conf/conf";
-import { Client, Account, ID } from "appwrite";
+import { Client, Account, ID, OAuthProvider } from "appwrite";
 
 export class AuthService {
   client = new Client();
@@ -33,7 +33,12 @@ export class AuthService {
 
   async login({ email, password }) {
     try {
-      //in this Session to EmailSession
+      const currentUser = await this.getCurrentUser();
+      if (currentUser) {
+        console.log("User is already logged in");
+        return currentUser;
+      }
+
       const login = await this.account.createEmailPasswordSession(
         email,
         password
@@ -46,7 +51,8 @@ export class AuthService {
 
   async getCurrentUser() {
     try {
-      return await this.account.get();
+      await this.account.get().then((res) => console.log(res));
+      return this.account.get();
     } catch (error) {
       console.log("Appwrite Service Error :: getCurrentUser :: Error", error);
     }
@@ -61,6 +67,26 @@ export class AuthService {
       console.log("Appwrite Service Error :: logOut:: Error", error);
     }
     return null;
+  }
+
+  googleLogin() {
+    try {
+      console.log(
+        this.account.createOAuth2Session(
+          OAuthProvider.Google, // provider
+          "http://localhost:5173/", // success (optional)
+          "http://localhost:5173/error"
+        )
+      );
+      return this.account.createOAuth2Session(
+        OAuthProvider.Google, // provider
+        "http://localhost:5173/", // success (optional)
+        "http://localhost:5173/error", // failure (optional)
+        [] // scopes (optional)
+      );
+    } catch (error) {
+      console.error("Error during Google login:", error);
+    }
   }
 }
 

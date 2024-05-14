@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from "react";
 import appwriteService from "../appwrite/config";
 import { Container, PostCard } from "../components/index";
+import { getPublicPosts as getPublicPostsSlice } from "../features/postSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Home() {
-  const [posts, setPosts] = useState([]);
-
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts.publicPosts);
   useEffect(() => {
     appwriteService.getPosts().then((posts) => {
       if (posts) {
-        setPosts(posts.documents);
+        dispatch(getPublicPostsSlice({ posts: posts.documents }));
       }
     });
   }, []);
+
+  // const [posts, setPosts] = useState([]);
+
+  // useEffect(() => {
+  //   appwriteService.getPosts().then((posts) => {
+  //     if (posts) {
+  //       setPosts(posts.documents);
+  //     }
+  //   });
+  // }, []);
 
   if (posts.length === 0) {
     return (
