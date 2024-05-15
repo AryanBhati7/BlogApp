@@ -1,8 +1,9 @@
 import React from "react";
 import appwriteService from "../appwrite/config";
 import { Link } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
 
-function PostCard({ $id, title, featuredImage }) {
+function PostCard({ $id, title, featuredImage, $createdAt }) {
   const imgSrc = appwriteService.getFilePreview(featuredImage);
   return (
     <Link to={`/post/${$id}`}>
@@ -13,6 +14,15 @@ function PostCard({ $id, title, featuredImage }) {
             alt={title}
             className="rounded-xl"
           />
+        </div>
+        <div>
+          {new Date($createdAt).toLocaleDateString(undefined, {
+            month: "long",
+            day: "numeric",
+          })}
+          {" ("}
+          {formatDistanceToNow(new Date($createdAt), { addSuffix: true })}
+          {")"}
         </div>
         <h2 className="text-xl font-bold">{title}</h2>
       </div>

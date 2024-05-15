@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { login } from "../features/authSlice";
+import { login as authLogin } from "../features/authSlice";
 import { useDispatch } from "react-redux";
 import { Input, Logo, Button } from "./index";
 import { useForm } from "react-hook-form";
 import authService from "../appwrite/auth";
-import { Client, Account } from "appwrite";
 
 function Signup() {
   const { register, handleSubmit } = useForm();
@@ -15,13 +14,16 @@ function Signup() {
 
   const create = async (data) => {
     setError("");
+    console.log(data);
     try {
-      const userData = await authService.createAccount(data);
-      if (userData) {
-        const userData = await authService.getCurrentUser();
-        if (userData) dispatch(login(userData));
-        navigate("/home");
-      }
+      const accData = await authService.createAccount(data);
+      console.log(accData);
+      // if (accData) {
+      //   const userData = await authService.getCurrentUser();
+      //   if (userData) dispatch(authLogin(userData));
+      //   navigate("/home");
+      //   console.log("navigation success");
+      // }
     } catch (error) {
       setError(error.message);
     }
@@ -35,14 +37,14 @@ function Signup() {
     // const account = new Account(client);
 
     try {
-      const res = await authService.googleLogin();
-      console.log("google logged in");
-      console.log(res);
-      if (res) {
-        const userData = await authService.getCurrentUser();
-        console.log(userData);
-        // if (userData) dispatch(login(userData));
-      }
+      authService.googleLogin();
+      // console.log("google logged in");
+      // console.log(userData);
+      // if (userData) {
+      //   dispatch(login(userData));
+      //   console.log("Dispatched google succesfuly");
+      //   // if (userData) dispatch(login(userData));
+      // }
       // const session = await account.getSession("current");
       // console.log(session.provider);
       // console.log(session.providerUid);

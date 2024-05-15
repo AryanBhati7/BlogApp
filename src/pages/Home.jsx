@@ -4,29 +4,24 @@ import { Container, PostCard } from "../components/index";
 import { getPublicPosts as getPublicPostsSlice } from "../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
-import { Client, Account } from "appwrite";
 
 function Home() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.publicPosts);
+  const userDetail = useSelector((state) => state.auth.userData);
 
   useEffect(() => {
+    authService.getCurrentUser().then((data) => {
+      console.log(data);
+    });
+    // console.log(userDetail);
+
     appwriteService.getPosts().then((posts) => {
       if (posts) {
         dispatch(getPublicPostsSlice({ posts: posts.documents }));
       }
     });
   }, []);
-
-  // const [posts, setPosts] = useState([]);
-
-  // useEffect(() => {
-  //   appwriteService.getPosts().then((posts) => {
-  //     if (posts) {
-  //       setPosts(posts.documents);
-  //     }
-  //   });
-  // }, []);
 
   if (posts.length === 0) {
     return (

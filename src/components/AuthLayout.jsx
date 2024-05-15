@@ -22,7 +22,14 @@ export default function Protected({ children, authentication = true }) {
     // } else if (!authentication && authStatus !== authentication) {
     //   navigate("/");
     // }
-
+    // const cookieFallback = localStorage.getItem("cookieFallback");
+    // if (
+    //   cookieFallback === "[]" ||
+    //   cookieFallback === null ||
+    //   cookieFallback === undefined
+    // ) {
+    //   navigate("/login");
+    // }
     if (authStatus !== authentication) {
       navigate(authentication ? "/login" : "/");
     }

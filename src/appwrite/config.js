@@ -18,7 +18,7 @@ export class Service {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseID,
-        conf.appwriteCollectionID,
+        conf.appwritePostsCollectionID,
         slug,
         {
           title,
@@ -36,7 +36,7 @@ export class Service {
     try {
       return await this.databases.updateDocument(
         conf.appwriteDatabaseID,
-        conf.appwriteCollectionID,
+        conf.appwritePostsCollectionID,
         slug,
         {
           title,
@@ -53,7 +53,7 @@ export class Service {
     try {
       await this.databases.deleteDocument(
         conf.appwriteDatabaseID,
-        conf.appwriteCollectionID,
+        conf.appwritePostsCollectionID,
         slug
       );
       return true;
@@ -66,7 +66,7 @@ export class Service {
     try {
       return await this.databases.getDocument(
         conf.appwriteDatabaseID,
-        conf.appwriteCollectionID,
+        conf.appwritePostsCollectionID,
         slug
       );
     } catch (error) {
@@ -79,7 +79,7 @@ export class Service {
     try {
       return await this.databases.listDocuments(
         conf.appwriteDatabaseID,
-        conf.appwriteCollectionID,
+        conf.appwritePostsCollectionID,
         queries
         //we can add more queries according to our need
         //[Query.equal("status", "active")]
@@ -94,7 +94,7 @@ export class Service {
   async uploadFile(file) {
     try {
       return await this.bucket.createFile(
-        conf.appwriteBucketID,
+        conf.appwritePostImgBucketID,
         ID.unique(),
         file
       );
@@ -105,7 +105,7 @@ export class Service {
   }
   async deleteFile(fileId) {
     try {
-      await this.bucket.deleteFile(conf.appwriteBucketID, fileId);
+      await this.bucket.deleteFile(conf.appwritePostImgBucketID, fileId);
       return true;
     } catch (error) {
       console.log("Appwrite serive :: deleteFile :: error", error);
@@ -113,8 +113,7 @@ export class Service {
     }
   }
   getFilePreview(fileId) {
-    console.log(this.bucket.getFilePreview(conf.appwriteBucketID, fileId));
-    return this.bucket.getFilePreview(conf.appwriteBucketID, fileId);
+    return this.bucket.getFilePreview(conf.appwritePostImgBucketID, fileId);
   }
 }
 const service = new Service();

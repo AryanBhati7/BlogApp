@@ -4,6 +4,7 @@ import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Post() {
   const [post, setPost] = useState(null);
@@ -18,6 +19,7 @@ export default function Post() {
     if (slug) {
       appwriteService.getPost(slug).then((post) => {
         if (post) {
+          console.log(post);
           setPost(post);
         } else navigate("/");
       });
@@ -54,6 +56,16 @@ export default function Post() {
               </Button>
             </div>
           )}
+        </div>
+        <div>
+          Posted on{" "}
+          {new Date(post.$createdAt).toLocaleDateString(undefined, {
+            month: "long",
+            day: "numeric",
+          })}
+          {" ("}
+          {formatDistanceToNow(new Date(post.$createdAt), { addSuffix: true })}
+          {")"}
         </div>
         <div className="w-full mb-6">
           <h1 className="text-2xl font-bold">{post.title}</h1>

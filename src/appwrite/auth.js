@@ -1,15 +1,27 @@
 import conf from "../conf/conf";
-import { Client, Account, ID, OAuthProvider } from "appwrite";
+import {
+  Client,
+  Account,
+  ID,
+  OAuthProvider,
+  Databases,
+  Storage,
+  Query,
+} from "appwrite";
 
 export class AuthService {
   client = new Client();
   account;
+  databases;
+  bucke;
 
   constructor() {
     this.client
       .setEndpoint(conf.appwriteURL)
       .setProject(conf.appwriteProjectID);
     this.account = new Account(this.client);
+    this.databases = new Databases(this.client);
+    this.bucket = new Storage(this.client);
   }
 
   async createAccount({ email, password, name }) {
@@ -20,9 +32,19 @@ export class AuthService {
         password,
         name
       );
+
       if (userAccount) {
+        console.log(userAccount);
+        const newUser = await this.saveUserToDB({
+          accountId: userAccount.$id,
+          name: userAccount.name,
+          email: userAccount.email,
+          profileImg: userAccount.profileImg,
+        });
+        return newUser;
+
         //call another method to create user profile
-        this.login({ email, password });
+        // return await this.login({ email, password });
       } else {
         return userAccount;
       }
@@ -31,14 +53,26 @@ export class AuthService {
     }
   }
 
+  async saveUserToDB({ accountId, name, email, profileImg }) {
+    try {
+      return await this.databases.createDocument(
+        conf.appwriteDatabaseID,
+        conf.appwriteUsersCollectionID,
+        ID.unique(),
+        {
+          accountId,
+          name,
+          email,
+          profileImg,
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite service :: saveUserToDB :: error", error);
+    }
+  }
+
   async login({ email, password }) {
     try {
-      const currentUser = await this.getCurrentUser();
-      if (currentUser) {
-        console.log("User is already logged in");
-        return currentUser;
-      }
-
       const login = await this.account.createEmailPasswordSession(
         email,
         password
@@ -49,14 +83,43 @@ export class AuthService {
     }
   }
 
+  async getAccount() {
+    try {
+      const currentAccount = await this.account.get();
+      return currentAccount;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async getCurrentUser() {
     try {
-      return await this.account.getSession("current");
+      const currentAccount = await this.getAccount();
+
+      if (!currentAccount) throw Error;
+
+      const currentUser = await this.databases.listDocuments(
+        conf.appwriteDatabaseID,
+        conf.appwriteUsersCollectionID,
+        [Query.equal("accountId", currentAccount.$id)]
+      );
+
+      if (!currentUser) throw Error;
+
+      return currentUser.documents[0];
     } catch (error) {
-      console.log("Appwrite Service Error :: getCurrentUser :: Error", error);
+      console.log(error);
+      return null;
     }
-    return null;
   }
+
+  // async getCurrentUser() {
+  //   try {
+  //     return await this.account.get();
+  //   } catch (error) {
+  //     console.log("Appwrite Service Error :: getCurrentUser :: Error", error);
+  //   }
+  //   return null;
+  // }
 
   async logOut() {
     try {
@@ -72,13 +135,30 @@ export class AuthService {
     try {
       this.account.createOAuth2Session(
         OAuthProvider.Google, // provider
-        "http://localhost:5173/home", // success (optional)
-        "http://localhost:5173/error", // failure (optional)
-        [] // scopes (optional)
+        "http://localhost:5173/", // success (optional)
+        "http://localhost:5173/login" // failure (optional)
       );
     } catch (error) {
       console.error("Error during Google login:", error);
     }
+  }
+
+  //User Profile
+  async uploadProfile(file) {
+    try {
+      return await this.bucket.createFile(
+        conf.appwriteProfileImgBucketID,
+        ID.unique(),
+        file
+      );
+    } catch (error) {
+      console.log("Appwrite serive :: uploadFile :: error", error);
+      return false;
+    }
+  }
+
+  getProfilePreview(fileId) {
+    return this.bucket.getFilePreview(conf.appwriteProfileImgBucketID, fileId);
   }
 }
 

@@ -17,11 +17,9 @@ function Login() {
     try {
       const session = await authService.login(data);
       if (session) {
-        const userData = await authService.getCurrentUser();
-        if (userData) {
-          await dispatch(authLogin(userData));
-        }
-        navigate("/home");
+        const userData = await authService.getAccount();
+        if (userData) dispatch(authLogin(userData));
+        navigate("/");
       }
     } catch (error) {
       setError(error.message);
