@@ -10,15 +10,16 @@ import {
 } from "appwrite";
 
 export class AuthService {
-  client = new Client();
+  client = new Client()
+    .setEndpoint(conf.appwriteURL)
+    .setProject(conf.appwriteProjectID);
   account;
   databases;
   bucke;
 
   constructor() {
-    this.client
-      .setEndpoint(conf.appwriteURL)
-      .setProject(conf.appwriteProjectID);
+    this.client;
+
     this.account = new Account(this.client);
     this.databases = new Databases(this.client);
     this.bucket = new Storage(this.client);
@@ -26,6 +27,7 @@ export class AuthService {
 
   async createAccount({ email, password, name }) {
     try {
+      // Create the account
       const userAccount = await this.account.create(
         ID.unique(),
         email,
@@ -33,21 +35,34 @@ export class AuthService {
         name
       );
 
-      if (userAccount) {
-        console.log(userAccount);
-        const newUser = await this.saveUserToDB({
-          accountId: userAccount.$id,
-          name: userAccount.name,
-          email: userAccount.email,
-          profileImg: userAccount.profileImg,
-        });
-        return newUser;
-
-        //call another method to create user profile
-        // return await this.login({ email, password });
-      } else {
-        return userAccount;
+      if (!userAccount) {
+        console.log("Account creation failed");
+        return null;
       }
+
+      // Log in
+      const login = await this.login({ email, password });
+
+      if (!login) {
+        console.log("Login failed");
+        return null;
+      }
+
+      // Save the user data to the database
+      const newUser = await this.saveUserToDB({
+        accountId: userAccount.$id,
+        name: userAccount.name,
+        email: userAccount.email,
+        profileImg: "6644de34002d7434f95a",
+      });
+
+      if (!newUser) {
+        console.log("Failed to save user data to the database");
+        return null;
+      }
+
+      console.log(newUser);
+      return newUser;
     } catch (error) {
       console.log("Appwrite Service Error :: createAccount :: Error", error);
     }
@@ -77,6 +92,7 @@ export class AuthService {
         email,
         password
       );
+      console.log("Login Success");
       return login;
     } catch (error) {
       console.log("Appwrite Service Error :: login :: Error", error);

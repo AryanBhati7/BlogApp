@@ -18,12 +18,12 @@ function Signup() {
     try {
       const accData = await authService.createAccount(data);
       console.log(accData);
-      // if (accData) {
-      //   const userData = await authService.getCurrentUser();
-      //   if (userData) dispatch(authLogin(userData));
-      //   navigate("/home");
-      //   console.log("navigation success");
-      // }
+      if (accData) {
+        const userData = await authService.getCurrentUser();
+        if (userData) dispatch(authLogin(userData));
+        navigate("/home");
+        console.log("navigation success");
+      }
     } catch (error) {
       setError(error.message);
     }
