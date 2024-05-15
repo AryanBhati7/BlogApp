@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Input, Logo, Button } from "./index";
 import { useForm } from "react-hook-form";
 import authService from "../appwrite/auth";
+import { Client, Account } from "appwrite";
 
 function Signup() {
   const { register, handleSubmit } = useForm();
@@ -19,7 +20,7 @@ function Signup() {
       if (userData) {
         const userData = await authService.getCurrentUser();
         if (userData) dispatch(login(userData));
-        navigate("/");
+        navigate("/home");
       }
     } catch (error) {
       setError(error.message);
@@ -29,14 +30,23 @@ function Signup() {
   const googleAuth = async (e) => {
     e.preventDefault();
     setError("");
+    // const client = new Client();
+
+    // const account = new Account(client);
+
     try {
-      const userData = await authService.googleLogin();
-      if (userData) {
-        dispatch(login(userData));
+      const res = await authService.googleLogin();
+      console.log("google logged in");
+      console.log(res);
+      if (res) {
         const userData = await authService.getCurrentUser();
-        if (userData) dispatch(login(userData));
-        navigate("/");
+        console.log(userData);
+        // if (userData) dispatch(login(userData));
       }
+      // const session = await account.getSession("current");
+      // console.log(session.provider);
+      // console.log(session.providerUid);
+      // console.log(session.providerAccessToken);
     } catch (error) {
       setError(error.message);
       console.log(error.message);

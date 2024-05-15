@@ -18,11 +18,14 @@ function Login() {
       const session = await authService.login(data);
       if (session) {
         const userData = await authService.getCurrentUser();
-        if (userData) dispatch(authLogin(userData));
-        navigate("/");
+        if (userData) {
+          await dispatch(authLogin(userData));
+        }
+        navigate("/home");
       }
     } catch (error) {
       setError(error.message);
+      console.log(error);
     }
   };
 

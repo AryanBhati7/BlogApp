@@ -3,10 +3,13 @@ import appwriteService from "../appwrite/config";
 import { Container, PostCard } from "../components/index";
 import { getPublicPosts as getPublicPostsSlice } from "../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
+import authService from "../appwrite/auth";
+import { Client, Account } from "appwrite";
 
 function Home() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.publicPosts);
+
   useEffect(() => {
     appwriteService.getPosts().then((posts) => {
       if (posts) {

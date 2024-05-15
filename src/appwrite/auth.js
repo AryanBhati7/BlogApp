@@ -51,8 +51,7 @@ export class AuthService {
 
   async getCurrentUser() {
     try {
-      await this.account.get().then((res) => console.log(res));
-      return this.account.get();
+      return await this.account.getSession("current");
     } catch (error) {
       console.log("Appwrite Service Error :: getCurrentUser :: Error", error);
     }
@@ -71,16 +70,9 @@ export class AuthService {
 
   googleLogin() {
     try {
-      console.log(
-        this.account.createOAuth2Session(
-          OAuthProvider.Google, // provider
-          "http://localhost:5173/", // success (optional)
-          "http://localhost:5173/error"
-        )
-      );
-      return this.account.createOAuth2Session(
+      this.account.createOAuth2Session(
         OAuthProvider.Google, // provider
-        "http://localhost:5173/", // success (optional)
+        "http://localhost:5173/home", // success (optional)
         "http://localhost:5173/error", // failure (optional)
         [] // scopes (optional)
       );
