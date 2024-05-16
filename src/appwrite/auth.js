@@ -25,7 +25,7 @@ export class AuthService {
     this.bucket = new Storage(this.client);
   }
 
-  async createAccount({ email, password, name }) {
+  async createAccount({ email, password, name, username, profileImg }) {
     try {
       // Create the account
       const userAccount = await this.account.create(
@@ -52,23 +52,22 @@ export class AuthService {
       const newUser = await this.saveUserToDB({
         accountId: userAccount.$id,
         name: userAccount.name,
+        username: username,
         email: userAccount.email,
-        profileImg: "6644de34002d7434f95a",
+        profileImg: profileImg || "6644de34002d7434f95a",
       });
 
       if (!newUser) {
         console.log("Failed to save user data to the database");
         return null;
       }
-
-      console.log(newUser);
       return newUser;
     } catch (error) {
       console.log("Appwrite Service Error :: createAccount :: Error", error);
     }
   }
 
-  async saveUserToDB({ accountId, name, email, profileImg }) {
+  async saveUserToDB({ accountId, name, email, profileImg, username }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseID,
@@ -76,6 +75,7 @@ export class AuthService {
         ID.unique(),
         {
           accountId,
+          username,
           name,
           email,
           profileImg,
@@ -127,15 +127,6 @@ export class AuthService {
       return null;
     }
   }
-
-  // async getCurrentUser() {
-  //   try {
-  //     return await this.account.get();
-  //   } catch (error) {
-  //     console.log("Appwrite Service Error :: getCurrentUser :: Error", error);
-  //   }
-  //   return null;
-  // }
 
   async logOut() {
     try {

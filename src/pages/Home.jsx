@@ -4,18 +4,16 @@ import { Container, PostCard } from "../components/index";
 import { getPublicPosts as getPublicPostsSlice } from "../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
+import { Onboarding } from "../components/index";
 
 function Home() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.publicPosts);
-  const userDetail = useSelector((state) => state.auth.userData);
+  const authStatus = useSelector((state) => state.auth.status);
 
   useEffect(() => {
-    authService.getCurrentUser().then((data) => {
-      console.log(data);
-    });
-    // console.log(userDetail);
-
+    const userData = authService.getAccount();
+    console.log(userData);
     appwriteService.getPosts().then((posts) => {
       if (posts) {
         dispatch(getPublicPostsSlice({ posts: posts.documents }));
@@ -23,7 +21,7 @@ function Home() {
     });
   }, []);
 
-  if (posts.length === 0) {
+  if (authStatus === false) {
     return (
       <div className="w-full py-8 mt-4 text-center">
         <Container>
@@ -48,6 +46,7 @@ function Home() {
             </div>
           ))}
         </div>
+        <Onboarding />
       </Container>
     </div>
   );

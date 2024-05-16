@@ -14,15 +14,24 @@ function Signup() {
 
   const create = async (data) => {
     setError("");
-    console.log(data);
     try {
+      if (data.profileImg) {
+        const profile = await authService.uploadProfile(data.profileImg[0]);
+        const profilefileId = profile.$id;
+        data.profileImg = profilefileId;
+      }
       const accData = await authService.createAccount(data);
-      console.log(accData);
       if (accData) {
         const userData = await authService.getCurrentUser();
-        if (userData) dispatch(authLogin(userData));
-        navigate("/home");
-        console.log("navigation success");
+        if (userData) {
+          dispatch(authLogin(userData));
+          if (!userData.hasCompletedOnboarding) {
+            navigate("/onboarding");
+          } else {
+            navigate("/");
+          }
+        }
+        navigate("/login");
       }
     } catch (error) {
       setError(error.message);
@@ -38,13 +47,6 @@ function Signup() {
 
     try {
       authService.googleLogin();
-      // console.log("google logged in");
-      // console.log(userData);
-      // if (userData) {
-      //   dispatch(login(userData));
-      //   console.log("Dispatched google succesfuly");
-      //   // if (userData) dispatch(login(userData));
-      // }
       // const session = await account.getSession("current");
       // console.log(session.provider);
       // console.log(session.providerUid);
@@ -82,11 +84,28 @@ function Signup() {
         <form onSubmit={handleSubmit(create)}>
           <div className="space-y-5">
             <Input
+              label="Profile Image"
+              type="file"
+              placeholder="Enter your full name"
+              {...register("profileImg", {
+                required: false, //this is for react hook form
+              })}
+            />
+            <Input
               label="Full Name :"
               placeholder="Enter your full name"
               {...register("name", {
                 required: true,
               })}
+              required //to add red astrick on the label name
+            />
+            <Input
+              label="Username :"
+              placeholder="Enter your username"
+              {...register("username", {
+                required: true,
+              })}
+              required //to add red astrick on the label name
             />
             <Input
               label="Email: "
@@ -100,6 +119,7 @@ function Signup() {
                     "Email address must be a valid address",
                 },
               })}
+              required //to add red astrick on the label name
             />
             <Input
               label="Password :"
@@ -108,6 +128,7 @@ function Signup() {
               {...register("password", {
                 required: true,
               })}
+              required //to add red astrick on the label name
             />
             <Button type="submit" className="w-full">
               Create Account

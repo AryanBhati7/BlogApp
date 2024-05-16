@@ -12,7 +12,15 @@ import PostForm from "./post-form/PostForm";
 import Container from "./Container/Container";
 import PostCard from "./PostCard";
 import AuthLayout from "./AuthLayout";
+import Onboarding from "./Onboarding";
+import Textarea from "./Textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "./Avatar";
 export {
+  Onboarding,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Textarea,
   AuthLayout,
   PostCard,
   Login,
