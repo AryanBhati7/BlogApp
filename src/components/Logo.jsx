@@ -2,7 +2,7 @@ import React from "react";
 
 function Logo() {
   return (
-    <div className="relative flex items-center gap-5">
+    <div className="relative flex items-center gap-5 mt-3">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="3rem"
@@ -19,10 +19,10 @@ function Logo() {
         </g>
       </svg>
       <div
-        className="text-2xl absolute z-50 font-bold tracking-widest ml-12 text-[#e10112]
+        className="text-2.5xl absolute z-50 font-bold tracking-widest ml-12 text-[#e10112]
 rounded-lg focus:outline-none focus:shadow-outline"
       >
-        BlogApp
+        Blog<span className="dark:text-white text-darken">App</span>
       </div>
     </div>
   );

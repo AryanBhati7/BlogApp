@@ -3,6 +3,7 @@ import { Container, Logo, LogoutBtn } from "../index";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ThemeToggler from "./ThemeToggler";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
@@ -42,7 +43,7 @@ function Header() {
   ];
 
   return (
-    <header className="py-3 shadow bg-[#f2f2f2]">
+    <header className="py-3 shadow bg-background ">
       <Container>
         <nav className="flex">
           <div className="mr-4">
@@ -56,13 +57,16 @@ function Header() {
                 <li key={item.name}>
                   <button
                     onClick={() => navigate(item.slug)}
-                    className="inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full"
+                    className=" dark:text-white font-mono inline-bock px-6 py-2 text-2.5xl text-darken duration-200 hover:bg-blue-100 rounded-full"
                   >
                     {item.name}
                   </button>
                 </li>
               ) : null
             )}
+            <li>
+              <ThemeToggler />
+            </li>
             {authStatus && (
               <li>
                 <LogoutBtn />

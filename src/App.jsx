@@ -24,12 +24,12 @@ function App() {
   }, []);
 
   return !loading ? (
-    <div className="w-full block h-screen bg-[#f2f2f2]">
-      {location.pathname !== "/onboarding" && <Header />}
+    <div className="w-full block h-screen bg-background ">
+      <Header />
       <main>
         <Outlet />
       </main>
-      {location.pathname !== "/onboarding" && <Footer />}
+      <Footer />
     </div>
   ) : null;
 }
