@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import appwriteService from "../appwrite/config";
-import { Container, PostCard } from "../components/index";
+import { Container, PostCard, Landingpage } from "../components/index";
 import { getPublicPosts as getPublicPostsSlice } from "../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
@@ -20,19 +20,7 @@ function Home() {
   }, []);
 
   if (authStatus === false) {
-    return (
-      <div className="w-full py-8 mt-4 text-center">
-        <Container>
-          <div className="flex flex-wrap">
-            <div className="p-2 w-full">
-              <h1 className="text-2xl font-bold hover:text-gray-500">
-                Login to Read Posts
-              </h1>
-            </div>
-          </div>
-        </Container>
-      </div>
-    );
+    return <Landingpage />;
   }
   return (
     <div className="w-full py-8">

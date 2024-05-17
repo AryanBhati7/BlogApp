@@ -15,7 +15,9 @@ import AuthLayout from "./AuthLayout";
 import Onboarding from "./Onboarding";
 import Textarea from "./Textarea";
 import { Avatar, AvatarName, AvatarImage } from "./Avatar";
+import Landingpage from "./Landingpage";
 export {
+  Landingpage,
   Onboarding,
   Avatar,
   AvatarName,
