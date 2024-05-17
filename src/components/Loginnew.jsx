@@ -22,120 +22,110 @@ function Loginnew() {
             </p>
 
             <div class="mt-6">
-              <h1 class="text-gray-500 dark:text-gray-300">
-                Select type of account
-              </h1>
-
-              <div class="mt-3 md:flex md:items-center md:-mx-2">
-                <button class="flex justify-center w-full px-6 py-3 text-white bg-blue-500 rounded-md md:w-auto md:mx-2 focus:outline-none">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-
-                  <span class="mx-2">client</span>
-                </button>
-
-                <button class="flex justify-center w-full px-6 py-3 mt-4 text-blue-500 border border-blue-500 rounded-md md:mt-0 md:w-auto md:mx-2 dark:border-blue-400 dark:text-blue-400 focus:outline-none">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-
-                  <span class="mx-2">worker</span>
-                </button>
-              </div>
+              <p className="mt-2 text-center text-base text-black/60">
+                Already have an account?&nbsp;
+                <Link
+                  to="/login"
+                  className="font-medium text-primary transition-all duration-200 hover:underline"
+                >
+                  Sign In
+                </Link>
+              </p>
             </div>
+            {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
 
-            <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+            <form
+              onSubmit={handleSubmit(create)}
+              class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2"
+            >
               <div>
-                <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-                  First Name
-                </label>
-                <input
+                <Input
+                  labelClasses="block mb-2 text-sm text-gray-600 dark:text-gray-200"
+                  label="Profile Image"
+                  type="file"
+                  placeholder="Enter your full name"
+                  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  {...register("profileImg", {
+                    required: false, //this is for react hook form
+                  })}
+                />
+              </div>
+
+              <div></div>
+              <Input
+                labelClasses="block mb-2 text-sm text-gray-600 dark:text-gray-200"
+                label="Full Name :"
+                type="text"
+                placeholder="John Wick"
+                className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                {...register("name", {
+                  required: true, //this is for react hook form
+                })}
+                required
+              />
+              <div>
+                <Input
+                  labelClasses="block mb-2 text-sm text-gray-600 dark:text-gray-200"
+                  label="Username :"
                   type="text"
-                  placeholder="John"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  placeholder="johnwick7"
+                  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  {...register("username", {
+                    required: true, //this is for react hook form
+                  })}
+                  required
                 />
               </div>
 
               <div>
-                <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-                  Last name
-                </label>
-                <input
+                <Input
+                  labelClasses="block mb-2 text-sm text-gray-600 dark:text-gray-200"
+                  label="Email :"
                   type="text"
-                  placeholder="Snow"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  placeholder="johnwick07@gmail.com"
+                  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  {...register("email", {
+                    required: true,
+                    validate: {
+                      matchPatern: (value) =>
+                        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+                          value
+                        ) || "Email address must be a valid address",
+                    }, //this is for react hook form
+                  })}
+                  required
                 />
               </div>
 
               <div>
-                <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-                  Phone number
-                </label>
-                <input
-                  type="text"
-                  placeholder="XXX-XX-XXXX-XXX"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-              </div>
-
-              <div>
-                <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  placeholder="johnsnow@example.com"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-              </div>
-
-              <div>
-                <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-                  Password
-                </label>
-                <input
+                <Input
+                  labelClasses="block mb-2 text-sm text-gray-600 dark:text-gray-200"
+                  label="Password :"
                   type="password"
                   placeholder="Enter your password"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  {...register("password", {
+                    required: true, //this is for react hook form
+                  })}
+                  required
                 />
               </div>
 
               <div>
-                <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
-                  Confirm password
-                </label>
-                <input
+                <Input
+                  labelClasses="block mb-2 text-sm text-gray-600 dark:text-gray-200"
+                  label="Confirm Password :"
                   type="password"
-                  placeholder="Enter your password"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  placeholder="Confirm your password"
+                  className="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                  required
                 />
               </div>
-
-              <button class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                <span>Sign Up </span>
+              <Button
+                type="submit"
+                className="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+              >
+                <span>Create Account </span>
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +139,8 @@ function Loginnew() {
                     clip-rule="evenodd"
                   />
                 </svg>
-              </button>
+              </Button>
+              <button class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"></button>
             </form>
           </div>
         </div>

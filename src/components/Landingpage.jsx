@@ -1,7 +1,5 @@
 import React from "react";
 import heroImg from "../assets/img/hero.png";
-import calenderImg from "../assets/img/calendar.svg";
-import Container from "./Container/Container";
 import "../assets/css/landingpage.css";
 import AOS from "aos";
 import "aos/dist/aos.css";

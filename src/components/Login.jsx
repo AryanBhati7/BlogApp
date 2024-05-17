@@ -92,7 +92,11 @@ function Login() {
                 Sign in
               </Button>
 
-              <hr />
+              <div className="flex items-center justify-center mt-4">
+                <hr className="w-full border-gray-300" />
+                <span className="px-2 text-gray-500">or</span>
+                <hr className="w-full border-gray-300" />
+              </div>
               <Button
                 onClick={(e) => googleAuth(e)}
                 className="flex mt-1 bg-white flex-wrap justify-center items-center w-full border border-gray-300 hover:border-gray-600 px-2 py-1.5 rounded-md text-gray-800"
