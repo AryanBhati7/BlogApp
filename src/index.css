@@ -2,34 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.text-primary {
-  @apply text-light-primary;
-}
-
-.bg-primary {
-  @apply bg-light-primary;
-}
-
-.text-background {
-  @apply text-light-background;
-}
-
-.bg-background {
-  @apply bg-light-background;
-}
-
-body.dark .text-primary {
-  @apply text-dark-primary;
-}
-
-body.dark .bg-primary {
-  @apply bg-dark-primary;
-}
-
-body.dark .text-background {
-  @apply text-dark-background;
-}
-
-body.dark .bg-background {
-  @apply bg-dark-background;
+.input-filled:valid {
+  background-color: #e8e8e8;
+  color: black;
 }

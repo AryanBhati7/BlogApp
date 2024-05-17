@@ -43,12 +43,12 @@ function Header() {
   ];
 
   return (
-    <header className="py-3 shadow bg-background ">
+    <header className="py-3 shadow bg-background dark:bg-dark-bg">
       <Container>
         <nav className="flex">
           <div className="mr-4">
             <Link to="/">
-              <Logo width="70px" />
+              <Logo textColor="primary" darkTextColor="white" />
             </Link>
           </div>
           <ul className="flex ml-auto">

@@ -24,7 +24,7 @@ function App() {
   }, []);
 
   return !loading ? (
-    <div className="w-full block h-screen bg-background ">
+    <div className="w-full block h-screen bg-background dark:bg-dark-bg ">
       <Header />
       <main>
         <Outlet />

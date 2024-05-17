@@ -5,6 +5,7 @@ import { Button, Input, Logo } from "./index";
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
+import "../index.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -26,25 +27,32 @@ function Login() {
       console.log(error);
     }
   };
+  const googleAuth = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      authService.googleLogin();
+    } catch (error) {
+      setError(error.message);
+      console.log(error.message);
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <div
-        className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
-      >
+    <div className="flex items-center justify-center w-full ">
+      <div className="mx-auto w-full max-w-lg bg-dark-bg dark:bg-background rounded-xl p-10 border border-black/10">
         <div className="mb-2 flex justify-center">
-          <span className="inline-block w-full max-w-[100px]">
-            <Logo width="100%" />
-          </span>
+          <Logo textColor="white" darkTextColor="primary" />
         </div>
-        <h2 className="text-center text-2xl font-bold leading-tight">
+        <h2 className="text-center text-2xl font-bold leading-tight dark:text-primary text-white">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-center text-base text-black/60">
+        <p className="mt-2 text-center text-base dark:text-black/60 text-gray-300 ">
           Don&apos;t have any account?&nbsp;
           <Link
             to="/signup"
-            className="font-medium text-primary transition-all duration-200 hover:underline"
+            className="font-medium dark:text-primary text-white transition-all duration-200 hover:underline"
           >
             Sign Up
           </Link>
@@ -53,6 +61,7 @@ function Login() {
         <form onSubmit={handleSubmit(login)} className="mt-8">
           <div className="space-y-5">
             <Input
+              labelClasses="dark:text-black text-white"
               label="Email: "
               placeholder="Enter your email"
               type="email"
@@ -66,6 +75,7 @@ function Login() {
               })}
             />
             <Input
+              labelClasses="dark:text-black text-white"
               label="Password: "
               type="password"
               placeholder="Enter your password"
@@ -73,9 +83,27 @@ function Login() {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">
-              Sign in
-            </Button>
+
+            <div className="mb-3">
+              <Button
+                type="submit"
+                className="mb-1.5 block w-full text-center text-white bg-primary hover:bg-blue-600 px-2 py-1.5 rounded-md"
+              >
+                Sign in
+              </Button>
+
+              <hr />
+              <Button
+                onClick={(e) => googleAuth(e)}
+                className="flex mt-1 bg-white flex-wrap justify-center items-center w-full border border-gray-300 hover:border-gray-600 px-2 py-1.5 rounded-md text-gray-800"
+              >
+                <img
+                  className="w-5 mr-2"
+                  src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
+                />
+                Sign in with Google
+              </Button>
+            </div>
           </div>
         </form>
       </div>

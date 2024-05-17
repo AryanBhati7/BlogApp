@@ -10,11 +10,10 @@ export default {
       colors: {
         "theme-color": "#e10112",
         // "light-primary": "#e10112",
-        "light-primary": "#00008B",
-        "light-background": "#f2f2f2",
-
+        primary: "#00008B",
+        background: "#f2f2f2",
         "dark-primary": "#ffffff",
-        "dark-background": "#1a202c",
+        "dark-bg": "#1a202c",
       },
     },
   },

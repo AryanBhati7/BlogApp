@@ -12,18 +12,13 @@ function ThemeToggler() {
   useEffect(() => {
     const body = document.body;
     if (isDarkMode) {
-      body.setAttribute("data-theme", "dark");
       body.classList.add("dark");
-      body.classList.add("text-white");
       localStorage.setItem("theme", "dark");
     } else {
-      body.setAttribute("data-theme", "light");
       body.classList.remove("dark");
-      body.classList.remove("text-white");
       localStorage.setItem("theme", "light");
     }
   }, [isDarkMode]);
-
   const handleToggle = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -34,7 +29,7 @@ function ThemeToggler() {
         type="checkbox"
         className="theme-controller"
         value="synthwave"
-        checked={isDarkMode}
+        defaultChecked={isDarkMode}
         onChange={handleToggle}
       />
 

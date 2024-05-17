@@ -6,6 +6,7 @@ import "../assets/css/landingpage.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Landingpage() {
   useEffect(() => {
@@ -13,13 +14,13 @@ function Landingpage() {
   }, []);
 
   return (
-    <div className="h-auto bg-background">
+    <div className="h-auto bg-background dark:bg-dark-bg">
       <div className="max-w-screen-xl px-8 mx-auto flex flex-col lg:flex-row items-center">
         <div className="flex flex-col w-full lg:w-6/12 justify-center lg:pt-24 items-start text-center lg:text-left mb-5 md:mb-0">
           <h1
             data-aos="fade-right"
             data-aos-once="true"
-            className="my-4 text-5xl font-bold leading-tight text-primary"
+            className="my-4 text-5xl font-bold leading-tight text-primary dark:text-dark-primary"
           >
             <span className="text-theme-color">Blogging</span> Online is now
             much easier
@@ -28,7 +29,7 @@ function Landingpage() {
             data-aos="fade-down"
             data-aos-once="true"
             data-aos-delay="300"
-            className="leading-normal mb-8 text-justify text-2.5xl text-primary"
+            className="leading-normal mb-8 text-justify text-2.5xl text-primary dark:text-dark-primary"
           >
             Write Blogs on various topics and start your journey as a impactful{" "}
             <span className="text-theme-color font-bold">Content Creator</span>,
@@ -41,9 +42,11 @@ function Landingpage() {
             data-aos-delay="700"
             className="w-full md:flex items-center justify-center lg:justify-start md:space-x-5"
           >
-            <button className="lg:mx-0 bg-[#e10112] text-white text-xl font-bold rounded-full py-4 px-9 focus:outline-none transform transition hover:scale-110 duration-300 ease-in-out">
-              Join Now
-            </button>
+            <Link to="/signup">
+              <button className="lg:mx-0 bg-[#e10112] text-white text-xl font-bold rounded-full py-4 px-9 focus:outline-none transform transition hover:scale-110 duration-300 ease-in-out">
+                Join Now
+              </button>
+            </Link>
           </div>
         </div>
         <div className="w-full lg:w-6/12 lg:-mt-10 relative pt-16" id="hero">

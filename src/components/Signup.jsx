@@ -36,16 +36,9 @@ function Signup() {
   const googleAuth = async (e) => {
     e.preventDefault();
     setError("");
-    // const client = new Client();
-
-    // const account = new Account(client);
 
     try {
       authService.googleLogin();
-      // const session = await account.getSession("current");
-      // console.log(session.provider);
-      // console.log(session.providerUid);
-      // console.log(session.providerAccessToken);
     } catch (error) {
       setError(error.message);
       console.log(error.message);
