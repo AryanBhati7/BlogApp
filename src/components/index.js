@@ -14,11 +14,11 @@ import PostCard from "./PostCard";
 import AuthLayout from "./AuthLayout";
 import Onboarding from "./Onboarding";
 import Textarea from "./Textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "./Avatar";
+import { Avatar, AvatarName, AvatarImage } from "./Avatar";
 export {
   Onboarding,
   Avatar,
-  AvatarFallback,
+  AvatarName,
   AvatarImage,
   Textarea,
   AuthLayout,

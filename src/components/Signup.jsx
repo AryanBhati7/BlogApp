@@ -25,13 +25,8 @@ function Signup() {
         const userData = await authService.getCurrentUser();
         if (userData) {
           dispatch(authLogin(userData));
-          if (!userData.hasCompletedOnboarding) {
-            navigate("/onboarding");
-          } else {
-            navigate("/");
-          }
         }
-        navigate("/login");
+        navigate("/onboarding");
       }
     } catch (error) {
       setError(error.message);

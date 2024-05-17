@@ -34,6 +34,11 @@ function Header() {
       slug: "/add-post",
       active: authStatus,
     },
+    {
+      name: "Profile",
+      slug: "/profile",
+      active: authStatus,
+    },
   ];
 
   return (

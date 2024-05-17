@@ -14,6 +14,7 @@ import AddPost from "./pages/AddPost.jsx";
 import Login from "./pages/Login.jsx";
 import { AuthLayout } from "./components/index.js";
 import Error from "./pages/Error.jsx";
+import Onboarding from "./pages/Onboarding.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/onboarding",
+        element: <Onboarding />,
       },
       {
         path: "/login",

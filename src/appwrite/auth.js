@@ -69,7 +69,7 @@ export class AuthService {
 
   async saveUserToDB({ accountId, name, email, profileImg, username }) {
     try {
-      return await this.databases.createDocument(
+      const userDataSaved = await this.databases.createDocument(
         conf.appwriteDatabaseID,
         conf.appwriteUsersCollectionID,
         ID.unique(),
@@ -81,6 +81,7 @@ export class AuthService {
           profileImg,
         }
       );
+      console.log(userDataSaved);
     } catch (error) {
       console.log("Appwrite service :: saveUserToDB :: error", error);
     }
@@ -92,6 +93,7 @@ export class AuthService {
         email,
         password
       );
+      console.log(login);
       console.log("Login Success");
       return login;
     } catch (error) {
@@ -102,6 +104,8 @@ export class AuthService {
   async getAccount() {
     try {
       const currentAccount = await this.account.get();
+      console.log(currentAccount);
+      console.log("got current account");
       return currentAccount;
     } catch (error) {
       console.log(error);
@@ -122,6 +126,19 @@ export class AuthService {
       if (!currentUser) throw Error;
 
       return currentUser.documents[0];
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+  async getUserInfo(userId) {
+    try {
+      const userInfo = await this.databases.listDocuments(
+        conf.appwriteDatabaseID,
+        conf.appwriteUsersCollectionID,
+        [Query.equal("accountId", userId)]
+      );
+      return userInfo;
     } catch (error) {
       console.log(error);
       return null;

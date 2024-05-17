@@ -35,6 +35,7 @@ function PostForm({ post }) {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
+    console.log(data);
     if (post) {
       const file = data.featuredImage[0]
         ? appwriteService.uploadFile(data.featuredImage[0])
@@ -59,7 +60,6 @@ function PostForm({ post }) {
         ...data,
         userId: userData.$id,
       });
-
       if (dbPost) {
         navigate(`/post/${dbPost.$id}`);
       }

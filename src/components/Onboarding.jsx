@@ -1,27 +1,25 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  Textarea,
-  Input,
-} from "./index";
+import { useSelector } from "react-redux";
+import authService from "../appwrite/auth";
+import { Avatar, AvatarImage, Button, Textarea, Input } from "./index";
 
 export default function OnBoarding() {
+  // const userDetails = useSelector((state) => state.auth.userData);
+  // console.log(userDetails);
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+    <div className="min-h-screen w-full flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-9/12">
         <h1 className="text-3xl font-bold mb-6">Build your profile</h1>
         <p className="text-sm mb-8">
           Tell us a little bit about yourself — this is how others will see you
-          on DEV Community. You’ll always be able to edit this later in your
-          Settings.
+          on BlogApp. You’ll always be able to edit this later in your Profile
+          Section
         </p>
-        <div className="flex items-center mb-6">
+        <div className="flex items-center mb-6 gap-5">
           <Avatar>
             <AvatarImage
               alt="profile_image"
-              src="https://upload.wikimedia.org/wikipedia/commons/5/59/User-avatar.svg"
+              // src=""
+              // src={authService.getProfilePreview(userDetails.profileImg)}
             />
           </Avatar>
           <div className="mt-2 text-center">
