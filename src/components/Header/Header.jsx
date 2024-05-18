@@ -64,14 +64,14 @@ function Header() {
                 </li>
               ) : null
             )}
+            {authStatus && (
+              <li>
+                <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2.5xl text-darken duration-200 hover:bg-blue-100 rounded-full" />
+              </li>
+            )}
             <li>
               <ThemeToggler />
             </li>
-            {authStatus && (
-              <li>
-                <LogoutBtn />
-              </li>
-            )}
           </ul>
         </nav>
       </Container>

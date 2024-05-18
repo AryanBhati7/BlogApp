@@ -19,15 +19,15 @@ function Signup() {
     try {
       if (data.profileImg) {
         const profile = await authService.uploadProfile(data.profileImg[0]);
-        const profilefileId = profile.$id;
-        data.profileImg = profilefileId;
+        const profileView = authService.getProfilePreview(profile.$id);
+        data.profileImg = profileView;
+      } else {
+        data.profileImg = authService.createAvatar(data.name);
       }
       const accData = await authService.createAccount(data);
       if (accData) {
-        const userData = await authService.getCurrentUser();
-        if (userData) {
-          dispatch(authLogin(userData));
-        }
+        console.log(accData, "Signup");
+        dispatch(authLogin(accData));
         navigate("/");
       }
     } catch (error) {
@@ -172,7 +172,7 @@ function Signup() {
 
             <Button
               type="submit"
-              className="flex mt-6 items-center justify-between w-full px-6 py-3  tracking-wide text-white capitalize transition-colors duration-300 transform bg-primary hover:bg-blue-600 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+              className="flex mt-6 items-center text-lg justify-center w-full px-6 py-3  tracking-wide text-white capitalize transition-colors duration-300 transform bg-primary hover:bg-blue-600 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
             >
               <span>Create Account </span>
               <svg
@@ -196,7 +196,7 @@ function Signup() {
             </div>
             <Button
               onClick={(e) => googleAuth(e)}
-              className="flex mt-1 bg-white flex-wrap justify-center items-center w-full border border-gray-300 hover:border-gray-600 px-2 py-1.5 rounded-md text-gray-800"
+              className="flex mt-1 text-lg bg-white flex-wrap justify-center items-center w-full border border-gray-300 hover:border-gray-600 px-2 py-1.5 rounded-md text-gray-800"
             >
               <img
                 className="w-5 mr-2"

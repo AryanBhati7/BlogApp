@@ -11,12 +11,13 @@ function Home() {
   const authStatus = useSelector((state) => state.auth.status);
 
   useEffect(() => {
-    appwriteService.getPosts().then((posts) => {
-      if (posts) {
-        console.log(posts);
-        dispatch(getPublicPostsSlice({ posts: posts.documents }));
-      }
-    });
+    if (authStatus) {
+      appwriteService.getPosts().then((posts) => {
+        if (posts) {
+          dispatch(getPublicPostsSlice({ posts: posts.documents }));
+        }
+      });
+    }
   }, []);
 
   if (authStatus === false) {

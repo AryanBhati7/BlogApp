@@ -7,7 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 function AllPost() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.allPosts);
+  const authStatus = useSelector((state) => state.auth.status);
   useEffect(() => {
+    if (!authStatus) return;
     appwriteService.getPosts([]).then((posts) => {
       if (posts) {
         dispatch(getAllPostsSlice({ posts: posts.documents }));

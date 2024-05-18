@@ -15,6 +15,7 @@ import Login from "./pages/Login.jsx";
 import { AuthLayout } from "./components/index.js";
 import Error from "./pages/Error.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
+import Callback from "./pages/Callback.jsx";
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
             <Error />
           </AuthLayout>
         ),
+      },
+      {
+        path: "/callback",
+        element: <Callback />,
       },
     ],
   },

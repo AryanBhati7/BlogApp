@@ -4,7 +4,7 @@ import authService from "../appwrite/auth";
 
 const Avatar = ({ children, className = "" }) => {
   return (
-    <div class="flex flex-row justify-between items-center">{children}</div>
+    <div className="flex flex-row justify-between items-center">{children}</div>
   );
 };
 
@@ -32,7 +32,7 @@ const AvatarImage = ({ className = "", w = "4", h = "4" }) => {
 const AvatarName = ({ className = "" }) => {
   const creatorInfo = useSelector((state) => state.creator);
   return (
-    <span class={`ml-2 text-lg ${className}`}>
+    <span className={`ml-2 text-lg ${className}`}>
       {" "}
       {creatorInfo ? creatorInfo.name : "UserName"}
     </span>

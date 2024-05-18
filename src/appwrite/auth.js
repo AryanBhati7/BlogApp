@@ -7,6 +7,7 @@ import {
   Databases,
   Storage,
   Query,
+  Avatars,
 } from "appwrite";
 
 export class AuthService {
@@ -15,7 +16,8 @@ export class AuthService {
     .setProject(conf.appwriteProjectID);
   account;
   databases;
-  bucke;
+  bucket;
+  avatar;
 
   constructor() {
     this.client;
@@ -23,6 +25,7 @@ export class AuthService {
     this.account = new Account(this.client);
     this.databases = new Databases(this.client);
     this.bucket = new Storage(this.client);
+    this.avatar = new Avatars(this.client);
   }
 
   async createAccount({ email, password, name, username, profileImg }) {
@@ -47,16 +50,15 @@ export class AuthService {
         console.log("Login failed");
         return null;
       }
-
       // Save the user data to the database
       const newUser = await this.saveUserToDB({
         accountId: userAccount.$id,
+        bio: "",
         name: userAccount.name,
         username: username,
         email: userAccount.email,
         profileImg: profileImg || "6644de34002d7434f95a",
       });
-
       if (!newUser) {
         console.log("Failed to save user data to the database");
         return null;
@@ -67,21 +69,30 @@ export class AuthService {
     }
   }
 
-  async saveUserToDB({ accountId, name, email, profileImg, username }) {
+  async saveUserToDB({ accountId, name, email, profileImg, username, bio }) {
     try {
-      const userDataSaved = await this.databases.createDocument(
-        conf.appwriteDatabaseID,
-        conf.appwriteUsersCollectionID,
-        ID.unique(),
-        {
-          accountId,
-          username,
-          name,
-          email,
-          profileImg,
-        }
-      );
-      console.log(userDataSaved);
+      // Check if a user with the same accountId already exists
+      const users = await this.getUserInfo(accountId);
+
+      if (users) {
+        // If the user already exists, return the existing user
+        return users;
+      } else {
+        // If the user doesn't exist, create a new user
+        const userDataSaved = await this.databases.createDocument(
+          conf.appwriteDatabaseID,
+          conf.appwriteUsersCollectionID,
+          ID.unique(),
+          {
+            accountId,
+            username,
+            name,
+            email,
+            profileImg,
+          }
+        );
+        return userDataSaved;
+      }
     } catch (error) {
       console.log("Appwrite service :: saveUserToDB :: error", error);
     }
@@ -93,8 +104,6 @@ export class AuthService {
         email,
         password
       );
-      console.log(login);
-      console.log("Login Success");
       return login;
     } catch (error) {
       console.log("Appwrite Service Error :: login :: Error", error);
@@ -103,9 +112,8 @@ export class AuthService {
 
   async getAccount() {
     try {
-      const currentAccount = await this.account.get();
+      const currentAccount = await this.account.getSession("current");
       console.log(currentAccount);
-      console.log("got current account");
       return currentAccount;
     } catch (error) {
       console.log(error);
@@ -120,14 +128,15 @@ export class AuthService {
       const currentUser = await this.databases.listDocuments(
         conf.appwriteDatabaseID,
         conf.appwriteUsersCollectionID,
-        [Query.equal("accountId", currentAccount.$id)]
+        [Query.equal("accountId", currentAccount.userId)]
       );
 
       if (!currentUser) throw Error;
-
+      console.log(currentUser);
       return currentUser.documents[0];
     } catch (error) {
       console.log(error);
+      throw new Error("No Current Account found");
       return null;
     }
   }
@@ -138,7 +147,8 @@ export class AuthService {
         conf.appwriteUsersCollectionID,
         [Query.equal("accountId", userId)]
       );
-      return userInfo;
+      console.log(userInfo, "getUserInfo");
+      return userInfo.documents[0];
     } catch (error) {
       console.log(error);
       return null;
@@ -159,11 +169,37 @@ export class AuthService {
     try {
       this.account.createOAuth2Session(
         OAuthProvider.Google, // provider
-        "http://localhost:5173/", // success (optional)
+        "http://localhost:5173/callback", // success (optional)
         "http://localhost:5173/login" // failure (optional)
       );
     } catch (error) {
       console.error("Error during Google login:", error);
+    }
+  }
+
+  async getGoogleAccountInfo() {
+    try {
+      // Get the current session
+      const session = await this.getAccount();
+      console.log(session);
+
+      // Get the user's profile information from Google
+      const response = await fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${session.providerAccessToken}`
+      );
+      const data = await response.json();
+
+      // Save the user's information to the database
+      return await this.saveUserToDB({
+        accountId: session.userId,
+        name: data.name,
+        email: data.email,
+        username: data.email.split("@")[0],
+        bio: "",
+        profileImg: data.picture,
+      });
+    } catch (error) {
+      console.error("Error during token exchange:", error);
     }
   }
 
@@ -179,6 +215,10 @@ export class AuthService {
       console.log("Appwrite serive :: uploadFile :: error", error);
       return false;
     }
+  }
+
+  createAvatar(name) {
+    return this.avatar.getInitials(name);
   }
 
   getProfilePreview(fileId) {

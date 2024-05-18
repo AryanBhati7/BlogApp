@@ -22,26 +22,26 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
 
   return (
     <Link to={`/post/${$id}`} className="w-80 m-auto block">
-      <div class="mx-auto px-4 max-w-lg ">
-        <div class="bg-gray-600 dark:bg-white shadow-2xl rounded-lg mb-6 tracking-wide">
-          <div class="">
+      <div className="mx-auto px-4 max-w-lg ">
+        <div className="bg-gray-600 dark:bg-white shadow-2xl rounded-lg mb-6 tracking-wide">
+          <div className="">
             <img
               src={appwriteService.getFilePreview(featuredImage)}
               alt={title}
-              class="w-full h-64 rounded-lg rounded-b-none"
+              className="w-full h-64 rounded-lg rounded-b-none"
             />
           </div>
-          <div class="px-4 py-2 mt-2">
-            <h2 class="font-bold text-2xl dark:text-gray-800 text-white tracking-normal">
+          <div className="px-4 py-2 mt-2">
+            <h2 className="font-bold text-2xl dark:text-gray-800 text-white tracking-normal">
               {title}
             </h2>
-            <div class="flex items-center justify-between mt-2 text-lg ">
-              <div class="flex gap-2 flex-wrap">
+            <div className="flex items-center justify-between mt-2 text-lg ">
+              <div className="flex gap-2 flex-wrap">
                 <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
-                  React
+                  Tag 1
                 </span>
                 <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
-                  Tailwind CSS
+                  Tag 2
                 </span>
               </div>
               <div className="flex items-end">
@@ -59,15 +59,13 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
                 <span className="text-white dark:text-black">5</span>
               </div>
             </div>
-            <div class="author flex items-center -ml-3 my-3">
+            <div className="author flex items-center -ml-3 my-3">
               <AvatarImage className="w-12 h-12 object-cover rounded-full mx-4  shadow" />
 
-              <h2 class="text-lg tracking-tighte gap-4 text-white dark:text-black">
-                <a href="#">
-                  By <AvatarName />
-                </a>
+              <h2 className="text-lg tracking-tighte gap-4 text-white dark:text-black">
+                By <AvatarName />
                 <br></br>
-                <span class="dark:text-gray-600 text-gray-200">
+                <span className="dark:text-gray-600 text-gray-200">
                   {new Date($createdAt).toLocaleDateString(undefined, {
                     month: "long",
                     day: "numeric",

@@ -4,10 +4,8 @@ import authService from "./appwrite/auth";
 import { login, logout } from "./features/authSlice";
 import { Footer, Header } from "./components/index";
 import { Outlet } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 
 function App() {
-  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -20,7 +18,12 @@ function App() {
           dispatch(logout());
         }
       })
-      .finally(() => setLoading(false));
+      .catch((error) => {
+        console.error("Error getting current user:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return !loading ? (
