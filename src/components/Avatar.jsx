@@ -12,12 +12,19 @@ const AvatarImage = ({ className = "", w = "4", h = "4" }) => {
   const creatorInfo = useSelector((state) => state.creator);
 
   return (
-    <img
-      className={`block rounded-full${className}`}
+    <div
+      className={`block rounded-full ${className}`}
+      style={{
+        backgroundImage: `url(${
+          creatorInfo
+            ? authService.getProfilePreview(creatorInfo.profileImg)
+            : ""
+        })`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
       alt={creatorInfo ? creatorInfo.name : "UserName"}
-      src={
-        creatorInfo ? authService.getProfilePreview(creatorInfo.profileImg) : ""
-      }
     />
   );
 };
@@ -25,7 +32,7 @@ const AvatarImage = ({ className = "", w = "4", h = "4" }) => {
 const AvatarName = ({ className = "" }) => {
   const creatorInfo = useSelector((state) => state.creator);
   return (
-    <span class="ml-2 text-sm">
+    <span class={`ml-2 text-lg ${className}`}>
       {" "}
       {creatorInfo ? creatorInfo.name : "UserName"}
     </span>
