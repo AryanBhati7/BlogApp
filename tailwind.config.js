@@ -17,5 +17,15 @@ export default {
       },
     },
   },
-  plugins: [require("daisyui")],
+  // plugins: [require("daisyui")],
+  // daisyui: {
+  //   styled: "false",
+  //   themes: false,
+  //   rtl: false,
+  //   utils: true,
+  //   logs: true,
+  //   extend: {
+  //     input: false, // disable the `button` component
+  //   },
+  // },
 };

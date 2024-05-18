@@ -26,7 +26,7 @@ const Input = React.forwardRef(function Input(
       <input
         type={type}
         style={{ backgroundColor: "white" }}
-        className={`input-filled px-3 py-2 rounded-lg  text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`}
+        className={`px-3 py-2 rounded-lg  text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`}
         ref={ref}
         required={required}
         {...props}

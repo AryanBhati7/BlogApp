@@ -3,7 +3,9 @@ import { useSelector } from "react-redux";
 import authService from "../appwrite/auth";
 
 const Avatar = ({ children, className = "" }) => {
-  return <div className={`avatar ${className}`}>{children}</div>;
+  return (
+    <div class="flex flex-row justify-between items-center">{children}</div>
+  );
 };
 
 const AvatarImage = ({ className = "", w = "4", h = "4" }) => {
@@ -11,7 +13,7 @@ const AvatarImage = ({ className = "", w = "4", h = "4" }) => {
 
   return (
     <img
-      className={`border border-black rounded-full object-cover w-8 h-8 ${className}`}
+      className={`block rounded-full${className}`}
       alt={creatorInfo ? creatorInfo.name : "UserName"}
       src={
         creatorInfo ? authService.getProfilePreview(creatorInfo.profileImg) : ""
@@ -23,11 +25,10 @@ const AvatarImage = ({ className = "", w = "4", h = "4" }) => {
 const AvatarName = ({ className = "" }) => {
   const creatorInfo = useSelector((state) => state.creator);
   return (
-    <div
-      className={`avatar-name text-lg font-semibold text-blue-500 ${className}`}
-    >
+    <span class="ml-2 text-sm">
+      {" "}
       {creatorInfo ? creatorInfo.name : "UserName"}
-    </div>
+    </span>
   );
 };
 

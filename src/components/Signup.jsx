@@ -7,12 +7,7 @@ import { useForm } from "react-hook-form";
 import authService from "../appwrite/auth";
 
 function Signup() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, watch } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -106,9 +101,8 @@ function Signup() {
                   label="Username :"
                   type="text"
                   placeholder="johnwick7"
-                  className={`block w-full px-5 py-3 mb-3 text-gray-700 placeholder-gray-400 bg-white border ${
-                    errors.username ? "border-red-500" : "border-green-500"
-                  } rounded-md dark:bg-gray-900 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40`}
+                  className={`block w-full px-5 py-3 mb-3 text-gray-700 placeholder-gray-400 bg-white border
+                   rounded-md dark:bg-gray-900 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40`}
                   {...register("username", {
                     required: true,
                     validate: {

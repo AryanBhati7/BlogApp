@@ -21,29 +21,96 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
   }, [userId]);
 
   return (
-    <Link to={`/post/${$id}`}>
-      <div className="w-full bg-gray-100 rounded-xl p-4">
-        <div className="w-full justify-center mb-4">
-          <img
-            src={appwriteService.getFilePreview(featuredImage)}
-            alt={title}
-            className="rounded-xl"
-          />
+    <Link to={`/post/${$id}`} className="w-96 m-auto block">
+      <div className="p-56">
+        <div className="w-96 m-auto ">
+          <div className=" grid grid-cols-3 grid-rows-7 grid-flow-row overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
+            {/* {featuredImage} */}
+            <div className="col-span-3 row-span-4 p-1 m-1">
+              <img
+                src={appwriteService.getFilePreview(featuredImage)}
+                alt={title}
+                className="rounded-t-xl object-cover h-48 w-full"
+              />
+            </div>
+
+            {/* {User Avatar} */}
+            <div className="col-span-3 row-span-1">
+              <div className="flex align-bottom flex-col leading-none p-2 md:p-4">
+                <Avatar className="flex flex-row justify-between items-center">
+                  <AvatarImage className="block rounded-full" />
+                  <AvatarName className="ml-2 text-sm" />
+                </Avatar>
+              </div>
+            </div>
+
+            {/* {Title Time of Post} */}
+            <div className="col-span-3 row-span-1">
+              <header className="flex items-center justify-between leading-tight p-2 md:p-4">
+                <h1 className="text-lg">
+                  <a
+                    className="no-underline hover:underline text-black"
+                    href="#"
+                  >
+                    {title}
+                  </a>
+                </h1>
+                <p className="text-grey-darker text-sm">
+                  {new Date($createdAt).toLocaleDateString(undefined, {
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  {" ("}
+                  {formatDistanceToNow(new Date($createdAt), {
+                    addSuffix: true,
+                  })}
+                  {")"}
+                </p>
+              </header>
+            </div>
+          </div>
         </div>
-        <Avatar className="flex gap-3 items-center">
-          <AvatarImage />
-          <AvatarName />
-        </Avatar>
-        <div>
-          {new Date($createdAt).toLocaleDateString(undefined, {
-            month: "long",
-            day: "numeric",
-          })}
-          {" ("}
-          {formatDistanceToNow(new Date($createdAt), { addSuffix: true })}
-          {")"}
-        </div>
-        <h2 className="text-xl font-bold">{title}</h2>
+      </div>
+
+      <div className="col-span-3 row-span-1">
+        <ul className="flex flex-row pl-2 text-gray-600 overflow-x-scroll hide-scroll-bar">
+          <li className="py-1">
+            <div className="transition duration-300 ease-in-out rounded-2xl mr-1 px-2 py-1 hover:bg-blue-200 text-gray-500 hover:text-gray-800">
+              <a className="" href="#">
+                #hogehoge
+              </a>
+            </div>
+          </li>
+          <li className="py-1">
+            <div className="transition duration-300 ease-in-out rounded-2xl mr-1 px-2 py-1 hover:bg-blue-200 text-gray-500 hover:text-gray-800">
+              <a className="" href="#">
+                #fugafuga
+              </a>
+            </div>
+          </li>
+
+          <li className="py-1">
+            <div className="transition duration-300 ease-in-out rounded-2xl mr-1 px-2 py-1 hover:bg-blue-200 text-gray-500 hover:text-gray-800">
+              <a className="" href="#">
+                #foofoo
+              </a>
+            </div>
+          </li>
+          <li className="py-1">
+            <div className="transition duration-300 ease-in-out rounded-2xl mr-1 px-2 py-1 hover:bg-blue-200 text-gray-500 hover:text-gray-800">
+              <a className="" href="#">
+                #barbarbar
+              </a>
+            </div>
+          </li>
+          <li className="py-1">
+            <div className="transition duration-300 ease-in-out rounded-2xl mr-1 px-2 py-1 hover:bg-blue-200 text-gray-500 hover:text-gray-800">
+              <a className="" href="#">
+                #hogefugafoo
+              </a>
+            </div>
+          </li>
+        </ul>
       </div>
     </Link>
   );
