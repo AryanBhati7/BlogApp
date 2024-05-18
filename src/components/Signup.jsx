@@ -17,17 +17,19 @@ function Signup() {
   const create = async (data) => {
     setError("");
     try {
-      if (data.profileImg) {
+      if (data.profileImg && data.profileImg.length > 0) {
         const profile = await authService.uploadProfile(data.profileImg[0]);
+        console.log(profile);
         const profileView = authService.getProfilePreview(profile.$id);
+        console.log(profileView);
         data.profileImg = profileView;
       } else {
         data.profileImg = authService.createAvatar(data.name);
       }
-      const accData = await authService.createAccount(data);
-      if (accData) {
-        console.log(accData, "Signup");
-        dispatch(authLogin(accData));
+      const userData = await authService.createAccount(data);
+      if (userData) {
+        // console.log(accData, "Signup");
+        dispatch(authLogin({ userData }));
         navigate("/");
       }
     } catch (error) {

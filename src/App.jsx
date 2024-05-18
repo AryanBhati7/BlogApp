@@ -28,7 +28,7 @@ function App() {
 
   return !loading ? (
     <div className="w-full block h-screen bg-background dark:bg-dark-bg ">
-      <Header />
+      <Header loading={loading} />
       <main>
         <Outlet />
       </main>

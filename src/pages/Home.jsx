@@ -14,6 +14,7 @@ function Home() {
     if (authStatus) {
       appwriteService.getPosts().then((posts) => {
         if (posts) {
+          console.log(posts);
           dispatch(getPublicPostsSlice({ posts: posts.documents }));
         }
       });

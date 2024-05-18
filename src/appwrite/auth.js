@@ -89,6 +89,7 @@ export class AuthService {
             name,
             email,
             profileImg,
+            bio,
           }
         );
         return userDataSaved;

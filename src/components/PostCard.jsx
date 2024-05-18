@@ -10,12 +10,14 @@ import { setCreatorInfo } from "../features/creatorSlice";
 
 function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
   const dispatch = useDispatch();
+  const [creatorInfo, setCreatorInfo] = useState({});
   useEffect(() => {
     authService.getUserInfo(userId).then((response) => {
-      if (response && response.documents && response.documents.length > 0) {
-        const info = response.documents[0];
-        console.log(info);
-        dispatch(setCreatorInfo(info));
+      if (response) {
+        setCreatorInfo(response);
+        console.log(creatorInfo);
+
+        // dispatch(setCreatorInfo({ creatorInfo }));
       }
     });
   }, [userId]);
@@ -60,16 +62,20 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
               </div>
             </div>
             <div className="author flex items-center -ml-3 my-3">
-              <AvatarImage className="w-12 h-12 object-cover rounded-full mx-4  shadow" />
+              <AvatarImage
+                src={creatorInfo.profileImg}
+                className="w-12 h-12 object-cover rounded-full mx-4  shadow"
+              />
 
               <h2 className="text-lg tracking-tighte gap-4 text-white dark:text-black">
-                By <AvatarName />
+                By <AvatarName name={creatorInfo.name} />
                 <br></br>
                 <span className="dark:text-gray-600 text-gray-200">
                   {new Date($createdAt).toLocaleDateString(undefined, {
                     month: "long",
                     day: "numeric",
                   })}
+                  <br></br>
                   {" ("}
                   {formatDistanceToNow(new Date($createdAt), {
                     addSuffix: true,

@@ -8,35 +8,24 @@ const Avatar = ({ children, className = "" }) => {
   );
 };
 
-const AvatarImage = ({ className = "", w = "4", h = "4" }) => {
-  const creatorInfo = useSelector((state) => state.creator);
-
+const AvatarImage = ({ className = "", w = "4", h = "4", src }) => {
   return (
     <div
-      className={`block rounded-full ${className}`}
+      className={`rounded-full flex items-center justify-center ${className}`}
       style={{
-        backgroundImage: `url(${
-          creatorInfo
-            ? authService.getProfilePreview(creatorInfo.profileImg)
-            : ""
-        })`,
+        backgroundImage: `url(${src})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
-      alt={creatorInfo ? creatorInfo.name : "UserName"}
+      alt={"Avatar"}
     />
   );
 };
 
-const AvatarName = ({ className = "" }) => {
-  const creatorInfo = useSelector((state) => state.creator);
-  return (
-    <span className={`ml-2 text-lg ${className}`}>
-      {" "}
-      {creatorInfo ? creatorInfo.name : "UserName"}
-    </span>
-  );
+const AvatarName = ({ className = "", name = "Username" }) => {
+  const creatorInfo = useSelector((state) => state.creator.creatorInfo);
+  return <span className={`ml-2 text-lg ${className}`}>{name}</span>;
 };
 
 export { Avatar, AvatarImage, AvatarName };

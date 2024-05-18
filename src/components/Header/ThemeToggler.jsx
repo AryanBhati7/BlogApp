@@ -25,7 +25,7 @@ function ThemeToggler() {
   };
 
   return (
-    <div className="mt-2 relative flex justify-center items-center w-10 h-10 bg-white rounded-full border-2 border-gray-800 shadow-md active:shadow-none active:translate-x-1 active:translate-y-1">
+    <div className="mt-2 relative flex justify-center items-center w-10 h-10  rounded-full shadow-md active:shadow-none active:translate-x-1 active:translate-y-1">
       <input
         type="checkbox"
         className="cursor-pointer absolute w-full h-full z-10 opacity-0 mt-7"
@@ -46,7 +46,7 @@ function ThemeToggler() {
       </svg>
 
       <svg
-        className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 fill-current text-gray-800 ${
+        className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 fill-current dark:text-white text-gray-800 ${
           isDarkMode ? "" : "hidden"
         }`}
         xmlns="http://www.w3.org/2000/svg"
