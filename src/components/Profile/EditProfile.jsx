@@ -19,16 +19,6 @@ function EditProfile({ profile }) {
     }
     return new Date();
   });
-  const slugTransform = useCallback((value) => {
-    if (value && typeof value === "string") {
-      return value
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-zA-Z\d\s]/g, "") // remove non-alphanumeric characters
-        .replace(/\s+/g, "-"); // replace one or more spaces with a hyphen
-    }
-    return "";
-  }, []);
 
   const {
     register,
