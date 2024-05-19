@@ -2,33 +2,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 function ProfileAvatar({ userInfo }) {
   return (
-    <div className="bg-background  dark:bg-dark-bg text-black dark:text-white shadow-xl pb-8">
+    <div className="bg-background  dark:bg-dark-bg text-black dark:text-white shadow-xl ">
       <div className="w-full h-[250px]">
-        <img
-          src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg"
-          className="w-full h-full"
-        />
+        <img src={userInfo.coverphoto} className="w-full h-full" />
       </div>
       <div className="flex flex-col items-center -mt-24">
         <img
-          src="https://vojislavd.com/ta-template-demo/assets/img/profile.jpg"
-          className="w-40 border-4 border-white rounded-full"
+          src={userInfo.profileImg}
+          className="w-40 h-40 border-4 border-dark-bg rounded-full bg-dark-bg"
         />
         <div className="flex items-center space-x-2">
-          <p className="text-2xl">Amanda Ross</p>
+          <p className="text-2xl">
+            {userInfo.username ? userInfo.username : "@username"}
+          </p>
         </div>
         <p className="text-gray-700 dark:text-gray-100">
-          Senior Software Engineer at Tailwind CSS
+          {userInfo.bio ? userInfo.bio : "---"}
         </p>
         <p className="text-sm text-gray-500 dark:text-gray-200">
-          New York, USA
+          {userInfo.location ? userInfo.location : "Location"}
         </p>
       </div>
 
       <div className="flex justify-center pt-2 space-x-4 align-center">
         {/* {Instagram} */}
         <Link
-          to="#"
+          to={userInfo.socials[0] ? userInfo.socials[0] : "#"} // Instagram
           className="p-2 rounded-md text-gray-800 dark:text-gray-200 hover:dark:text-[#d62976]"
         >
           <svg
@@ -41,7 +40,7 @@ function ProfileAvatar({ userInfo }) {
         </Link>
         {/* {Twitter} */}
         <Link
-          to="#"
+          to={userInfo.socials[1] ? userInfo.socials[2] : "#"} // Twitter
           className="p-2 rounded-md text-gray-800 dark:text-gray-200 hover:dark:text-blue-400"
         >
           <svg
@@ -54,7 +53,7 @@ function ProfileAvatar({ userInfo }) {
         </Link>
         {/* {Facebook} */}
         <Link
-          to="#"
+          to={userInfo.socials[2] ? userInfo.socials[2] : "#"} // Facebook
           className="p-2 rounded-md text-gray-800 dark:text-gray-200 hover:dark:text-[#001ba0]"
         >
           <svg
@@ -67,21 +66,23 @@ function ProfileAvatar({ userInfo }) {
         </Link>
       </div>
       <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
-        <div className="flex items-center space-x-4">
-          <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width={26}
-              height={26}
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="white"
-                d="M21 12a1 1 0 0 0-1 1v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h6a1 1 0 0 0 0-2H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1m-15 .76V17a1 1 0 0 0 1 1h4.24a1 1 0 0 0 .71-.29l6.92-6.93L21.71 8a1 1 0 0 0 0-1.42l-4.24-4.29a1 1 0 0 0-1.42 0l-2.82 2.83l-6.94 6.93a1 1 0 0 0-.29.71m10.76-8.35l2.83 2.83l-1.42 1.42l-2.83-2.83ZM8 13.17l5.93-5.93l2.83 2.83L10.83 16H8Z"
-              ></path>
-            </svg>
-            <span className="text-md">Edit Profile</span>
-          </button>
+        <div className="flex items-center space-x-4 lg:relative lg:top-[-55px]">
+          <Link to={"/edit-profile"}>
+            <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={26}
+                height={26}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="white"
+                  d="M21 12a1 1 0 0 0-1 1v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h6a1 1 0 0 0 0-2H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1m-15 .76V17a1 1 0 0 0 1 1h4.24a1 1 0 0 0 .71-.29l6.92-6.93L21.71 8a1 1 0 0 0 0-1.42l-4.24-4.29a1 1 0 0 0-1.42 0l-2.82 2.83l-6.94 6.93a1 1 0 0 0-.29.71m10.76-8.35l2.83 2.83l-1.42 1.42l-2.83-2.83ZM8 13.17l5.93-5.93l2.83 2.83L10.83 16H8Z"
+                ></path>
+              </svg>
+              <span className="text-md">Edit Profile</span>
+            </button>
+          </Link>
         </div>
       </div>
     </div>

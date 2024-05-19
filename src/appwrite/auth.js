@@ -114,7 +114,6 @@ export class AuthService {
   async getAccount() {
     try {
       const currentAccount = await this.account.getSession("current");
-      console.log(currentAccount);
       return currentAccount;
     } catch (error) {
       console.log(error);
@@ -133,7 +132,7 @@ export class AuthService {
       );
 
       if (!currentUser) throw Error;
-      console.log(currentUser);
+
       return currentUser.documents[0];
     } catch (error) {
       console.log(error);
@@ -249,7 +248,7 @@ export class AuthService {
         file
       );
     } catch (error) {
-      console.log("Appwrite serive :: uploadFile :: error", error);
+      console.log("Appwrite service :: uploadProfile :: error", error);
       return false;
     }
   }
@@ -260,6 +259,57 @@ export class AuthService {
 
   getProfilePreview(fileId) {
     return this.bucket.getFilePreview(conf.appwriteProfileImgBucketID, fileId);
+  }
+  async deleteProfile(fileId) {
+    try {
+      await this.bucket.deleteProfile(conf.appwriteProfileImgBucketID, fileId);
+      return true;
+    } catch (error) {
+      console.log("Appwrite serive :: deleteProfile :: error", error);
+      return false;
+    }
+  }
+
+  async uploadCoverPhoto(file) {
+    try {
+      return await this.bucket.createFile(
+        conf.appwriteCoverPhotoBucketID,
+        ID.unique(),
+        file
+      );
+    } catch (error) {
+      console.log("Appwrite service :: uploadCoverPhoto:: error", error);
+      return false;
+    }
+  }
+
+  getCoverPhotoPreview(fileId) {
+    return this.bucket.getFilePreview(conf.appwriteCoverPhotoBucketID, fileId);
+  }
+
+  async updateProfile(
+    userId,
+    { name, profileImg, username, bio, coverphoto, gender, dob, location }
+  ) {
+    try {
+      return await this.databases.updateDocument(
+        conf.appwriteDatabaseID,
+        conf.appwriteUsersCollectionID,
+        userId,
+        {
+          location,
+          name,
+          gender,
+          dob,
+          profileImg,
+          username,
+          bio,
+          coverphoto,
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite service :: updateProfile :: error", error);
+    }
   }
 }
 

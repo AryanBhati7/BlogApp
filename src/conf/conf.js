@@ -17,6 +17,9 @@ const conf = {
   appwriteProfileImgBucketID: String(
     import.meta.env.VITE_APPWRITE_PROFILE_IMG_BUCKET_ID
   ),
+  appwriteCoverPhotoBucketID: String(
+    import.meta.env.VITE_APPWRITE_COVER_PHOTO_BUCKET_ID
+  ),
   tinyMCEKey: String(import.meta.env.VITE_TINYMCE_API_KEY),
 };
 

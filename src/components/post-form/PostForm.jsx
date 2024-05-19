@@ -8,9 +8,6 @@ import appwriteService from "../../appwrite/config";
 function PostForm({ post }) {
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
-      // const slug = value.toLowerCase().replace(/ /g, "-")
-      // setValue("slug", slug)
-      // return slug
       return value
         .trim()
         .toLowerCase()
@@ -25,7 +22,7 @@ function PostForm({ post }) {
       defaultValues: {
         //if post is there then display that post value
         title: post?.title || "",
-        slug: post ? slugTransform(post.title) : "",
+        slug: post ? slugTransform(post.$id) : "",
         content: post?.content || "",
         status: post?.status || "active",
       },
@@ -35,7 +32,6 @@ function PostForm({ post }) {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
-    console.log(data);
     if (post) {
       const file = data.featuredImage[0]
         ? appwriteService.uploadFile(data.featuredImage[0])

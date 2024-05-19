@@ -18,7 +18,9 @@ import { Avatar, AvatarName, AvatarImage } from "./Avatar";
 import Landingpage from "./Landingpage";
 import ProfileAvatar from "./Profile/ProfileAvatar";
 import UserInformation from "./Profile/UserInformation";
+import EditProfile from "./Profile/EditProfile";
 export {
+  EditProfile,
   UserInformation,
   ProfileAvatar,
   Landingpage,

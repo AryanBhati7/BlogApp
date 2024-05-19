@@ -17,7 +17,7 @@ import Error from "./pages/Error.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 import Callback from "./pages/Callback.jsx";
 import Profile from "./pages/Profile.jsx";
-
+import EditProfile from "./pages/EditProfile.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -97,6 +97,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/edit-profile",
+        element: <EditProfile />,
       },
     ],
   },

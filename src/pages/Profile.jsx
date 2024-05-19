@@ -6,8 +6,8 @@ function Profile() {
   const userInfo = useSelector((state) => state.auth.userData);
   return (
     <div>
-      <ProfileAvatar />
-      <UserInformation />
+      <ProfileAvatar userInfo={userInfo} />
+      <UserInformation userInfo={userInfo} />
     </div>
   );
 }
