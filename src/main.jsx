@@ -16,6 +16,7 @@ import { AuthLayout } from "./components/index.js";
 import Error from "./pages/Error.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 import Callback from "./pages/Callback.jsx";
+import Profile from "./pages/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -86,8 +87,16 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/callback",
-        element: <Callback />,
+        path: "/callback/google",
+        element: <Callback provider="google" />,
+      },
+      {
+        path: "/callback/facebook",
+        element: <Callback provider="facebook" />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },

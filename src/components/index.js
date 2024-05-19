@@ -16,7 +16,11 @@ import Onboarding from "./Onboarding";
 import Textarea from "./Textarea";
 import { Avatar, AvatarName, AvatarImage } from "./Avatar";
 import Landingpage from "./Landingpage";
+import ProfileAvatar from "./Profile/ProfileAvatar";
+import UserInformation from "./Profile/UserInformation";
 export {
+  UserInformation,
+  ProfileAvatar,
   Landingpage,
   Onboarding,
   Avatar,

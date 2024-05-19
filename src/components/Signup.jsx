@@ -48,6 +48,18 @@ function Signup() {
       console.log(error.message);
     }
   };
+
+  // const facebookAuth = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+
+  //   try {
+  //     authService.facebookLogin();
+  //   } catch (error) {
+  //     setError(error.message);
+  //     console.log(error.message);
+  //   }
+  // };
   return (
     <section className=" flex items-center justify-center w-full">
       <div className=" bg-dark-bg dark:bg-background flex items-center w-full max-w-3xl p-4 mx-auto  rounded-xl border-black/10 lg:px-12 lg:w-3/5">
@@ -69,7 +81,7 @@ function Signup() {
           </div>
           {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
 
-          <form onSubmit={handleSubmit(create)} className="mt-8">
+          <form onSubmit={handleSubmit(create)} className="mt-4">
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <Input
@@ -95,7 +107,6 @@ function Signup() {
                 required
               />
             </div>
-
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <Input
@@ -137,7 +148,6 @@ function Signup() {
                 />
               </div>
             </div>
-
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <Input
@@ -171,7 +181,6 @@ function Signup() {
                 />
               </div>
             </div>
-
             <Button
               type="submit"
               className="flex mt-6 items-center text-lg justify-center w-full px-6 py-3  tracking-wide text-white capitalize transition-colors duration-300 transform bg-primary hover:bg-blue-600 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
@@ -190,12 +199,12 @@ function Signup() {
                 />
               </svg>
             </Button>
-
             <div className="flex items-center justify-center mt-4">
               <hr className="w-full border-gray-300" />
               <span className="px-2 text-gray-500">or</span>
               <hr className="w-full border-gray-300" />
             </div>
+
             <Button
               onClick={(e) => googleAuth(e)}
               className="flex mt-1 text-lg bg-white flex-wrap justify-center items-center w-full border border-gray-300 hover:border-gray-600 px-2 py-1.5 rounded-md text-gray-800"
@@ -206,6 +215,16 @@ function Signup() {
               />
               Sign in with Google
             </Button>
+            {/* <Button
+              onClick={(e) => facebookAuth(e)}
+              className="flex mt-1 text-lg bg-white flex-wrap justify-center items-center w-full border border-gray-300 hover:border-gray-600 px-2 py-1.5 rounded-md text-gray-800"
+            >
+              <img
+                className="w-6 mr-2"
+                src="https://i.pinimg.com/564x/b2/ef/68/b2ef689d1f387dfc949d0f63c3865441.jpg"
+              />
+              Sign in with Facebook
+            </Button> */}
           </form>
         </div>
       </div>

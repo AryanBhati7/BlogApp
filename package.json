@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
     "@tinymce/tinymce-react": "^5.0.1",
+    "alpinejs": "^3.13.10",
     "aos": "^2.3.4",
     "appwrite": "^14.0.1",
     "date-fns": "^3.6.0",

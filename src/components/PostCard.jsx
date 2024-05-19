@@ -23,14 +23,17 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
   }, [userId]);
 
   return (
-    <Link to={`/post/${$id}`} className="w-80 m-auto block">
-      <div className="mx-auto px-4 max-w-lg ">
+    <Link
+      to={`/post/${$id}`}
+      className="w-[22rem] mx-auto px-4 block flex-shrink-0 flex-grow-0 overflow-hidden"
+    >
+      <div className="mx-auto">
         <div className="bg-gray-600 dark:bg-white shadow-2xl rounded-lg mb-6 tracking-wide">
           <div className="">
             <img
               src={appwriteService.getFilePreview(featuredImage)}
               alt={title}
-              className="w-full h-64 rounded-lg rounded-b-none"
+              className="w-full h-64 rounded-lg rounded-b-none object-cover"
             />
           </div>
           <div className="px-4 py-2 mt-2">
@@ -67,8 +70,8 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
                 className="w-12 h-12 object-cover rounded-full mx-4  shadow"
               />
 
-              <h2 className="text-lg tracking-tighte gap-4 text-white dark:text-black">
-                By <AvatarName name={creatorInfo.name} />
+              <h2 className="text-lg tracking-tight text-white dark:text-black">
+                By <AvatarName name={"@" + creatorInfo.username} />
                 <br></br>
                 <span className="dark:text-gray-600 text-gray-200">
                   {new Date($createdAt).toLocaleDateString(undefined, {

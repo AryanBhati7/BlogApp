@@ -4,20 +4,33 @@ import { login as authLogin } from "../features/authSlice";
 import authService from "../appwrite/auth";
 import { useDispatch } from "react-redux";
 
-function Callback() {
+function Callback({ provider }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   useEffect(() => {
-    authService.getGoogleAccountInfo().then((data) => {
-      if (data) {
-        console.log(data);
-        dispatch(authLogin(data));
-        navigate("/");
-      } else {
-        console.log("Error");
-      }
-    });
-  }, []);
+    if (provider === "google") {
+      authService.getGoogleAccountInfo().then((userData) => {
+        if (userData) {
+          console.log(userData);
+          dispatch(authLogin({ userData }));
+          navigate("/");
+        } else {
+          console.log("Error");
+        }
+      });
+    } else if (provider === "facebook") {
+      authService.getFacebookAccountInfo().then((data) => {
+        if (data) {
+          console.log(data);
+          dispatch(authLogin(data));
+          navigate("/");
+        } else {
+          console.log("Error");
+        }
+      });
+    }
+  }, [provider, dispatch, navigate]);
 
   return <div>Loading...</div>;
 }

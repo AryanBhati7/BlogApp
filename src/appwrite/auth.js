@@ -170,7 +170,7 @@ export class AuthService {
     try {
       this.account.createOAuth2Session(
         OAuthProvider.Google, // provider
-        "http://localhost:5173/callback", // success (optional)
+        "http://localhost:5173/callback/google", // success (optional)
         "http://localhost:5173/login" // failure (optional)
       );
     } catch (error) {
@@ -198,6 +198,42 @@ export class AuthService {
         username: data.email.split("@")[0],
         bio: "",
         profileImg: data.picture,
+      });
+    } catch (error) {
+      console.error("Error during token exchange:", error);
+    }
+  }
+  facebookLogin() {
+    try {
+      this.account.createOAuth2Session(
+        OAuthProvider.Facebook, // provider
+        "http://localhost:5173/callback/facebook", // success (optional)
+        "http://localhost:5173/login" // failure (optional)
+      );
+    } catch (error) {
+      console.error("Error during Facebook login:", error);
+    }
+  }
+  async getFacebookAccountInfo() {
+    try {
+      // Get the current session
+      const session = await this.getAccount();
+      console.log(session);
+
+      // Get the user's profile information from Facebook
+      const response = await fetch(
+        `https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${session.providerAccessToken}`
+      );
+      const data = await response.json();
+
+      // Save the user's information to the database
+      return await this.saveUserToDB({
+        accountId: session.userId,
+        name: data.name,
+        email: data.email,
+        username: data.email.split("@")[0],
+        bio: "",
+        profileImg: data.picture.data.url,
       });
     } catch (error) {
       console.error("Error during token exchange:", error);

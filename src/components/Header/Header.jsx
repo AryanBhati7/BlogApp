@@ -42,7 +42,7 @@ function Header({ loading }) {
   return (
     <header className="py-3 shadow bg-background dark:bg-dark-bg">
       <nav className="flex">
-        <div className="mr-4">
+        <div className="ml-36 mt-1">
           <Link to="/">
             <Logo textColor="primary" darkTextColor="white" />
           </Link>

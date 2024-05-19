@@ -24,8 +24,7 @@ const AvatarImage = ({ className = "", w = "4", h = "4", src }) => {
 };
 
 const AvatarName = ({ className = "", name = "Username" }) => {
-  const creatorInfo = useSelector((state) => state.creator.creatorInfo);
-  return <span className={`ml-2 text-lg ${className}`}>{name}</span>;
+  return <span className={`text-lg italic ${className}`}>{name}</span>;
 };
 
 export { Avatar, AvatarImage, AvatarName };
