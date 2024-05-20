@@ -4,16 +4,10 @@ import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { AvatarImage, AvatarName, PostCardLoading } from "./index";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 
 function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
-  const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
-
-  console.log(users);
   const creatorInfo = users.find((user) => user.userId === userId);
-  console.log(creatorInfo);
-
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -23,9 +17,9 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
   return (
     <Link
       to={`/post/${$id}`}
-      className="group p-5 ml-12 rounded-xl max-w-4xl overflow-hidden sm:flex bg-gray-100 dark:bg-[#262f40] border border-gray-400"
+      className="group p-3 w-full rounded-xl overflow-hidden flex flex-col md:flex-row bg-gray-100 dark:bg-[#262f40] border border-gray-400"
     >
-      <div className="relative rounded-xl overflow-hidden w-[36rem] sm:w-56 h-60 flex-none">
+      <div className="relative rounded-xl overflow-hidden w-full md:w-[36rem] lg:w-56 h-60 flex-none">
         <img
           src={appwriteService.getFilePreview(featuredImage)}
           alt={title}
@@ -49,7 +43,7 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
           {truncateHtmlContent(content, 150)}
           {/* {content.length > 400 ? `${content.substring(0, 400)}...` : content} */}
         </p>
-        <p className="mt-4 inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
+        <p className="lg:mt-4 mt-2 inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
           Read more
           <svg
             className="flex-shrink-0 size-4"

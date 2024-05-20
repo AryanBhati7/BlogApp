@@ -46,12 +46,9 @@ const postSlice = createSlice({
       })
       .addCase(fetchPublicPosts.pending, (state) => {
         state.status = "loading";
-        console.log("Loading ");
       })
       .addCase(fetchPublicPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        console.log("Success ");
-        // Add any fetched posts to the array
         state.publicPosts = state.publicPosts.concat(action.payload);
       })
       .addCase(fetchPublicPosts.rejected, (state, action) => {

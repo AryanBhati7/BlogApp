@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 function Author({ username, profileImg, numberOfPosts }) {
   return (
-    <li className="flex items-center p-2">
+    <li className="flex items-center p-3">
       <img
         src={profileImg}
         alt="avatar"
-        className="object-cover w-10 h-10 mx-4 rounded-full"
+        className="object-cover w-10 h-10 ml-6 mr-1 rounded-full "
       />
       <p>
         <Link

@@ -15,9 +15,22 @@ function LogoutBtn({ className = "" }) {
   };
   return (
     <button
-      className={`inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full ${className}`}
+      className={`inline-bock px-4 py-2 duration-200 rounded-full ${className} flex justify-center items-center gap-2`}
       onClick={logoutHandler}
     >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-6 h-6 dark:text-white text-darken"
+        viewBox="0 0 14 14"
+      >
+        <path
+          fill="none"
+          stroke="white"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9.5 10.5v2a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v2M6.5 7h7m-2-2l2 2l-2 2"
+        ></path>
+      </svg>
       Logout
     </button>
   );

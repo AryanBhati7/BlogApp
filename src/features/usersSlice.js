@@ -15,7 +15,7 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
       const data = await appwriteService.getPostsByUser(user.accountId);
       return {
         userId: user.accountId,
-        username: user.name,
+        username: user.username,
         profileImg: user.profileImg,
         coverphoto: user.coverphoto,
         numberOfPosts: data.total,

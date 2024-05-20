@@ -13,41 +13,44 @@ function Home() {
   const posts = useSelector((state) => state.posts.publicPosts);
   const authStatus = useSelector((state) => state.auth.status);
   const authors = useSelector((state) => state.users.users);
-  console.log(authors);
-  console.log(posts);
-  const isLoading = posts.length === 0 || authors.length === 0;
+
+  const postsStatus = useSelector((state) => state.posts.status);
+  const authorsStatus = useSelector((state) => state.users.status);
+
+  const isLoading = postsStatus === "loading" || authorsStatus === "loading";
+
   if (authStatus === false) {
     return <Landingpage />;
   }
   return (
-    <div className="flex flex-wrap px-16 py-4 gap-6 w-full dark:bg-dark-bg bg-background">
-      <div className="w-full flex justify-between ml-12 ">
-        <div className="flex items-center w-8/12">
-          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 md:text-2xl">
-            Posts
-          </h1>
-        </div>
-        <div className="flex w-4/12 justify-start pl-6">
-          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 md:text-2xl">
-            Authors
-          </h1>
+    <div className="maincontainer flex flex-wrap px-5 lg:px-16 py-4 gap-6 w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-row">
+      <div className="w-full lg:w-[58rem] flex flex-col justify-between lg:ml-12 ml-3">
+        <h1 className="mb-3 text-2xl font-bold text-gray-800 dark:text-gray-200 lg:ml-3 md:text-2xl">
+          Posts
+        </h1>
+        <div className="px-2  lg:ml-2 lg:w-full flex flex-col gap-8">
+          {isLoading ? (
+            <PostCardLoading />
+          ) : (
+            posts.map((post) => (
+              <div key={post.$id}>
+                <PostCard {...post} />
+              </div>
+            ))
+          )}
         </div>
       </div>
-      <div className="w-8/12 flex flex-col gap-8">
-        {isLoading ? (
-          <PostCardLoading />
-        ) : (
-          posts.map((post) => (
-            <div key={post.$id} className="">
-              <PostCard {...post} />
-            </div>
-          ))
-        )}
-      </div>
-      <div className="w-4/12 -mx-8 lg:block ">
-        <div className="px-8">
-          <div className="flex flex-col max-w-sm px-6 py-4 mx-auto bg-gray-100 dark:bg-[#262f40] border border-gray-400 rounded-lg shadow-md">
-            <ul className="-mx-4">
+
+      <div className="lg:w-[28rem] w-full lg:-mx-8 mx-0 lg:block px-2">
+        <div className="lg:px-8">
+          <div className="w-full flex justify-between  ml-3">
+            <h1 className="mb-3 text-2xl font-bold text-gray-800 dark:text-gray-200 md:text-2xl">
+              Authors
+            </h1>
+          </div>
+
+          <div className="flex flex-col py-4 ml-3 lg:w-full gap-8 lg:mx-auto bg-gray-100 dark:bg-[#262f40] border border-gray-400 rounded-lg shadow-md w-full">
+            <ul className="lg:-mx-4 mx-0">
               {isLoading ? (
                 <AuthorsLoading />
               ) : (
