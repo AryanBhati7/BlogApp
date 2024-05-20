@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import appwriteService from "../appwrite/config";
 import authService from "../appwrite/auth";
 import { Link } from "react-router-dom";
+import parse from "html-react-parser";
 import { formatDistanceToNow } from "date-fns";
 import { Avatar, AvatarImage, AvatarName } from "./index";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setCreatorInfo } from "../features/creatorSlice";
 
-function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
+function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
   const dispatch = useDispatch();
   const [creatorInfo, setCreatorInfo] = useState({});
   useEffect(() => {
@@ -16,78 +17,69 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId }) {
       if (response) {
         setCreatorInfo(response);
         console.log(creatorInfo);
-
-        // dispatch(setCreatorInfo({ creatorInfo }));
       }
     });
   }, [userId]);
-
+  function truncateHtmlContent(html, length) {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const text = div.textContent || div.innerText || "";
+    return text.length > length ? `${text.substring(0, length)}...` : text;
+  }
   return (
     <Link
       to={`/post/${$id}`}
-      className="w-[22rem] mx-auto px-4 block flex-shrink-0 flex-grow-0 overflow-hidden"
+      className="group p-5 rounded-xl max-w-4xl overflow-hidden sm:flex bg-gray-100 dark:bg-[#262f40] border border-gray-400"
     >
-      <div className="mx-auto">
-        <div className="bg-gray-600 dark:bg-white shadow-2xl rounded-lg mb-6 tracking-wide">
-          <div className="">
-            <img
-              src={appwriteService.getFilePreview(featuredImage)}
-              alt={title}
-              className="w-full h-64 rounded-lg rounded-b-none object-cover"
-            />
-          </div>
-          <div className="px-4 py-2 mt-2">
-            <h2 className="font-bold text-2xl dark:text-gray-800 text-white tracking-normal">
-              {title}
-            </h2>
-            <div className="flex items-center justify-between mt-2 text-lg ">
-              <div className="flex gap-2 flex-wrap">
-                <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
-                  Tag 1
-                </span>
-                <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
-                  Tag 2
-                </span>
-              </div>
-              <div className="flex items-end">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={32}
-                  height={32}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="#e10112"
-                    d="M12.001 4.529a5.998 5.998 0 0 1 8.242.228a6 6 0 0 1 .236 8.236l-8.48 8.492l-8.478-8.492a6 6 0 0 1 8.48-8.464"
-                  ></path>
-                </svg>
-                <span className="text-white dark:text-black">5</span>
-              </div>
-            </div>
-            <div className="author flex items-center -ml-3 my-3">
-              <AvatarImage
-                src={creatorInfo.profileImg}
-                className="w-12 h-12 object-cover rounded-full mx-4  shadow"
-              />
-
-              <h2 className="text-lg tracking-tight text-white dark:text-black">
-                By <AvatarName name={"@" + creatorInfo.username} />
-                <br></br>
-                <span className="dark:text-gray-600 text-gray-200">
-                  {new Date($createdAt).toLocaleDateString(undefined, {
-                    month: "long",
-                    day: "numeric",
-                  })}
-                  <br></br>
-                  {" ("}
-                  {formatDistanceToNow(new Date($createdAt), {
-                    addSuffix: true,
-                  })}
-                  {")"}
-                </span>
-              </h2>
-            </div>
-          </div>
+      <div className="relative rounded-xl overflow-hidden w-[36rem] sm:w-56 h-60 flex-none">
+        <img
+          src={appwriteService.getFilePreview(featuredImage)}
+          alt={title}
+          className="group-hover:scale-105 transition-transform duration-500 ease-in-out size-full absolute top-0 start-0 object-cover rounded-xl"
+        />
+      </div>
+      <div className="mt-4 sm:mt-0 sm:ms-6 px-4 sm:px-0">
+        <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-600 dark:text-neutral-100 dark:group-hover:text-white">
+          {title}
+        </h3>
+        <div className="flex gap-2 flex-wrap mt-2">
+          <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
+            Tag 1
+          </span>
+          <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
+            Tag 2
+          </span>
+        </div>
+        <p className="mt-3 text-gray-600 dark:text-neutral-300">
+          {/* {parse(content, options)} */}
+          {truncateHtmlContent(content, 150)}
+          {/* {content.length > 400 ? `${content.substring(0, 400)}...` : content} */}
+        </p>
+        <p className="mt-4 inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
+          Read more
+          <svg
+            className="flex-shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </p>
+        <div className="author flex items-center -ml-3 my-3">
+          <AvatarImage
+            src={creatorInfo.profileImg}
+            className="w-12 h-12 object-cover rounded-full mx-4  shadow"
+          />
+          <h2 className="text-lg tracking-tight text-gray-800 dark:text-neutral-100">
+            By <AvatarName name={"@" + creatorInfo.username} />
+          </h2>
         </div>
       </div>
     </Link>

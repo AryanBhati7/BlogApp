@@ -19,7 +19,9 @@ import Landingpage from "./Landingpage";
 import ProfileAvatar from "./Profile/ProfileAvatar";
 import UserInformation from "./Profile/UserInformation";
 import EditProfile from "./Profile/EditProfile";
+import Author from "./Author";
 export {
+  Author,
   EditProfile,
   UserInformation,
   ProfileAvatar,

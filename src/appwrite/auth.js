@@ -311,6 +311,17 @@ export class AuthService {
       console.log("Appwrite service :: updateProfile :: error", error);
     }
   }
+  async getAllUsers() {
+    try {
+      const allUsers = await this.databases.listDocuments(
+        conf.appwriteDatabaseID,
+        conf.appwriteUsersCollectionID
+      );
+      return allUsers.documents;
+    } catch (error) {
+      console.log("Appwrite Service :: getAllUsers :: errors", error);
+    }
+  }
 }
 
 const authService = new AuthService();
