@@ -14,7 +14,7 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
     const authorsData = allUsers.map(async (user) => {
       const data = await appwriteService.getPostsByUser(user.accountId);
       return {
-        userId: user.accountId,
+        accountId: user.accountId,
         username: user.username,
         profileImg: user.profileImg,
         coverphoto: user.coverphoto,

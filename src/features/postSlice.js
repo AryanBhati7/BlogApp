@@ -5,7 +5,7 @@ import appwriteService from "../appwrite/config";
 export const fetchAllPosts = createAsyncThunk(
   "posts/fetchAllPosts",
   async () => {
-    const response = await appwriteService.getAllPosts();
+    const response = await appwriteService.getPosts([]);
     return response.documents;
   }
 );
@@ -38,7 +38,7 @@ const postSlice = createSlice({
       .addCase(fetchAllPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched posts to the array
-        state.allPosts = state.allPosts.concat(action.payload);
+        state.allPosts = action.payload;
       })
       .addCase(fetchAllPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -49,7 +49,7 @@ const postSlice = createSlice({
       })
       .addCase(fetchPublicPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.publicPosts = state.publicPosts.concat(action.payload);
+        state.publicPosts = action.payload;
       })
       .addCase(fetchPublicPosts.rejected, (state, action) => {
         state.status = "failed";

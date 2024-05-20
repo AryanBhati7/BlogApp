@@ -95,7 +95,7 @@ const router = createBrowserRouter([
         element: <Callback provider="facebook" />,
       },
       {
-        path: "/profile",
+        path: "/profile/:username",
         element: <Profile />,
       },
       {

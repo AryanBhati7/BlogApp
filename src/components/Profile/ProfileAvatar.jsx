@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-function ProfileAvatar({ userInfo }) {
+function ProfileAvatar({ userInfo, isUser }) {
   return (
     <div className="bg-background  dark:bg-dark-bg text-black dark:text-white shadow-xl ">
       <div className="w-full h-[250px]">
@@ -65,26 +65,28 @@ function ProfileAvatar({ userInfo }) {
           </svg>
         </Link>
       </div>
-      <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
-        <div className="flex items-center space-x-4 lg:relative lg:top-[-55px]">
-          <Link to={"/edit-profile"}>
-            <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={26}
-                height={26}
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="white"
-                  d="M21 12a1 1 0 0 0-1 1v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h6a1 1 0 0 0 0-2H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1m-15 .76V17a1 1 0 0 0 1 1h4.24a1 1 0 0 0 .71-.29l6.92-6.93L21.71 8a1 1 0 0 0 0-1.42l-4.24-4.29a1 1 0 0 0-1.42 0l-2.82 2.83l-6.94 6.93a1 1 0 0 0-.29.71m10.76-8.35l2.83 2.83l-1.42 1.42l-2.83-2.83ZM8 13.17l5.93-5.93l2.83 2.83L10.83 16H8Z"
-                ></path>
-              </svg>
-              <span className="text-md">Edit Profile</span>
-            </button>
-          </Link>
+      {isUser && (
+        <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
+          <div className="flex items-center space-x-4 lg:relative lg:top-[-55px]">
+            <Link to={"/edit-profile"}>
+              <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={26}
+                  height={26}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="white"
+                    d="M21 12a1 1 0 0 0-1 1v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h6a1 1 0 0 0 0-2H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1m-15 .76V17a1 1 0 0 0 1 1h4.24a1 1 0 0 0 .71-.29l6.92-6.93L21.71 8a1 1 0 0 0 0-1.42l-4.24-4.29a1 1 0 0 0-1.42 0l-2.82 2.83l-6.94 6.93a1 1 0 0 0-.29.71m10.76-8.35l2.83 2.83l-1.42 1.42l-2.83-2.83ZM8 13.17l5.93-5.93l2.83 2.83L10.83 16H8Z"
+                  ></path>
+                </svg>
+                <span className="text-md">Edit Profile</span>
+              </button>
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

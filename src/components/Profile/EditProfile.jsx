@@ -74,7 +74,7 @@ function EditProfile({ profile }) {
       console.log(userData);
       if (userData) {
         dispatch(login({ userData }));
-        navigate("/profile");
+        navigate(`/profile/${userData.username}`);
       }
     }
   };

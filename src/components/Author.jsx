@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Author({ username, profileImg, numberOfPosts }) {
   return (
-    <li className="flex items-center p-3">
+    <>
       <img
         src={profileImg}
         alt="avatar"
@@ -20,7 +20,7 @@ function Author({ username, profileImg, numberOfPosts }) {
           Created {numberOfPosts} Posts
         </span>
       </p>
-    </li>
+    </>
   );
 }
 

@@ -7,7 +7,8 @@ import { useSelector } from "react-redux";
 
 function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
   const users = useSelector((state) => state.users.users);
-  const creatorInfo = users.find((user) => user.userId === userId);
+  console.log(users);
+  const creatorInfo = users.find((user) => user.accountId === userId);
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -62,11 +63,16 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
         </p>
         <div className="author flex items-center -ml-3 my-3">
           <AvatarImage
-            src={creatorInfo.profileImg}
+            src={creatorInfo ? creatorInfo.profileImg : ""}
             className="w-12 h-12 object-cover rounded-full mx-4  shadow"
           />
           <h2 className="text-lg tracking-tight text-gray-800 dark:text-neutral-100">
-            By <AvatarName name={"@" + creatorInfo.username} />
+            By{" "}
+            {creatorInfo ? (
+              <AvatarName name={"@" + creatorInfo.username} />
+            ) : (
+              "Unknown"
+            )}
             <br></br>
             <span className="text-gray-600 dark:text-gray-200">
               {new Date($createdAt).toLocaleDateString(undefined, {

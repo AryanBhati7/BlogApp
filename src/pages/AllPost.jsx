@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Container, PostCard } from "../components/index";
-import appwriteService from "../appwrite/config";
-// import { getAllPosts as getAllPostsSlice } from "../features/postSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchAllPosts } from "../features/postSlice";
+import { PostCard, PostCardLoading } from "../components/index";
+
+import { useSelector } from "react-redux";
+
 function AllPost() {
-  const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.allPosts);
-  const authStatus = useSelector((state) => state.auth.status);
-  useEffect(() => {
-    if (!authStatus) return;
-    dispatch(fetchAllPosts());
-  }, []);
+  console.log(posts);
+  const postsStatus = useSelector((state) => state.posts.status);
+  const isLoading = postsStatus === "loading";
   return (
     <div className="flex flex-wrap px-28 py-4 gap-6 w-full">
-      {posts.map((post) => (
-        <div key={post.$id} className="p-2">
-          <PostCard {...post} />
-        </div>
-      ))}
+      {isLoading ? (
+        <PostCardLoading />
+      ) : (
+        posts.map((post) => (
+          <div key={post.$id}>
+            <PostCard {...post} />
+          </div>
+        ))
+      )}
     </div>
   );
 }

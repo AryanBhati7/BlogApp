@@ -183,7 +183,7 @@ function Header({ loading }) {
           </li>
           {authStatus && !loading && userData && (
             <li>
-              <Link to="/profile">
+              <Link to={`/profile/${userData.username}`}>
                 <AvatarImage
                   src={userData.profileImg}
                   className="w-12 h-12 object-cover rounded-full mx-4"
