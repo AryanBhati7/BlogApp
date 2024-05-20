@@ -29,7 +29,7 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
   return (
     <Link
       to={`/post/${$id}`}
-      className="group p-5 rounded-xl max-w-4xl overflow-hidden sm:flex bg-gray-100 dark:bg-[#262f40] border border-gray-400"
+      className="group p-5 ml-12 rounded-xl max-w-4xl overflow-hidden sm:flex bg-gray-100 dark:bg-[#262f40] border border-gray-400"
     >
       <div className="relative rounded-xl overflow-hidden w-[36rem] sm:w-56 h-60 flex-none">
         <img
@@ -79,6 +79,18 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
           />
           <h2 className="text-lg tracking-tight text-gray-800 dark:text-neutral-100">
             By <AvatarName name={"@" + creatorInfo.username} />
+            <br></br>
+            <span className="text-gray-600 dark:text-gray-200">
+              {new Date($createdAt).toLocaleDateString(undefined, {
+                month: "long",
+                day: "numeric",
+              })}
+              {" ("}
+              {formatDistanceToNow(new Date($createdAt), {
+                addSuffix: true,
+              })}
+              {")"}
+            </span>
           </h2>
         </div>
       </div>
