@@ -49,8 +49,7 @@ const usersSlice = createSlice({
       })
 
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        console.log(state, action); // log the state and the action
-        state.users = state.users.concat(action.payload); // update the 'users' field
+        state.users = action.payload; // update the 'users' field
         state.status = "succeeded"; // update the status
       });
   },

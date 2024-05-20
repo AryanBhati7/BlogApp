@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import appwriteService from "../appwrite/config";
-import authService from "../appwrite/auth";
 import { Link } from "react-router-dom";
-import parse from "html-react-parser";
 import { formatDistanceToNow } from "date-fns";
-import { Avatar, AvatarImage, AvatarName } from "./index";
+import { AvatarImage, AvatarName, PostCardLoading } from "./index";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setCreatorInfo } from "../features/creatorSlice";
 
 function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
   const dispatch = useDispatch();
-  const [creatorInfo, setCreatorInfo] = useState({});
-  useEffect(() => {
-    authService.getUserInfo(userId).then((response) => {
-      if (response) {
-        setCreatorInfo(response);
-        console.log(creatorInfo);
-      }
-    });
-  }, [userId]);
+  const users = useSelector((state) => state.users.users);
+
+  console.log(users);
+  const creatorInfo = users.find((user) => user.userId === userId);
+  console.log(creatorInfo);
+
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
     div.innerHTML = html;

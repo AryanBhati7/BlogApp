@@ -20,7 +20,11 @@ import ProfileAvatar from "./Profile/ProfileAvatar";
 import UserInformation from "./Profile/UserInformation";
 import EditProfile from "./Profile/EditProfile";
 import Author from "./Author";
+import PostCardLoading from "./Loading/PostCardLoading";
+import AuthorsLoading from "./Loading/AuthorsLoading";
 export {
+  AuthorsLoading,
+  PostCardLoading,
   Author,
   EditProfile,
   UserInformation,
