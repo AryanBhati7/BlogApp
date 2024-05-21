@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 function ProfileAvatar({ userInfo, isUser }) {
   return (
     <div className="bg-background  dark:bg-dark-bg text-black dark:text-white shadow-xl ">
-      <div className="w-full h-[250px]">
-        <img src={userInfo.coverphoto} className="w-full h-full" />
-      </div>
+      <div
+        className="w-full h-[250px] rounded-sm bg-cover bg-center bg-no-repeat items-center"
+        style={{ backgroundImage: `url(${userInfo.coverphoto})` }}
+      ></div>
       <div className="flex flex-col items-center -mt-24">
-        <img
-          src={userInfo.profileImg}
-          className="w-40 h-40 border-4 border-dark-bg rounded-full bg-dark-bg"
-        />
+        <div
+          className={`mx-auto flex justify-center w-44 h-44 bg-blue-300/20 rounded-full bg-cover bg-center bg-no-repeat border-4 border-dark-bg `}
+          style={{ backgroundImage: `url(${userInfo.profileImg})` }}
+        ></div>
+
         <div className="flex items-center space-x-2">
           <p className="text-2xl">
             {userInfo.username ? userInfo.username : "@username"}

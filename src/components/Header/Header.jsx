@@ -45,26 +45,17 @@ function Header({ loading }) {
       <div className="ml-2">
         <nav className="flex md:hidden">
           <button onClick={() => setIsOpen(!isOpen)} className="ml-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="h-8 w-8 dark:text-gray-200 text-dark-bg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+            <AvatarImage
+              src={userData.profileImg}
+              className="w-12 h-12 object-cover rounded-full mt-2"
+            />
           </button>
-          <div className="w-full z-10 flex justify-center items-center">
+          <div className="w-full z-10 flex justify-center items-center -ml-6">
             <Link>
               <Logo to="/" />
             </Link>
           </div>
+
           <div
             className={`fixed transform top-0 left-0 w-80 bg-gray-200  dark:bg-gray-900 h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${
               isOpen ? "translate-x-0" : "-translate-x-full"
@@ -96,8 +87,11 @@ function Header({ loading }) {
                 item.active ? (
                   <li key={item.name} className="flex items-center space-x-4">
                     <button
-                      onClick={() => navigate(item.slug)}
-                      className="text-2xl hover:bg-gray-600 w-full text-left p-2 rounded-lg text-dark-bg dark:text-white duration-200 hover:text-primary"
+                      onClick={() => {
+                        navigate(item.slug);
+                        setIsOpen(false);
+                      }}
+                      className="text-2xl hover:bg-gray-300 w-full text-left p-2 rounded-lg text-dark-bg dark:text-white duration-200 hover:text-primary"
                     >
                       {item.name}
                     </button>
@@ -106,7 +100,10 @@ function Header({ loading }) {
               )}
               {authStatus && (
                 <li>
-                  <button className="w-full mb-4 py-2 flex justify-center gap-4 items-center text-xl text-center text-white bg-blue-500 rounded-full mt-4">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-full mb-4 py-2 flex justify-center gap-4 items-center text-xl text-center text-white bg-blue-500 rounded-full mt-4"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="p-0 h-6 w-6"
@@ -122,13 +119,10 @@ function Header({ loading }) {
                 </li>
               )}
               {authStatus && !loading && userData && (
-                <li className="flex items-center space-x-4 mt-6 w-full">
+                <div className="flex items-center space-x-4 mt-6 w-full">
                   <Link
-                    className="flex
-                  items-center
-                  space-x-4 
-                  
-                  "
+                    to={`/profile/${userData.username}`}
+                    className="flex items-center space-x-4"
                   >
                     <AvatarImage
                       src={userData.profileImg}
@@ -143,11 +137,14 @@ function Header({ loading }) {
                       </p>
                     </div>
                   </Link>
-                </li>
+                </div>
               )}
               {authStatus && (
                 <li>
-                  <LogoutBtn className="dark:text-white font-mono inline-bock px-2 py-2 text-2xl text-darken duration-200 rounded-full" />
+                  <LogoutBtn
+                    onClick={() => setIsOpen(false)}
+                    className="dark:text-white font-mono inline-bock px-2 py-2 text-2xl text-darken duration-200 rounded-full"
+                  />
                 </li>
               )}
             </ul>

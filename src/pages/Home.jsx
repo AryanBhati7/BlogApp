@@ -25,10 +25,10 @@ function Home() {
   return (
     <div className="maincontainer flex flex-wrap px-5 lg:px-16 py-4 gap-6 w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-row">
       <div className="w-full lg:w-[58rem] flex flex-col justify-between lg:ml-12 ml-3">
-        <h1 className="mb-3 text-2xl font-bold text-gray-800 dark:text-gray-200 lg:ml-3 md:text-2xl">
+        <h1 className="mb-3 text-2xl font-bold text-gray-800 dark:text-gray-200 lg:ml-6 md:text-2xl">
           Posts
         </h1>
-        <div className="px-2  lg:ml-2 lg:w-full flex flex-col gap-8">
+        <div className="px-4 -ml-6  lg:ml-2 lg:w-full flex flex-col gap-8">
           {isLoading ? (
             <PostCardLoading />
           ) : (
@@ -43,14 +43,14 @@ function Home() {
 
       <div className="lg:w-[28rem] w-full lg:-mx-8 mx-0 lg:block px-2">
         <div className="lg:px-8">
-          <div className="w-full flex justify-between  ml-3">
+          <div className="w-full flex justify-between  ml-3 lg:ml-1">
             <h1 className="mb-3 text-2xl font-bold text-gray-800 dark:text-gray-200 md:text-2xl">
               Authors
             </h1>
           </div>
 
-          <div className="flex flex-col py-4 ml-3 lg:w-full gap-8 lg:mx-auto bg-gray-100 dark:bg-[#262f40] border border-gray-400 rounded-lg shadow-md w-full">
-            <ul className="lg:-mx-4 mx-0">
+          <div className="flex flex-col py-4 -ml-0 lg:w-full gap-8 lg:mx-auto bg-gray-100 dark:bg-[#262f40] border border-gray-400 rounded-lg shadow-md w-full">
+            <ul className="lg:-mx-4 -ml-4 mx-0">
               {isLoading ? (
                 <AuthorsLoading />
               ) : (
