@@ -298,7 +298,17 @@ export class AuthService {
 
   async updateProfile(
     userId,
-    { name, profileImg, username, bio, coverphoto, gender, dob, location }
+    {
+      name,
+      profileImg,
+      username,
+      bio,
+      coverphoto,
+      gender,
+      dob,
+      location,
+      socials,
+    }
   ) {
     try {
       return await this.databases.updateDocument(
@@ -314,6 +324,7 @@ export class AuthService {
           username,
           bio,
           coverphoto,
+          socials,
         }
       );
     } catch (error) {

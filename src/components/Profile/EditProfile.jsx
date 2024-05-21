@@ -34,6 +34,9 @@ function EditProfile({ profile }) {
       gender: profile?.gender || "",
       dob: profile?.dob || "",
       location: profile?.location || "",
+      instaLink: profile?.socials[0] || "",
+      twitterLink: profile?.socials[1] || "",
+      fbLink: profile?.socials[2] || "",
     },
   });
   function extractFileId(url) {
@@ -51,6 +54,9 @@ function EditProfile({ profile }) {
   }
 
   const submit = async (data) => {
+    const socials = [data.instaLink, data.twitterLink, data.fbLink];
+    console.log(socials);
+
     if (Object.keys(errors).length > 0) {
       for (const error in errors) {
         toast.error(errors[error].message);
@@ -98,6 +104,7 @@ function EditProfile({ profile }) {
       }
       const userData = await authService.updateProfile(profile.$id, {
         ...data,
+        socials,
       });
       if (userData) {
         dispatch(updateUser(userData));
@@ -258,7 +265,7 @@ function EditProfile({ profile }) {
                     {...register("name", { required: true })}
                   />
                 </div>
-                <div className="w-full lg:mt-3">
+                <div className="w-full mt-3">
                   <label className=" dark:text-gray-300">Username</label>
                   <input
                     type="text"
@@ -285,8 +292,8 @@ function EditProfile({ profile }) {
                 />
               </div>
 
-              <div className="flex lg:flex-row md:flex-row sm:flex-col xs:flex-col gap-2 justify-center w-full">
-                <div className="flex-1">
+              <div className="flex flex-col mb-3 sm:flex-row md:flex-row lg:flex-row gap-2 justify-center w-full">
+                <div className="flex-1 mb-2">
                   <h3 className="dark:text-gray-300 mb-2">Gender</h3>
                   <select
                     {...register("gender", { required: false })}
@@ -299,7 +306,7 @@ function EditProfile({ profile }) {
                     <option value="Female">Female</option>
                   </select>
                 </div>
-                <div>
+                <div className="mb-2">
                   <h3 className="dark:text-gray-300 mb-2">Date of Birth</h3>
                   <DatePicker
                     selected={DOB}
@@ -308,7 +315,7 @@ function EditProfile({ profile }) {
                     className="text-grey p-4 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
                   />
                 </div>
-                <div className="flex-1 mb-4">
+                <div className="flex-1 mb-2">
                   <label className="mb-2 dark:text-gray-300">Location</label>
                   <input
                     type="text"
@@ -318,7 +325,56 @@ function EditProfile({ profile }) {
                   />
                 </div>
               </div>
-              <div className="w-full rounded-lg bg-blue-500 mt-4 text-white text-lg font-semibold">
+
+              <div className="flex flex-col sm:flex-row md:flex-row lg:flex-row gap-2 justify-center w-full">
+                <div className="flex-1 mb-2">
+                  <label className="mb-2 dark:text-gray-300">Instagram</label>
+                  <input
+                    type="text"
+                    className="mt-2 p-4 pl-10 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
+                    style={{
+                      backgroundImage: `url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDE1IDE1Ij48cGF0aCBmaWxsPSIjYzJjMmMyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMi45MSAxMi45MDljLjMyNi0uMzI3LjU4Mi0uNzIuNzQ5LTEuMTUxYy4xNi0uNDE0LjI3LS44ODYuMzAyLTEuNTc4Yy4wMzItLjY5My4wNC0uOTE1LjA0LTIuNjhjMC0xLjc2NS0uMDA4LTEuOTg3LS4wNC0yLjY4Yy0uMDMyLS42OTItLjE0Mi0xLjE2NC0uMzAyLTEuNTc4YTMuMTg1IDMuMTg1IDAgMCAwLS43NS0xLjE1MWEzLjE4NyAzLjE4NyAwIDAgMC0xLjE1MS0uNzVjLS40MTQtLjE2LS44ODYtLjI3LTEuNTc4LS4zMDJDOS40ODcgMS4wMDcgOS4yNjUgMSA3LjUgMWMtMS43NjUgMC0xLjk4Ny4wMDctMi42OC4wNGMtLjY5Mi4wMy0xLjE2NC4xNC0xLjU3OC4zMDFhMy4yIDMuMiAwIDAgMC0xLjE1MS43NWEzLjIgMy4yIDAgMCAwLS43NSAxLjE1MWMtLjE2LjQxNC0uMjcuODg2LS4zMDIgMS41NzhDMS4wMDcgNS41MTMgMSA1LjczNSAxIDcuNWMwIDEuNzY1LjAwNyAxLjk4Ny4wNCAyLjY4Yy4wMy42OTIuMTQgMS4xNjQuMzAxIDEuNTc4Yy4xNjQuNDM0LjQyLjgyNi43NSAxLjE1MWMuMzI1LjMzLjcxOC41ODYgMS4xNTEuNzVjLjQxNC4xNi44ODYuMjcgMS41NzguMzAyYy42OTMuMDMxLjkxNS4wMzkgMi42OC4wMzljMS43NjUgMCAxLjk4Ny0uMDA4IDIuNjgtLjA0Yy42OTItLjAzIDEuMTY0LS4xNCAxLjU3OC0uMzAxYTMuMzIzIDMuMzIzIDAgMCAwIDEuMTUxLS43NU0yIDYuNzM1djEuNTNjLS4wMDIuODIxLS4wMDIgMS4wMzQuMDIgMS41Yy4wMjYuNTg2LjA1OCAxLjAxNi4xNTYgMS4zNGMuMDk0LjMxMi4xOTkuNjMuNTQzIDEuMDEyYy4zNDQuMzgzLjY3NS41NTYgMS4wOTcuNjg0Yy40MjMuMTI3Ljk1NC4xNTQgMS40MTUuMTc1Yy41MjIuMDI0LjczLjAyNCAxLjgyNi4wMjRIOC4yNGMuODQyLjAwMSAxLjA1NC4wMDIgMS41MjYtLjAyYy41ODUtLjAyNyAxLjAxNS0uMDU5IDEuMzQtLjE1NmMuMzExLS4wOTQuNjI5LS4yIDEuMDExLS41NDNjLjM4My0uMzQ0LjU1Ni0uNjc2LjY4NC0xLjA5OGMuMTI3LS40MjIuMTU1LS45NTMuMTc2LTEuNDE0QzEzIDkuMjQ3IDEzIDkuMDQgMTMgNy45NDd2LS44OWMwLTEuMDk2IDAtMS4zMDMtLjAyMy0xLjgyNmMtLjAyMS0uNDYxLS4wNDktLjk5Mi0uMTc2LTEuNDE0Yy0uMTI3LS40MjMtLjMtLjc1NC0uNjg0LTEuMDk4Yy0uMzgzLS4zNDQtLjctLjQ0OS0xLjAxMS0uNTQzYy0uMzI1LS4wOTctLjc1NS0uMTMtMS4zNC0uMTU2QTI3LjI5IDI3LjI5IDAgMCAwIDguMjQgMkg3LjA1N2MtMS4wOTYgMC0xLjMwNCAwLTEuODI2LjAyM2MtLjQ2MS4wMjEtLjk5Mi4wNDktMS40MTUuMTc2Yy0uNDIyLjEyOC0uNzUzLjMwMS0xLjA5Ny42ODRjLS4zNDQuMzgzLS40NS43LS41NDMgMS4wMTJjLS4wOTguMzI0LS4xMy43NTQtLjE1NiAxLjM0Yy0uMDIyLjQ2Ni0uMDIyLjY3OS0uMDIgMS41TTcuNSA1LjI1YTIuMjUgMi4yNSAwIDEgMCAwIDQuNWEyLjI1IDIuMjUgMCAwIDAgMC00LjVNNC4yNSA3LjVhMy4yNSAzLjI1IDAgMSAxIDYuNSAwYTMuMjUgMy4yNSAwIDAgMS02LjUgMG02LjcyLTIuNzJhLjc1Ljc1IDAgMSAwIDAtMS41YS43NS43NSAwIDAgMCAwIDEuNSIgY2xpcC1ydWxlPSJldmVub2RkIi8+PC9zdmc+')`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "30px 30px",
+                      backgroundPosition: "5px center",
+                    }}
+                    placeholder="Your Insta profile link here"
+                    {...register("instaLink", { required: false })}
+                  />
+                </div>
+                <div className="flex-1 mb-2">
+                  <label className="mb-2 dark:text-gray-300">Twitter</label>
+                  <input
+                    type="text"
+                    className="mt-2 p-4 pl-10 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
+                    style={{
+                      backgroundImage: `url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjYzJjMmMyIiBkPSJNMjIuNDYgNmMtLjc3LjM1LTEuNi41OC0yLjQ2LjY5Yy44OC0uNTMgMS41Ni0xLjM3IDEuODgtMi4zOGMtLjgzLjUtMS43NS44NS0yLjcyIDEuMDVDMTguMzcgNC41IDE3LjI2IDQgMTYgNGMtMi4zNSAwLTQuMjcgMS45Mi00LjI3IDQuMjljMCAuMzQuMDQuNjcuMTEuOThDOC4yOCA5LjA5IDUuMTEgNy4zOCAzIDQuNzljLS4zNy42My0uNTggMS4zNy0uNTggMi4xNWMwIDEuNDkuNzUgMi44MSAxLjkxIDMuNTZjLS43MSAwLTEuMzctLjItMS45NS0uNXYuMDNjMCAyLjA4IDEuNDggMy44MiAzLjQ0IDQuMjFhNC4yIDQuMiAwIDAgMS0xLjkzLjA3YTQuMjggNC4yOCAwIDAgMCA0IDIuOThhOC41MiA4LjUyIDAgMCAxLTUuMzMgMS44NHEtLjUxIDAtMS4wMi0uMDZDMy40NCAyMC4yOSA1LjcgMjEgOC4xMiAyMUMxNiAyMSAyMC4zMyAxNC40NiAyMC4zMyA4Ljc5YzAtLjE5IDAtLjM3LS4wMS0uNTZjLjg0LS42IDEuNTYtMS4zNiAyLjE0LTIuMjMiLz48L3N2Zz4=')`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "30px 30px",
+                      backgroundPosition: "5px center",
+                    }}
+                    placeholder="Your Twitter profile link here"
+                    {...register("twitterLink", { required: false })}
+                  />
+                </div>
+                <div className="flex-1 mb-2">
+                  <label className="mb-2 dark:text-gray-300">Facebook</label>
+                  <input
+                    type="text"
+                    className="mt-2 p-4 pl-10 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
+                    style={{
+                      backgroundImage: `url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBmaWxsPSIjYzJjMmMyIiBkPSJNMTYgOC4wNDljMC00LjQ0Ni0zLjU4Mi04LjA1LTgtOC4wNUMzLjU4IDAtLjAwMiAzLjYwMy0uMDAyIDguMDVjMCA0LjAxNyAyLjkyNiA3LjM0NyA2Ljc1IDcuOTUxdi01LjYyNWgtMi4wM1Y4LjA1SDYuNzVWNi4yNzVjMC0yLjAxNyAxLjE5NS0zLjEzMSAzLjAyMi0zLjEzMWMuODc2IDAgMS43OTEuMTU3IDEuNzkxLjE1N3YxLjk4aC0xLjAwOWMtLjk5MyAwLTEuMzAzLjYyMS0xLjMwMyAxLjI1OHYxLjUxaDIuMjE4bC0uMzU0IDIuMzI2SDkuMjVWMTZjMy44MjQtLjYwNCA2Ljc1LTMuOTM0IDYuNzUtNy45NTEiLz48L3N2Zz4=')`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "30px 30px",
+                      backgroundPosition: "5px center",
+                    }}
+                    placeholder=" Your FB profile link here"
+                    {...register("fbLink", { required: false })}
+                  />
+                </div>
+              </div>
+
+              <div className="w-full rounded-lg bg-blue-500 hover:bg-blue-400 mt-4 text-white text-lg font-semibold">
                 <button type="submit" className="w-full p-4">
                   Submit
                 </button>

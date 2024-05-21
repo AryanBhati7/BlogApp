@@ -23,7 +23,7 @@ function Home() {
     return <Landingpage />;
   }
   return (
-    <div className="maincontainer flex flex-wrap px-5 lg:px-16 py-4 gap-6 w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-row">
+    <div className="maincontainer overflow-x-hidden flex flex-wrap px-5 lg:px-16 py-4 gap-6 w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-row">
       <div className="w-full lg:w-[58rem] flex flex-col justify-between lg:ml-12 ml-3">
         <h1 className="mb-3 text-2xl font-bold text-gray-800 dark:text-gray-200 lg:ml-6 md:text-2xl">
           Posts
