@@ -262,7 +262,7 @@ export class AuthService {
   }
   async deleteProfile(fileId) {
     try {
-      await this.bucket.deleteProfile(conf.appwriteProfileImgBucketID, fileId);
+      await this.bucket.deleteFile(conf.appwriteProfileImgBucketID, fileId);
       return true;
     } catch (error) {
       console.log("Appwrite serive :: deleteProfile :: error", error);
@@ -285,6 +285,15 @@ export class AuthService {
 
   getCoverPhotoPreview(fileId) {
     return this.bucket.getFilePreview(conf.appwriteCoverPhotoBucketID, fileId);
+  }
+  async deleteCoverPhoto(fileId) {
+    try {
+      await this.bucket.deleteFile(conf.appwriteCoverPhotoBucketID, fileId);
+      return true;
+    } catch (error) {
+      console.log("Appwrite serive :: deleteCoverPhoto :: error", error);
+      return false;
+    }
   }
 
   async updateProfile(

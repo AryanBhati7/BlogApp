@@ -6,7 +6,9 @@ import { ProfileAvatar, UserInformation } from "../components/index";
 function Profile() {
   const [userInfo, setUserInfo] = useState(null);
   const { username } = useParams();
+
   const currentUserInfo = useSelector((state) => state.auth.userData);
+
   const allUsers = useSelector((state) => state.users.users);
 
   const isUser =

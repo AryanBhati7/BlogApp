@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
   const users = useSelector((state) => state.users.users);
-  console.log(users);
+
   const creatorInfo = users.find((user) => user.accountId === userId);
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");

@@ -20,7 +20,6 @@ function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
-        //if post is there then display that post value
         title: post?.title || "",
         slug: post ? slugTransform(post.$id) : "",
         content: post?.content || "",

@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, Controller, appendErrors } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../features/authSlice";
@@ -8,6 +8,7 @@ import authService from "../../appwrite/auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
+import { updateUser } from "../../features/usersSlice";
 
 function EditProfile({ profile }) {
   const dispatch = useDispatch();
@@ -35,6 +36,19 @@ function EditProfile({ profile }) {
       location: profile?.location || "",
     },
   });
+  function extractFileId(url) {
+    if (!url.startsWith("https://lh3.googleusercontent.com")) {
+      const regex = /files\/(.*)\/preview/;
+      const match = url.match(regex);
+      if (match && match[1]) {
+        return match[1];
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
 
   const submit = async (data) => {
     if (Object.keys(errors).length > 0) {
@@ -47,9 +61,7 @@ function EditProfile({ profile }) {
         month: "2-digit",
         year: "numeric",
       });
-      console.log(data.profileImg);
-      console.log(data.coverphoto);
-      console.log(data);
+
       if (data.profileImg && data.profileImg.length > 0) {
         const profile = await authService.uploadProfile(data.profileImg[0]);
         const profileView = authService.getProfilePreview(profile.$id);
@@ -66,13 +78,29 @@ function EditProfile({ profile }) {
         data.coverphoto = profile.coverphoto;
       }
 
-      // Delete profile from storage if new profile is uploaded pending
+      // Delete profile from storage if new profile is uploaded
+      if (data.profileImg !== profile.profileImg && data.profileImg) {
+        console.log(profile.profileImg);
+        const profileId = extractFileId(profile.profileImg);
+        console.log(profileId);
+        if (profileId) {
+          authService.deleteProfile(profileId);
+        }
+      }
 
+      // Delete cover photo from storage if new cover photo is uploaded
+      if (data.coverphoto !== profile.coverphoto && data.coverphoto) {
+        const coverId = extractFileId(profile.coverphoto);
+        console.log(coverId);
+        if (coverId) {
+          authService.deleteCoverPhoto(coverId);
+        }
+      }
       const userData = await authService.updateProfile(profile.$id, {
         ...data,
       });
-      console.log(userData);
       if (userData) {
+        dispatch(updateUser(userData));
         dispatch(login({ userData }));
         navigate(`/profile/${userData.username}`);
       }

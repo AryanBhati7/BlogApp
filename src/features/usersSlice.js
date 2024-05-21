@@ -34,6 +34,13 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   }
 });
 
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (updatedUser) => {
+    return updatedUser;
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -52,6 +59,12 @@ const usersSlice = createSlice({
         state.users = action.payload; // update the 'users' field
         state.status = "succeeded"; // update the status
       });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      const index = state.users.findIndex(
+        (user) => user.accountId === action.payload.accountId
+      );
+      state.users[index] = action.payload;
+    });
   },
 });
 
