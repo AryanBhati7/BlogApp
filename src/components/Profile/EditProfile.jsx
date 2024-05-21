@@ -274,7 +274,7 @@ function EditProfile({ profile }) {
                     {...register("username", {
                       required: true,
                       pattern: {
-                        value: /^[a-z]+$/,
+                        value: /^[a-z0-9]+$/,
                         message: "No uppercase letters allowed",
                       },
                     })}

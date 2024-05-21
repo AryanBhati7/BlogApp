@@ -44,13 +44,36 @@ function Header({ loading }) {
     <header className="py-3 shadow bg-background dark:bg-dark-bg">
       <div className="ml-2">
         <nav className="flex md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)} className="ml-4">
-            <AvatarImage
-              src={userData.profileImg}
-              className="w-12 h-12 object-cover rounded-full mt-2"
-            />
-          </button>
-          <div className="w-full z-10 flex justify-center items-center -ml-6">
+          {authStatus && (
+            <button onClick={() => setIsOpen(!isOpen)} className="ml-4">
+              <AvatarImage
+                src={userData.profileImg}
+                className="w-12 h-12 object-cover rounded-full mt-2"
+              />
+            </button>
+          )}
+          {!authStatus && (
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="ml-4 w-18 h-18 flex justify-center items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className=" dark:text-gray-200 h-8 w-8 text-dark-bg block"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          )}
+          <div className="w-full z-10 flex justify-center items-center ">
             <Link>
               <Logo to="/" />
             </Link>

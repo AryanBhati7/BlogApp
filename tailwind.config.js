@@ -12,6 +12,7 @@ export default {
         // "light-primary": "#e10112",
         primary: "#00008B",
         background: "#f2f2f2",
+
         "dark-primary": "#ffffff",
         "dark-bg": "#1a202c",
       },
