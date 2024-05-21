@@ -186,7 +186,7 @@ function Header({ loading }) {
               <li key={item.name}>
                 <button
                   onClick={() => navigate(item.slug)}
-                  className=" dark:text-white font-mono inline-bock px-6 py-2 text-2.5xl text-darken duration-200 hover:bg-blue-100 rounded-full"
+                  className=" dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-blue-100 rounded-full"
                 >
                   {item.name}
                 </button>
@@ -195,7 +195,7 @@ function Header({ loading }) {
           )}
           {authStatus && (
             <li>
-              <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2.5xl text-darken duration-200 hover:bg-blue-100 rounded-full" />
+              <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-blue-100 rounded-full" />
             </li>
           )}
           <li>

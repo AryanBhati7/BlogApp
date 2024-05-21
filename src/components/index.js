@@ -24,7 +24,9 @@ import PostCardLoading from "./Loading/PostCardLoading";
 import AuthorsLoading from "./Loading/AuthorsLoading";
 import PostLoading from "./Loading/PostLoading";
 import RecentPosts from "./RecentPosts";
+import FileUploader from "./FileUploader";
 export {
+  FileUploader,
   RecentPosts,
   PostLoading,
   AuthorsLoading,

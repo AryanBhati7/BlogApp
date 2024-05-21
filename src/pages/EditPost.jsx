@@ -2,23 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Container, PostForm } from "../components/index";
 import appwriteService from "../appwrite/config";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function EditPost() {
-  const [post, setPosts] = useState(null);
+  const posts = useSelector((state) => state.posts.publicPosts);
   const { postId } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (postId) {
-      appwriteService.getPost(postId).then((post) => {
-        if (post) {
-          setPosts(post);
-        } else {
-          navigate("/");
-        }
-      });
-    }
-  }, [postId, navigate]);
+  const post = posts.find((post) => post.$id === postId);
+  console.log(post, "Edit Post");
+  if (!post) {
+    navigate("/");
+  }
   return post ? (
     <div className="py-8">
       <Container>

@@ -3,7 +3,7 @@ import React, { useId } from "react";
 function Select({ options, label, className, ...props }, ref) {
   const id = useId();
   return (
-    <div className="w-full">
+    <div className="">
       {label && <label htmlFor={id} className=""></label>}
       <select
         id={id}

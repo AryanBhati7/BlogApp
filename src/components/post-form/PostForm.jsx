@@ -1,11 +1,12 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Input, Select, RTE } from "../index";
+import { Button, Input, Select, RTE, FileUploader } from "../index";
 import appwriteService from "../../appwrite/config";
 
 function PostForm({ post }) {
+  console.log(post, "Post Form");
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
       return value
@@ -21,7 +22,6 @@ function PostForm({ post }) {
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post ? slugTransform(post.$id) : "",
         content: post?.content || "",
         status: post?.status || "active",
       },
@@ -29,12 +29,14 @@ function PostForm({ post }) {
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-
+  const [featuredImg, setFeaturedImg] = useState(null);
+  const handleFileSelect = (file) => {
+    setFeaturedImg(file);
+  };
+  console.log(featuredImg);
   const submit = async (data) => {
     if (post) {
-      const file = data.featuredImage[0]
-        ? appwriteService.uploadFile(data.featuredImage[0])
-        : null;
+      const file = featuredImg ? appwriteService.uploadFile(featuredImg) : null;
 
       if (file) {
         appwriteService.deleteFile(post.featuredImage);
@@ -47,7 +49,7 @@ function PostForm({ post }) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      const file = await appwriteService.uploadFile(data.featuredImage[0]);
+      const file = await appwriteService.uploadFile(featuredImg);
       const fileId = file.$id;
       data.featuredImage = fileId;
       console.log(userData);
@@ -61,74 +63,74 @@ function PostForm({ post }) {
     }
   };
 
-  React.useEffect(() => {
-    console.log(post);
-    const subscription = watch((value, { name }) => {
-      if (name === "title") {
-        setValue("slug", slugTransform(value.title, { shouldValidate: true }));
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [watch, slugTransform, setValue]);
-
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-      <div className="w-2/3 px-2">
-        <Input
-          label="Title :"
-          placeholder="Title"
-          className="mb-4"
-          {...register("title", { required: true })}
-        />
-        <Input
-          label="Slug :"
-          placeholder="Slug"
-          className="mb-4"
-          disabled
-          {...register("slug", { required: true })}
-        />
-        <RTE
-          label="Content :"
-          name="content"
-          control={control}
-          defaultValue={getValues("content")}
-        />
-      </div>
-      <div className="w-1/3 px-2">
-        <Input
-          label="Featured Image :"
-          type="file"
-          className="mb-4"
-          accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("featuredImage", { required: !post })}
-        />
-        {post && (
-          <div className="w-full mb-4">
-            <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
-              alt={post.title}
-              className="rounded-lg"
+    <>
+      <h1 className="text-2.5xl font-semibold text-gray-800 dark:text-white mb-3 ml-2">
+        Create Post
+      </h1>
+      <div className="container w-full   text-xl rounded-lg  border border-gray-200 bg-gray-100 dark:bg-dark-bg p-4 text-black dark:text-white">
+        <form
+          onSubmit={handleSubmit(submit)}
+          className="flex-wrap flex flex-col lg:flex-row"
+        >
+          <div className=" w-full px-2">
+            <div className="">
+              <Input
+                label="Title :"
+                placeholder="Title"
+                className="mb-4"
+                {...register("title", { required: true })}
+              />
+              <Input
+                label='Add Tags : (separated by commas ",")'
+                placeholder="Entertainment, Education, Politics, etc."
+                className="mb-4"
+                {...register("tags", { required: true })}
+              />
+              <label class="mb-8 blockfont-semibold ">Featured Image :</label>
+              <FileUploader
+                onFileSelect={handleFileSelect}
+                imgSrc={
+                  post
+                    ? appwriteService.getFilePreview(post.featuredImage)
+                    : null
+                }
+              />{" "}
+            </div>
+          </div>
+
+          <div className="w-full px-2 gap-3 flex flex-col mt-3 lg:mt-0">
+            <RTE
+              label="Content :"
+              name="content"
+              control={control}
+              defaultValue={getValues("content")}
             />
           </div>
-        )}
-        <Select
-          options={["active", "inactive"]}
-          label="Status"
-          className="mb-4"
-          {...register("status", { required: true })}
-        />
-        <Button
-          type="submit"
-          bgColor={post ? "bg-green-500" : undefined}
-          className="w-full"
-        >
-          {post ? "Update" : "Submit"}
-        </Button>
+          <div className="flex w-full justify-between items-center mt-3">
+            <div
+              className="flex gap-4 ml-3 
+            "
+            >
+              <label class="mb-8 blockfont-semibold ">Post Status :</label>
+              <Select
+                options={["active", "inactive"]}
+                label="Status"
+                className=""
+                {...register("status", { required: true })}
+              />
+            </div>
+            <Button
+              type="submit"
+              bgColor={post ? "bg-green-500" : undefined}
+              className="border border-gray-400 p-2 rounded-lg text-white bg-blue-500"
+            >
+              {post ? "Update" : "Submit"}
+            </Button>
+          </div>
+        </form>
       </div>
-    </form>
+    </>
   );
 }
 
