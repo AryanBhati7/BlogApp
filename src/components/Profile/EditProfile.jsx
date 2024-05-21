@@ -55,7 +55,6 @@ function EditProfile({ profile }) {
 
   const submit = async (data) => {
     const socials = [data.instaLink, data.twitterLink, data.fbLink];
-    console.log(socials);
 
     if (Object.keys(errors).length > 0) {
       for (const error in errors) {
@@ -71,7 +70,6 @@ function EditProfile({ profile }) {
       if (data.profileImg && data.profileImg.length > 0) {
         const profile = await authService.uploadProfile(data.profileImg[0]);
         const profileView = authService.getProfilePreview(profile.$id);
-        console.log(profileView);
         data.profileImg = profileView;
       } else {
         data.profileImg = profile.profileImg;
@@ -86,9 +84,8 @@ function EditProfile({ profile }) {
 
       // Delete profile from storage if new profile is uploaded
       if (data.profileImg !== profile.profileImg && data.profileImg) {
-        console.log(profile.profileImg);
         const profileId = extractFileId(profile.profileImg);
-        console.log(profileId);
+
         if (profileId) {
           authService.deleteProfile(profileId);
         }
@@ -97,7 +94,6 @@ function EditProfile({ profile }) {
       // Delete cover photo from storage if new cover photo is uploaded
       if (data.coverphoto !== profile.coverphoto && data.coverphoto) {
         const coverId = extractFileId(profile.coverphoto);
-        console.log(coverId);
         if (coverId) {
           authService.deleteCoverPhoto(coverId);
         }

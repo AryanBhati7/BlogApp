@@ -55,7 +55,7 @@ function Home() {
                 <AuthorsLoading />
               ) : (
                 authors.map((author) => (
-                  <li key={author.accountId} className="flex items-center p-3">
+                  <li key={author.accountId} className="flex items-center p-2">
                     <Author {...author} />
                   </li>
                 ))
