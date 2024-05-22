@@ -25,7 +25,9 @@ import AuthorsLoading from "./Loading/AuthorsLoading";
 import PostLoading from "./Loading/PostLoading";
 import RecentPosts from "./RecentPosts";
 import FileUploader from "./FileUploader";
+import SharePost from "./SharePost";
 export {
+  SharePost,
   FileUploader,
   RecentPosts,
   PostLoading,

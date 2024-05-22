@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Container } from "../components/index";
+import { Button, Container, SharePost } from "../components/index";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
@@ -15,10 +15,11 @@ import {
 export default function Post() {
   const { postId } = useParams();
   const navigate = useNavigate();
+  const postUrl = window.location.href;
   const allPublicPosts = useSelector((state) => state.posts.publicPosts);
   const allUsers = useSelector((state) => state.users.users);
   const userData = useSelector((state) => state.auth.userData);
-  console.log(allPublicPosts);
+
   const post = allPublicPosts.find((post) => post.$id === postId);
 
   const creatorInfo = post
@@ -53,8 +54,8 @@ export default function Post() {
           }}
         ></div>
 
-        <div className="content-container border border-gray-400 p-6 pb-12 m-4 mx-auto -mt-16 space-y-6 lg:min-w-4xl sm:px-10 sm:mx-12 lg:rounded-md dark:bg-[#262f40] bg-gray-200">
-          <div className="space-y-6 flex  justify-between">
+        <div className="content-container border border-gray-400 p-6 pb-12 m-4 lg:mx-12 -mt-16 mx-5 space-y-6 lg:min-w-4xl sm:px-12 sm:mx-12 rounded-md dark:bg-[#262f40] bg-gray-200">
+          <div className=" flex  justify-between">
             <div className="flex flex-col gap-3">
               <h2
                 rel="noopener noreferrer"
@@ -102,22 +103,28 @@ export default function Post() {
                 </Link>
               </div>
             </div>
-            <div className="flex justify-end items-center">
-              {isAuthor && (
-                <div className="flex justify-end">
-                  <Link to={`/edit-post/${post.$id}`}>
-                    <Button className="mr-3 w-20 px-4 py-2 bg-green-600 text-white font-bold rounded hover:bg-green-700">
-                      Edit
+            <div className="flex flex-col  gap-5 justify-between h-full">
+              {/* <button className="flex justify-end "> */}
+
+              <SharePost postLink={postUrl} postTitle={post.title} />
+
+              <div className="justify-end">
+                {isAuthor && (
+                  <div className="flex">
+                    <Link to={`/edit-post/${post.$id}`}>
+                      <Button className="mr-3 w-20 px-4 py-2 bg-green-600 text-white font-bold rounded hover:bg-green-700">
+                        Edit
+                      </Button>
+                    </Link>
+                    <Button
+                      onClick={deletePost}
+                      className=" w-20 px-4 py-2 text-white font-bold rounded bg-red-500 hover:bg-red-700"
+                    >
+                      Delete
                     </Button>
-                  </Link>
-                  <Button
-                    onClick={deletePost}
-                    className=" w-20 px-4 py-2 text-white font-bold rounded bg-red-500 hover:bg-red-700"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
