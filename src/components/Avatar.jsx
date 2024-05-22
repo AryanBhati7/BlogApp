@@ -1,6 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import authService from "../appwrite/auth";
 
 const Avatar = ({ children, className = "" }) => {
   return (

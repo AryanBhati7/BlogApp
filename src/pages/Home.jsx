@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { fetchPublicPosts } from "../features/postSlice";
+import { fetchUsers } from "../features/usersSlice";
 import {
   Container,
   PostCard,
@@ -7,10 +9,11 @@ import {
   AuthorsLoading,
   PostCardLoading,
 } from "../components/index";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function Home() {
-  const posts = useSelector((state) => state.posts.posts);
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts.publicPosts);
   const authStatus = useSelector((state) => state.auth.status);
   const authors = useSelector((state) => state.users.users);
 
@@ -22,6 +25,12 @@ function Home() {
   if (authStatus === false) {
     return <Landingpage />;
   }
+
+  useEffect(() => {
+    if (posts.length === 0) dispatch(fetchPublicPosts());
+    if (authors.length === 0) dispatch(fetchUsers());
+  }, [dispatch]);
+
   return (
     <div className="maincontainer overflow-x-hidden flex  px-5 lg:px-16 py-4 gap-6 w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-col sm:flex-col">
       <div className="w-full lg:w-[58rem] flex flex-col lg:ml-12 ml-3">

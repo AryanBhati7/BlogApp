@@ -11,14 +11,25 @@ export const fetchMyPosts = createAsyncThunk(
 );
 
 // Async thunk for fetching public posts
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const response = await appwriteService.getPosts();
-  return response.documents;
-});
+export const fetchAllPosts = createAsyncThunk(
+  "posts/fetchAllPosts",
+  async () => {
+    const response = await appwriteService.getPosts([]);
+    return response.documents;
+  }
+);
 
+export const fetchPublicPosts = createAsyncThunk(
+  "posts/fetchPublicPosts",
+  async () => {
+    const response = await appwriteService.getPosts();
+    return response.documents;
+  }
+);
 const initialState = {
   myPosts: [],
-  posts: [],
+  publicPosts: [],
+  allPosts: [],
   status: "idle",
   error: null,
 };
@@ -28,10 +39,21 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     createPost: (state, action) => {
-      state.posts.push(action.payload);
+      const newPost = action.payload;
+      state.allPosts.push(newPost);
+      state.myPosts.push(newPost);
+
+      if (newPost.status === "Public") {
+        state.publicPosts.push(newPost);
+      }
     },
     deletePost: (state, action) => {
-      state.posts = state.posts.filter((post) => post.$id !== action.payload);
+      const postId = action.payload;
+      state.allPosts = state.allPosts.filter((post) => post.$id !== postId);
+      state.myPosts = state.myPosts.filter((post) => post.$id !== postId);
+      state.publicPosts = state.publicPosts.filter(
+        (post) => post.$id !== postId
+      );
     },
   },
   extraReducers: (builder) => {
@@ -41,21 +63,31 @@ const postSlice = createSlice({
       })
       .addCase(fetchMyPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // Add any fetched posts to the array
         state.myPosts = action.payload;
       })
       .addCase(fetchMyPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(fetchPosts.pending, (state) => {
+      .addCase(fetchAllPosts.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
+      .addCase(fetchAllPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.posts = action.payload;
+        state.allPosts = action.payload;
       })
-      .addCase(fetchPosts.rejected, (state, action) => {
+      .addCase(fetchAllPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(fetchPublicPosts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchPublicPosts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.publicPosts = action.payload;
+      })
+      .addCase(fetchPublicPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

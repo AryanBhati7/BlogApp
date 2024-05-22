@@ -26,7 +26,9 @@ import PostLoading from "./Loading/PostLoading";
 import RecentPosts from "./RecentPosts";
 import FileUploader from "./FileUploader";
 import SharePost from "./SharePost";
+import LoadingSpinner from "./Loading/LoadingSpinner";
 export {
+  LoadingSpinner,
   SharePost,
   FileUploader,
   RecentPosts,

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
 import { login, logout } from "./features/authSlice";
-import { Footer, Header } from "./components/index";
+import { Footer, Header, LoadingSpinner } from "./components/index";
 import { Outlet } from "react-router-dom";
 import { fetchUsers } from "./features/usersSlice";
-import { fetchPosts } from "./features/postSlice";
+
 import { fetchMyPosts } from "./features/postSlice";
 
 function App() {
@@ -17,9 +17,6 @@ function App() {
       .then((userData) => {
         if (userData) {
           dispatch(login({ userData }));
-          dispatch(fetchUsers());
-          dispatch(fetchPosts());
-          dispatch(fetchMyPosts(userData.accountId));
         } else {
           dispatch(logout());
         }
@@ -40,7 +37,11 @@ function App() {
       </main>
       <Footer />
     </div>
-  ) : null;
+  ) : (
+    <div className="h-screen w-screen dark:bg-dark-bg bg-background">
+      <LoadingSpinner />
+    </div>
+  );
 }
 
 export default App;

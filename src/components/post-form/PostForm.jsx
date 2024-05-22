@@ -85,7 +85,9 @@ function PostForm({ post }) {
                 className="mb-4"
                 {...register("tags", { required: true })}
               />
-              <label class="mb-8 blockfont-semibold ">Featured Image :</label>
+              <label className="mb-8 blockfont-semibold ">
+                Featured Image :
+              </label>
               <FileUploader
                 onFileSelect={handleFileSelect}
                 imgSrc={
@@ -110,7 +112,7 @@ function PostForm({ post }) {
               className="flex gap-4 ml-3 
             "
             >
-              <label class="mb-8 blockfont-semibold ">Post Status :</label>
+              <label className="mb-8 blockfont-semibold ">Post Status :</label>
               <Select
                 options={["Public", "Private"]}
                 label="Status"

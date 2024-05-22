@@ -5,6 +5,7 @@ import { Button, Container, SharePost } from "../components/index";
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
+import { fetchAllPosts } from "../features/postSlice";
 import {
   AvatarImage,
   AvatarName,
@@ -17,12 +18,12 @@ export default function Post() {
   const navigate = useNavigate();
   const postUrl = window.location.href;
   const dispatch = useDispatch();
-  const allPublicPosts = useSelector((state) => state.posts.posts);
+  const allPosts = useSelector((state) => state.posts.allPosts);
   const allUsers = useSelector((state) => state.users.users);
   const userData = useSelector((state) => state.auth.userData);
-  console.log(allPublicPosts);
-  const post = allPublicPosts.find((post) => post.$id === postId);
-  console.log(post);
+
+  const post = allPosts.find((post) => post.$id === postId);
+
   const creatorInfo = post
     ? allUsers.find((user) => user.accountId === post.userId)
     : null;
@@ -40,6 +41,9 @@ export default function Post() {
       }
     });
   };
+  useEffect(() => {
+    dispatch(fetchAllPosts());
+  }, [dispatch, postId]);
 
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800">
