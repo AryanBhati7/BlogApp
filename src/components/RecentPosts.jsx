@@ -4,7 +4,7 @@ import { PostCardLoading, PostCard } from "./index";
 import { useSelector } from "react-redux";
 function RecentPosts({ currentPostId }) {
   console.log(currentPostId);
-  const posts = useSelector((state) => state.posts.publicPosts);
+  const posts = useSelector((state) => state.posts.posts);
   console.log(posts);
 
   const postsStatus = useSelector((state) => state.posts.status);

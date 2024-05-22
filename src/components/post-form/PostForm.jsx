@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Button, Input, Select, RTE, FileUploader } from "../index";
 import appwriteService from "../../appwrite/config";
 import { useDispatch } from "react-redux";
-import { createPublicPost } from "../../features/postSlice";
+import { createPost } from "../../features/postSlice";
 
 function PostForm({ post }) {
   const dispatch = useDispatch();
@@ -15,7 +15,8 @@ function PostForm({ post }) {
       defaultValues: {
         title: post?.title || "",
         content: post?.content || "",
-        status: post?.status || "active",
+        status: post?.status || "Public",
+        tags: post?.tags ? post.tags.join(", ") : " ",
       },
     });
 
@@ -25,7 +26,7 @@ function PostForm({ post }) {
   const handleFileSelect = (file) => {
     setFeaturedImg(file);
   };
-  console.log(featuredImg);
+
   const submit = async (data) => {
     if (post) {
       const file = featuredImg ? appwriteService.uploadFile(featuredImg) : null;
@@ -45,7 +46,6 @@ function PostForm({ post }) {
       const file = await appwriteService.uploadFile(featuredImg);
       const fileId = file.$id;
       data.featuredImage = fileId;
-      console.log(userData);
 
       data.tags = data.tags.split(",").map((tag) => tag.trim());
 
@@ -54,7 +54,8 @@ function PostForm({ post }) {
         userId: userData.accountId,
       });
       if (dbPost) {
-        dispatch(createPublicPost(dbPost));
+        console.log("dbPost", dbPost);
+        if (dbPost.status === "Public") dispatch(createPost(dbPost));
         navigate(`/post/${dbPost.$id}`);
       }
     }
@@ -111,7 +112,7 @@ function PostForm({ post }) {
             >
               <label class="mb-8 blockfont-semibold ">Post Status :</label>
               <Select
-                options={["active", "inactive"]}
+                options={["Public", "Private"]}
                 label="Status"
                 className=""
                 {...register("status", { required: true })}

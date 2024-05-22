@@ -28,7 +28,7 @@ function PostCard({
       to={`/post/${$id}`}
       className="group p-3 w-full rounded-xl overflow-hidden flex flex-col md:flex-row bg-gray-100 dark:bg-[#262f40] border border-gray-400"
     >
-      <div className="relative rounded-xl overflow-hidden w-full md:w-[36rem] lg:w-56 h-60 flex-none">
+      <div className="relative rounded-xl overflow-hidden w-full md:w-[18rem] lg:w-56 h-60 flex-none">
         <img
           src={appwriteService.getFilePreview(featuredImage)}
           alt={title}

@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function EditPost() {
-  const posts = useSelector((state) => state.posts.publicPosts);
+  const posts = useSelector((state) => state.posts.posts);
   const { postId } = useParams();
   const navigate = useNavigate();
 

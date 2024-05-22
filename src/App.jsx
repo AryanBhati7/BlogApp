@@ -5,8 +5,8 @@ import { login, logout } from "./features/authSlice";
 import { Footer, Header } from "./components/index";
 import { Outlet } from "react-router-dom";
 import { fetchUsers } from "./features/usersSlice";
-import { fetchPublicPosts } from "./features/postSlice";
-import { fetchAllPosts } from "./features/postSlice";
+import { fetchPosts } from "./features/postSlice";
+import { fetchMyPosts } from "./features/postSlice";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -18,8 +18,8 @@ function App() {
         if (userData) {
           dispatch(login({ userData }));
           dispatch(fetchUsers());
-          dispatch(fetchPublicPosts());
-          dispatch(fetchAllPosts());
+          dispatch(fetchPosts());
+          dispatch(fetchMyPosts(userData.accountId));
         } else {
           dispatch(logout());
         }

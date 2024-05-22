@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
 import { Button, Container, SharePost } from "../components/index";
 import parse from "html-react-parser";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
 import {
   AvatarImage,
@@ -11,27 +11,30 @@ import {
   PostLoading,
   RecentPosts,
 } from "../components/index";
-
+import { deletePost as deletePostAction } from "../features/postSlice";
 export default function Post() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const postUrl = window.location.href;
-  const allPublicPosts = useSelector((state) => state.posts.publicPosts);
+  const dispatch = useDispatch();
+  const allPublicPosts = useSelector((state) => state.posts.posts);
   const allUsers = useSelector((state) => state.users.users);
   const userData = useSelector((state) => state.auth.userData);
-
+  console.log(allPublicPosts);
   const post = allPublicPosts.find((post) => post.$id === postId);
-
+  console.log(post);
   const creatorInfo = post
     ? allUsers.find((user) => user.accountId === post.userId)
     : null;
+  console.log(creatorInfo);
   const isAuthor =
     post && userData ? post.userId === userData.accountId : false;
   console.log(creatorInfo);
-
+  console.log(post);
   const deletePost = () => {
     appwriteService.deletePost(post.$id).then((status) => {
       if (status) {
+        dispatch(deletePostAction(post.$id));
         appwriteService.deleteFile(post.featuredImage);
         navigate("/");
       }
