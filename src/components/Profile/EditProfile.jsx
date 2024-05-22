@@ -134,8 +134,8 @@ function EditProfile({ profile }) {
     }
   }
   return (
-    <section className="py-2 my-auto dark:bg-gray-900 bg-background">
-      <div className="lg:w-[80%] md:w-[90%] xs:w-[96%] mx-auto flex gap-4">
+    <section className="py-2 my-auto dark:bg-gray-900 bg-background  ">
+      <div className="lg:w-[85%] md:w-[90%] xs:w-[96%] mx-auto flex gap-4">
         <div className="lg:w-[88%] md:w-[80%] sm:w-[88%] xs:w-full mx-auto shadow-2xl p-4 rounded-xl h-fit self-center dark:bg-gray-800/40">
           <div className="">
             <h1 className="lg:text-3xl md:text-2xl sm:text-xl xs:text-xl font-serif font-extrabold mb-2 dark:text-white">
@@ -145,7 +145,9 @@ function EditProfile({ profile }) {
             <form onSubmit={handleSubmit(submit)}>
               <div
                 className="w-full rounded-sm bg-cover bg-center bg-no-repeat items-center"
-                style={{ backgroundImage: `url(${selectedCover})` }}
+                style={{
+                  backgroundImage: `url(${selectedCover})`,
+                }}
               >
                 <div
                   className={`mx-auto flex justify-center w-[141px] h-[141px] bg-blue-300/20 rounded-full bg-cover bg-center bg-no-repeat border border-dark-bg `}

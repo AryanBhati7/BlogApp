@@ -2,9 +2,9 @@ import React from "react";
 
 function UserInformation({ userInfo }) {
   return (
-    <div className="w-full my-auto py-6 flex flex-col justify-center gap-2 bg-background dark:bg-dark-bg shadow-xl pb-8">
+    <div className="w-full mx-8 my-auto py-6 flex flex-col justify-center gap-2 bg-background dark:bg-dark-bg shadow-xl pb-8">
       <div className="w-full flex sm:flex-row xs:flex-col gap-2 justify-center">
-        <div className="w-full mx-8">
+        <div className="w-full">
           <div className="text-gray-900 dark:text-white">
             <div className="flex flex-col pb-3 border-b border-gray-200 dark:border-gray-700 mb-3">
               <div className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
@@ -24,7 +24,7 @@ function UserInformation({ userInfo }) {
             </div>
           </div>
         </div>
-        <div className="w-full">
+        <div className="w-full overflow-hidden mr-16">
           <div className="text-gray-900 dark:text-white">
             <div className="flex flex-col pb-3 border-b border-gray-200 dark:border-gray-700 mb-3">
               <div className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">

@@ -24,10 +24,10 @@ function Profile() {
   }, [allUsers, username]);
 
   return userInfo ? (
-    <div>
+    <>
       <ProfileAvatar userInfo={userInfo} isUser={isUser} />
       <UserInformation userInfo={userInfo} />
-    </div>
+    </>
   ) : null;
 }
 
