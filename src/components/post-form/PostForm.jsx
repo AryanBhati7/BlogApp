@@ -4,19 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, Input, Select, RTE, FileUploader } from "../index";
 import appwriteService from "../../appwrite/config";
+import { useDispatch } from "react-redux";
+import { createPublicPost } from "../../features/postSlice";
 
 function PostForm({ post }) {
-  console.log(post, "Post Form");
-  const slugTransform = useCallback((value) => {
-    if (value && typeof value === "string") {
-      return value
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-zA-Z\d\s]/g, "") // remove non-alphanumeric characters
-        .replace(/\s+/g, "-"); // replace one or more spaces with a hyphen
-    }
-    return "";
-  }, []);
+  const dispatch = useDispatch();
 
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
@@ -41,6 +33,7 @@ function PostForm({ post }) {
       if (file) {
         appwriteService.deleteFile(post.featuredImage);
       }
+      data.tags = data.tags.split(",").map((tag) => tag.trim());
       const dbPost = await appwriteService.updatePost(post.$id, {
         ...data,
         featuredImage: file ? file.$id : undefined,
@@ -53,11 +46,15 @@ function PostForm({ post }) {
       const fileId = file.$id;
       data.featuredImage = fileId;
       console.log(userData);
+
+      data.tags = data.tags.split(",").map((tag) => tag.trim());
+
       const dbPost = await appwriteService.createPost({
         ...data,
         userId: userData.accountId,
       });
       if (dbPost) {
+        dispatch(createPublicPost(dbPost));
         navigate(`/post/${dbPost.$id}`);
       }
     }

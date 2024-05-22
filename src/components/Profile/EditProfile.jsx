@@ -39,19 +39,19 @@ function EditProfile({ profile }) {
       fbLink: profile?.socials[2] || "",
     },
   });
-  function extractFileId(url) {
-    if (!url.startsWith("https://lh3.googleusercontent.com")) {
-      const regex = /files\/(.*)\/preview/;
-      const match = url.match(regex);
-      if (match && match[1]) {
-        return match[1];
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
+  // function extractFileId(url) {
+  //   if (!url.startsWith("https://lh3.googleusercontent.com")) {
+  //     const regex = /files\/(.*)\/preview/;
+  //     const match = url.match(regex);
+  //     if (match && match[1]) {
+  //       return match[1];
+  //     } else {
+  //       return null;
+  //     }
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   const submit = async (data) => {
     const socials = [data.instaLink, data.twitterLink, data.fbLink];
@@ -71,31 +71,32 @@ function EditProfile({ profile }) {
         const profile = await authService.uploadProfile(data.profileImg[0]);
         const profileView = authService.getProfilePreview(profile.$id);
         data.profileImg = profileView;
+        data.profileId = profile.$id;
       } else {
         data.profileImg = profile.profileImg;
+        data.profileId = profile.profileId;
       }
       if (data.coverphoto && data.coverphoto.length > 0) {
         const cover = await authService.uploadCoverPhoto(data.coverphoto[0]);
         const coverView = authService.getCoverPhotoPreview(cover.$id);
         data.coverphoto = coverView;
+        data.coverphotoId = cover.$id;
       } else {
         data.coverphoto = profile.coverphoto;
+        data.coverphotoId = profile.coverphotoId;
       }
-
+      console.log(profile, data.profileImg, data.coverphoto);
       // Delete profile from storage if new profile is uploaded
       if (data.profileImg !== profile.profileImg && data.profileImg) {
-        const profileId = extractFileId(profile.profileImg);
-
-        if (profileId) {
-          authService.deleteProfile(profileId);
+        if (profile.profileId) {
+          authService.deleteProfile(profile.profileId);
         }
       }
 
       // Delete cover photo from storage if new cover photo is uploaded
       if (data.coverphoto !== profile.coverphoto && data.coverphoto) {
-        const coverId = extractFileId(profile.coverphoto);
-        if (coverId) {
-          authService.deleteCoverPhoto(coverId);
+        if (profile.coverphotoId) {
+          authService.deleteCoverPhoto(coverphotoId);
         }
       }
       const userData = await authService.updateProfile(profile.$id, {

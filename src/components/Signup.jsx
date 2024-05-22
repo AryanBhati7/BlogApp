@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Input, Logo, Button } from "./index";
 import { useForm } from "react-hook-form";
 import authService from "../appwrite/auth";
+import { createUser } from "../features/usersSlice";
 
 function Signup() {
   const { register, handleSubmit, watch } = useForm();
@@ -19,13 +20,17 @@ function Signup() {
     try {
       if (data.profileImg && data.profileImg.length > 0) {
         const profile = await authService.uploadProfile(data.profileImg[0]);
+        console.log(profile);
         const profileView = authService.getProfilePreview(profile.$id);
         data.profileImg = profileView;
+        data.profileId = profile.$id;
       } else {
         data.profileImg = authService.createAvatar(data.name);
       }
+      console.log(data);
       const userData = await authService.createAccount(data);
       if (userData) {
+        dispatch(createUser(userData));
         dispatch(authLogin({ userData }));
         navigate("/");
       }

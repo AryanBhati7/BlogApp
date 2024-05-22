@@ -5,7 +5,15 @@ import { formatDistanceToNow } from "date-fns";
 import { AvatarImage, AvatarName, PostCardLoading } from "./index";
 import { useSelector } from "react-redux";
 
-function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
+function PostCard({
+  $id,
+  title,
+  featuredImage,
+  $createdAt,
+  userId,
+  content,
+  tags,
+}) {
   const users = useSelector((state) => state.users.users);
 
   const creatorInfo = users.find((user) => user.accountId === userId);
@@ -32,12 +40,14 @@ function PostCard({ $id, title, featuredImage, $createdAt, userId, content }) {
           {title}
         </h3>
         <div className="flex gap-2 flex-wrap mt-2">
-          <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
-            Tag 1
-          </span>
-          <span className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full">
-            Tag 2
-          </span>
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
         <p className="mt-3 text-gray-600 dark:text-neutral-300">
           {/* {parse(content, options)} */}

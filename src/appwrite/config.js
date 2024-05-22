@@ -14,7 +14,7 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  async createPost({ title, slug, content, featuredImage, status, userId }) {
+  async createPost({ title, content, featuredImage, status, userId, tags }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseID,
@@ -26,6 +26,7 @@ export class Service {
           featuredImage,
           status,
           userId,
+          tags,
         }
       );
     } catch (error) {
@@ -59,6 +60,49 @@ export class Service {
       return true;
     } catch (error) {
       console.log("Appwrite serive :: deletePost :: error", error);
+      return false;
+    }
+  }
+
+  async likePost(postId, likesArray) {
+    try {
+      return await this.databases.updateDocument(
+        conf.appwriteDatabaseID,
+        conf.appwritePostsCollectionID,
+        postId,
+        {
+          likes: likesArray,
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite serive :: likePost :: error", error);
+    }
+  }
+  async savePost(postId, userId) {
+    try {
+      return await this.databases.createDocument(
+        conf.appwriteDatabaseID,
+        conf.appwriteSavesCollectionID,
+        ID.unique(),
+        {
+          userId,
+          postId,
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite serive :: savePost :: error", error);
+    }
+  }
+  async unsavePost(saveId) {
+    try {
+      await this.databases.deleteDocument(
+        conf.appwriteDatabaseID,
+        conf.appwriteSavesCollectionID,
+        saveId
+      );
+      return true;
+    } catch (error) {
+      console.log("Appwrite serive :: unsavePost :: error", error);
       return false;
     }
   }

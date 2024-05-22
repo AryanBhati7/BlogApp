@@ -29,7 +29,11 @@ const initialState = {
 const postSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    createPublicPost: (state, action) => {
+      state.publicPosts.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPosts.pending, (state) => {
@@ -58,5 +62,7 @@ const postSlice = createSlice({
       });
   },
 });
+
+export const { createPublicPost } = postSlice.actions;
 
 export default postSlice.reducer;

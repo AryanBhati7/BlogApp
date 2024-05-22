@@ -128,9 +128,9 @@ export default function Post() {
             </div>
           </div>
 
-          <p className="text-gray-600 dark:text-neutral-300 text-xl text-justify leading-relaxed">
+          <div className="text-gray-600 dark:text-neutral-300 text-xl text-justify leading-relaxed">
             {parse(post.content)}
-          </p>
+          </div>
         </div>
       </div>
 

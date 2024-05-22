@@ -28,7 +28,14 @@ export class AuthService {
     this.avatar = new Avatars(this.client);
   }
 
-  async createAccount({ email, password, name, username, profileImg }) {
+  async createAccount({
+    email,
+    password,
+    name,
+    username,
+    profileImg,
+    profileId,
+  }) {
     try {
       // Create the account
       const userAccount = await this.account.create(
@@ -57,7 +64,8 @@ export class AuthService {
         name: userAccount.name,
         username: username,
         email: userAccount.email,
-        profileImg: profileImg || "6644de34002d7434f95a",
+        profileImg: profileImg || "",
+        profileId: profileId || "",
       });
       if (!newUser) {
         console.log("Failed to save user data to the database");
@@ -69,7 +77,15 @@ export class AuthService {
     }
   }
 
-  async saveUserToDB({ accountId, name, email, profileImg, username, bio }) {
+  async saveUserToDB({
+    accountId,
+    name,
+    email,
+    profileImg,
+    username,
+    bio,
+    profileId = "",
+  }) {
     try {
       // Check if a user with the same accountId already exists
       const users = await this.getUserInfo(accountId);
@@ -90,6 +106,7 @@ export class AuthService {
             email,
             profileImg,
             bio,
+            profileId,
           }
         );
         return userDataSaved;
@@ -145,6 +162,7 @@ export class AuthService {
       const userInfo = await this.databases.listDocuments(
         conf.appwriteDatabaseID,
         conf.appwriteUsersCollectionID,
+
         [Query.equal("accountId", userId)]
       );
       console.log(userInfo, "getUserInfo");
@@ -181,8 +199,6 @@ export class AuthService {
     try {
       // Get the current session
       const session = await this.getAccount();
-      console.log(session);
-
       // Get the user's profile information from Google
       const response = await fetch(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${session.providerAccessToken}`
@@ -308,6 +324,8 @@ export class AuthService {
       dob,
       location,
       socials,
+      profileId,
+      coverphotoId,
     }
   ) {
     try {
@@ -325,6 +343,8 @@ export class AuthService {
           bio,
           coverphoto,
           socials,
+          profileId,
+          coverphotoId,
         }
       );
     } catch (error) {

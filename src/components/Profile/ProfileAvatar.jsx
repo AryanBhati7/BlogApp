@@ -9,7 +9,7 @@ function ProfileAvatar({ userInfo, isUser }) {
       ></div>
       <div className="flex flex-col items-center -mt-24">
         <div
-          className={`mx-auto flex justify-center w-44 h-44 bg-blue-300/20 rounded-full bg-cover bg-center bg-no-repeat border-4 border-dark-bg `}
+          className={`mx-auto flex justify-center w-44 h-44 bg-dark-bg rounded-full bg-cover bg-center bg-no-repeat border-4 border-dark-bg `}
           style={{ backgroundImage: `url(${userInfo.profileImg})` }}
         ></div>
 
