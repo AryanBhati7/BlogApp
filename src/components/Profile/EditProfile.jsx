@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../../features/authSlice";
+import { login, updateUserData } from "../../features/authSlice";
 import { useNavigate } from "react-router-dom";
 import authService from "../../appwrite/auth";
 import DatePicker from "react-datepicker";
@@ -105,7 +105,7 @@ function EditProfile({ profile }) {
       });
       if (userData) {
         dispatch(updateUser(userData));
-        dispatch(login({ userData }));
+        dispatch(updateUserData({ userData }));
         navigate(`/profile/${userData.username}`);
       }
     }

@@ -11,6 +11,12 @@ const conf = {
   appwriteUsersCollectionID: String(
     import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID
   ),
+  appwriteCommentsCollectionID: String(
+    import.meta.env.VITE_APPWRITE_COMMENTS_COLLECTION_ID
+  ),
+  appwriteTagsCollectionID: String(
+    import.meta.env.VITE_APPWRITE_TAGS_COLLECTION_ID
+  ),
   appwritePostImgBucketID: String(
     import.meta.env.VITE_APPWRITE_POST_IMG_BUCKET_ID
   ),

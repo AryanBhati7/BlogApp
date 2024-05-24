@@ -1,15 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import appwriteService from "../appwrite/config";
+import authService from "../appwrite/auth";
 
 import save from "../assets/img/save.svg";
 import saved from "../assets/img/saved.svg";
 import like from "../assets/img/like.svg";
 import liked from "../assets/img/liked.svg";
+import { updateUserData } from "../features/authSlice";
 function PostStats({ post }) {
-  const user = useSelector((state) => state.auth.userData);
-  console.log(user);
+  const userData = useSelector((state) => state.auth.userData);
+  const [user, setUser] = useState(userData);
+  const dispatch = useDispatch();
   const likesList = post.likes.map((user) => user.$id);
+
+  const getCurrentUser = () => {
+    authService
+      .getCurrentUser()
+      .then((userData) => {
+        if (userData) {
+          console.log(userData);
+          return userData;
+        } else {
+          console.log("GetCurrentuserFailed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting current user:", error);
+      });
+  };
 
   const [likes, setLikes] = useState(likesList);
   const [isSaved, setIsSaved] = useState(false);
@@ -21,7 +40,7 @@ function PostStats({ post }) {
   const savedPostRecord = user.save.find(
     (record) => record.post.$id === post.$id
   );
-  const handleLikePost = (e) => {
+  const handleLikePost = async (e) => {
     let likesArray = [...likes];
 
     if (likesArray.includes(user.$id)) {
@@ -32,20 +51,33 @@ function PostStats({ post }) {
 
     setLikes(likesArray);
     appwriteService.likePost(post.$id, likesArray).then((res) => {
-      console.log(res);
+      console.log(res, "LikePost");
+    });
+    authService.getCurrentUser().then((userData) => {
+      console.log(userData);
+      setUser(userData);
+      dispatch(updateUserData({ userData }));
     });
   };
   const handleSavePost = (e) => {
     if (savedPostRecord) {
       setIsSaved(false);
+      authService.getCurrentUser().then((userData) => {
+        console.log(userData);
+        setUser(userData);
+        dispatch(updateUserData({ userData }));
+      });
       return appwriteService.unsavePost(savedPostRecord.$id);
     }
-
     appwriteService.savePost(user.$id, post.$id).then((res) => {
-      console.log(res);
-      console.log(user);
+      console.log(res, "SavePost");
     });
     setIsSaved(true);
+    authService.getCurrentUser().then((userData) => {
+      console.log(userData);
+      setUser(userData);
+      dispatch(updateUserData({ userData }));
+    });
   };
 
   return (
