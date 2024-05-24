@@ -16,7 +16,6 @@ function Home() {
   const posts = useSelector((state) => state.posts.publicPosts);
   const authStatus = useSelector((state) => state.auth.status);
   const authors = useSelector((state) => state.users.users);
-  console.log(posts);
   const postsStatus = useSelector((state) => state.posts.status);
   const authorsStatus = useSelector((state) => state.users.status);
 
@@ -43,7 +42,7 @@ function Home() {
           ) : (
             posts.map((post) => (
               <div key={post.$id}>
-                <PostCard {...post} />
+                <PostCard post={post} />
               </div>
             ))
           )}
@@ -65,7 +64,11 @@ function Home() {
               ) : (
                 authors.map((author) => (
                   <li key={author.accountId} className="flex items-center p-2">
-                    <Author {...author} />
+                    <Author
+                      authorusername={author.username}
+                      numberOfPosts={author.posts.length}
+                      profileImg={author.profileImg}
+                    />
                   </li>
                 ))
               )}

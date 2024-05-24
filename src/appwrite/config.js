@@ -1,26 +1,12 @@
 import conf from "../conf/conf";
-import { Client, ID, Storage, Query, Databases } from "appwrite";
+import { Client, Storage, Query, Databases } from "appwrite";
 import { FileService } from "./posts/fileService.js";
 import { UserService } from "./posts/userService.js";
 import { PostService } from "./posts/postService.js";
 
-const userService = new UserService();
-userService.addComment(userId, postId, comment);
-userService.deleteComment(commentId);
-userService.updateComment(commentId, comment);
-userService.savePost(user, post);
-userService.unsavePost(saveId);
-userService.likePost(postId, likes);
-
-const postService = new PostService();
-postService.createPost({ title, content, featuredImage, status, userId, tags });
-postService.updatePost(postId, { title, content, featuredImage, status });
-postService.deletePost(postId);
-
-const fileService = new FileService();
-fileService.uploadFile(file);
-fileService.deleteFile(fileId);
-fileService.getFilePreview(fileId);
+export const userService = new UserService();
+export const postService = new PostService();
+export const fileService = new FileService();
 
 export class Service {
   client = new Client();

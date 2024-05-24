@@ -17,24 +17,7 @@ const initialState = {
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   const allUsers = await authService.getAllUsers();
   if (allUsers) {
-    const authorsData = allUsers.map(async (user) => {
-      const data = await appwriteService.getPostsByUser(user.accountId);
-      return {
-        accountId: user.accountId,
-        username: user.username,
-        profileImg: user.profileImg,
-        coverphoto: user.coverphoto,
-        numberOfPosts: data.total,
-        location: user.location,
-        name: user.name,
-        dob: user.dob,
-        bio: user.bio,
-        email: user.email,
-        gender: user.gender,
-        socials: user.socials,
-      };
-    });
-    return Promise.all(authorsData);
+    return allUsers;
   } else {
     throw new Error("Failed to fetch users");
   }

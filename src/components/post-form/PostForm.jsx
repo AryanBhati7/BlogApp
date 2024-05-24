@@ -6,6 +6,7 @@ import { Button, Input, Select, RTE, FileUploader } from "../index";
 import appwriteService from "../../appwrite/config";
 import { useDispatch } from "react-redux";
 import { createPost } from "../../features/postSlice";
+import { fileService, postService } from "../../appwrite/config";
 
 function PostForm({ post }) {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ function PostForm({ post }) {
         title: post?.title || "",
         content: post?.content || "",
         status: post?.status || "Public",
-        tags: post?.tags ? post.tags.join(", ") : " ",
+        tags: post?.tags.tagName ? post.tags.tagName.join(", ") : " ",
       },
     });
 
@@ -29,29 +30,38 @@ function PostForm({ post }) {
 
   const submit = async (data) => {
     if (post) {
-      const file = featuredImg ? appwriteService.uploadFile(featuredImg) : null;
+      let file;
+      let featuredImageURL;
 
-      if (file) {
-        appwriteService.deleteFile(post.featuredImage);
+      if (featuredImg) {
+        file = await fileService.uploadFile(featuredImg);
+        featuredImageURL = file.$id;
       }
+      if (file && post.featuredImage) {
+        await fileService.deleteFile(post.featuredImage);
+      }
+
       data.tags = data.tags.split(",").map((tag) => tag.trim());
-      const dbPost = await appwriteService.updatePost(post.$id, {
+      const dbPost = await postService.updatePost(post.$id, {
         ...data,
         featuredImage: file ? file.$id : undefined,
+        featuredImageURL,
       });
       if (dbPost) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      const file = await appwriteService.uploadFile(featuredImg);
+      const file = await fileService.uploadFile(featuredImg);
       const fileId = file.$id;
       data.featuredImage = fileId;
+      const featuredImageURL = fileService.getFilePreview(file.$id);
 
       data.tags = data.tags.split(",").map((tag) => tag.trim());
 
-      const dbPost = await appwriteService.createPost({
+      const dbPost = await postService.createPost({
         ...data,
-        userId: userData.accountId,
+        userId: userData.$id,
+        featuredImageURL,
       });
       if (dbPost) {
         console.log("dbPost", dbPost);
@@ -90,11 +100,7 @@ function PostForm({ post }) {
               </label>
               <FileUploader
                 onFileSelect={handleFileSelect}
-                imgSrc={
-                  post
-                    ? appwriteService.getFilePreview(post.featuredImage)
-                    : null
-                }
+                imgSrc={post ? post.featuredImageURL : null}
               />{" "}
             </div>
           </div>

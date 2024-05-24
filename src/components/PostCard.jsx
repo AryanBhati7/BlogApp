@@ -5,18 +5,9 @@ import { formatDistanceToNow } from "date-fns";
 import { AvatarImage, AvatarName, PostCardLoading } from "./index";
 import { useSelector } from "react-redux";
 
-function PostCard({
-  $id,
-  title,
-  featuredImage,
-  $createdAt,
-  userId,
-  content,
-  tags,
-}) {
-  const users = useSelector((state) => state.users.users);
-
-  const creatorInfo = users.find((user) => user.accountId === userId);
+function PostCard({ post }) {
+  const creatorInfo = post.creator;
+  // const creatorInfo = users.find((user) => user.accountId === userId);
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -25,20 +16,20 @@ function PostCard({
   }
   return (
     <div className="group p-3 w-full rounded-xl overflow-hidden flex flex-col md:flex-row bg-gray-100 dark:bg-[#262f40] border border-gray-400">
-      <Link to={`/post/${$id}`}>
+      <Link to={`/post/${post.$id}`}>
         <div className="relative rounded-xl overflow-hidden w-full md:w-[18rem] lg:w-56 h-60 flex-none">
           <img
-            src={appwriteService.getFilePreview(featuredImage)}
-            alt={title}
+            src={post.featuredImageURL}
+            alt={post.title}
             className="group-hover:scale-105 transition-transform duration-500 ease-in-out size-full absolute top-0 start-0 object-cover rounded-xl"
           />
         </div>
       </Link>
-      <div className="mt-4 sm:mt-0 sm:ms-6 sm:px-2">
-        <Link to={`/post/${$id}`}>
+      <div className="mt-4 sm:mt-0 sm:ms-6 sm:px-2 w-full">
+        <Link to={`/post/${post.$id}`}>
           <div className="flex items-center justify-between mt-1 lg:mt-0 mr-1">
             <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-600 dark:text-neutral-100 dark:group-hover:text-white">
-              {title}
+              {post.title}
             </h3>
             <div className="flex flex-row gap-1 items-center justify-center ">
               <svg
@@ -53,23 +44,27 @@ function PostCard({
                 ></path>
               </svg>
               <span className="text-md text-neutral-100">
-                {Math.floor(Math.random() * 1000) + 1}
+                {post.likes.length}
               </span>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap mt-2">
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full"
-              >
-                {tag}
-              </span>
-            ))}
+            {post.tags &&
+              post.tags.map((tag) => {
+                console.log(tag.tagName);
+                return (
+                  <span
+                    key={tag.$id}
+                    className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full"
+                  >
+                    {tag.tagName}
+                  </span>
+                );
+              })}
           </div>
           <p className="mt-3 text-gray-600 dark:text-neutral-300">
             {/* {parse(content, options)} */}
-            {truncateHtmlContent(content, 180)}
+            {truncateHtmlContent(post.content, 180)}
             {/* {content.length > 400 ? `${content.substring(0, 400)}...` : content} */}
           </p>
           <p className="mt-2 inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
@@ -90,7 +85,7 @@ function PostCard({
             </svg>
           </p>
         </Link>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mt-8">
           <div className="author flex items-center -ml-3 my-3">
             <AvatarImage
               src={creatorInfo ? creatorInfo.profileImg : ""}
@@ -110,19 +105,19 @@ function PostCard({
               </Link>
               <br></br>
               <span className="text-gray-600 dark:text-gray-200">
-                {new Date($createdAt).toLocaleDateString(undefined, {
+                {new Date(post.$createdAt).toLocaleDateString(undefined, {
                   month: "long",
                   day: "numeric",
                 })}
                 {" ("}
-                {formatDistanceToNow(new Date($createdAt), {
+                {formatDistanceToNow(new Date(post.$createdAt), {
                   addSuffix: true,
                 })}
                 {")"}
               </span>
             </h2>
           </div>
-          <div className="mt-6 lg:mt-10">
+          <div className="mt-6 lg:mt-8">
             <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

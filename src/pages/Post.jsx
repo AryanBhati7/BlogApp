@@ -23,13 +23,10 @@ export default function Post() {
   const userData = useSelector((state) => state.auth.userData);
 
   const post = allPosts.find((post) => post.$id === postId);
-  const creatorInfo = post
-    ? allUsers.find((user) => user.accountId === post.userId)
-    : null;
+  console.log(post);
+  const creatorInfo = post ? post.creator : undefined;
   console.log(creatorInfo);
-  const isAuthor =
-    post && userData ? post.userId === userData.accountId : false;
-  console.log(creatorInfo);
+  const isAuthor = creatorInfo.accountId === userData.accountId ? true : false;
 
   const deletePost = () => {
     appwriteService.deletePost(post.$id).then((status) => {
@@ -50,9 +47,7 @@ export default function Post() {
         <div
           className="rounded-md h-60 sm:h-96 w-full"
           style={{
-            backgroundImage: `url(${appwriteService.getFilePreview(
-              post.featuredImage
-            )})`,
+            backgroundImage: `url(${post.featuredImageURL})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "center",
