@@ -16,7 +16,7 @@ function Home() {
   const posts = useSelector((state) => state.posts.publicPosts);
   const authStatus = useSelector((state) => state.auth.status);
   const authors = useSelector((state) => state.users.users);
-
+  console.log(posts);
   const postsStatus = useSelector((state) => state.posts.status);
   const authorsStatus = useSelector((state) => state.users.status);
 

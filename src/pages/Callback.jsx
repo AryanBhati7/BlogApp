@@ -12,7 +12,6 @@ function Callback({ provider }) {
     if (provider === "google") {
       authService.getGoogleAccountInfo().then((userData) => {
         if (userData) {
-          console.log(userData);
           dispatch(authLogin({ userData }));
           navigate("/");
         } else {

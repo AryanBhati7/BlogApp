@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 function RecentPosts({ currentPostId }) {
   console.log(currentPostId);
   const posts = useSelector((state) => state.posts.publicPosts);
-  console.log(posts);
-
   const postsStatus = useSelector((state) => state.posts.status);
 
   const recentPosts = posts.filter((post) => post.$id !== currentPostId);

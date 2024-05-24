@@ -6,7 +6,7 @@ import { Footer, Header, LoadingSpinner } from "./components/index";
 import { Outlet } from "react-router-dom";
 import { fetchUsers } from "./features/usersSlice";
 
-import { fetchMyPosts } from "./features/postSlice";
+import { fetchAllPosts } from "./features/postSlice";
 
 function App() {
   const [loading, setLoading] = useState(true);

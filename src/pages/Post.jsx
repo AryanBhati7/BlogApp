@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Container, SharePost } from "../components/index";
+import { Button, Container, PostStats, SharePost } from "../components/index";
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
@@ -23,7 +23,6 @@ export default function Post() {
   const userData = useSelector((state) => state.auth.userData);
 
   const post = allPosts.find((post) => post.$id === postId);
-
   const creatorInfo = post
     ? allUsers.find((user) => user.accountId === post.userId)
     : null;
@@ -31,7 +30,7 @@ export default function Post() {
   const isAuthor =
     post && userData ? post.userId === userData.accountId : false;
   console.log(creatorInfo);
-  console.log(post);
+
   const deletePost = () => {
     appwriteService.deletePost(post.$id).then((status) => {
       if (status) {
@@ -42,7 +41,7 @@ export default function Post() {
     });
   };
   useEffect(() => {
-    dispatch(fetchAllPosts());
+    if (allPosts.length === 0) dispatch(fetchAllPosts());
   }, [dispatch, postId]);
 
   return post && creatorInfo ? (
@@ -134,7 +133,7 @@ export default function Post() {
               </div>
             </div>
           </div>
-
+          <PostStats post={post} />
           <div className="text-gray-600 dark:text-neutral-300 text-xl text-justify leading-relaxed">
             {parse(post.content)}
           </div>

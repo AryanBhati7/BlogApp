@@ -27,7 +27,9 @@ import RecentPosts from "./RecentPosts";
 import FileUploader from "./FileUploader";
 import SharePost from "./SharePost";
 import LoadingSpinner from "./Loading/LoadingSpinner";
+import PostStats from "./PostStats";
 export {
+  PostStats,
   LoadingSpinner,
   SharePost,
   FileUploader,

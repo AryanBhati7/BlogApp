@@ -64,29 +64,29 @@ export class Service {
     }
   }
 
-  async likePost(postId, likesArray) {
+  async likePost(postId, likes) {
     try {
       return await this.databases.updateDocument(
         conf.appwriteDatabaseID,
         conf.appwritePostsCollectionID,
         postId,
         {
-          likes: likesArray,
+          likes,
         }
       );
     } catch (error) {
       console.log("Appwrite serive :: likePost :: error", error);
     }
   }
-  async savePost(postId, userId) {
+  async savePost(user, post) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseID,
         conf.appwriteSavesCollectionID,
         ID.unique(),
         {
-          userId,
-          postId,
+          user,
+          post,
         }
       );
     } catch (error) {

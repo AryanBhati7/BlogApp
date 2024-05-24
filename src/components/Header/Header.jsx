@@ -43,7 +43,7 @@ function Header({ loading }) {
   return (
     <header className="py-3 shadow bg-background dark:bg-dark-bg">
       <div className="ml-2">
-        <nav className="flex md:hidden">
+        <nav className="flex md:hidden ">
           {authStatus && (
             <button onClick={() => setIsOpen(!isOpen)} className="ml-4">
               <AvatarImage
@@ -80,7 +80,7 @@ function Header({ loading }) {
           </div>
 
           <div
-            className={`fixed transform top-0 left-0 w-80 bg-gray-200  dark:bg-gray-900 h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${
+            className={` mt-3 fixed transform top-0 left-0 w-80 bg-gray-200  dark:bg-gray-900 h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${
               isOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >
@@ -174,7 +174,7 @@ function Header({ loading }) {
           </div>
         </nav>
       </div>
-      <nav className="hidden md:flex pr-14">
+      <nav className="hidden md:flex pr-14 mt-4 mr-4">
         <div className="ml-36 mt-1">
           <Link to="/">
             <Logo textColor="primary" darkTextColor="white" />

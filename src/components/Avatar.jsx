@@ -22,7 +22,7 @@ const AvatarImage = ({ className = "", w = "4", h = "4", src }) => {
 };
 
 const AvatarName = ({ className = "", name = "Username" }) => {
-  return <span className={`text-lg italic ${className}`}>{name}</span>;
+  return <span className={`text-lg ${className}`}>{name}</span>;
 };
 
 export { Avatar, AvatarImage, AvatarName };
