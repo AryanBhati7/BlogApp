@@ -6,7 +6,6 @@ import { useEffect } from "react";
 function AllPost() {
   const posts = useSelector((state) => state.posts.myPosts);
   const currentUser = useSelector((state) => state.auth.userData);
-  console.log(posts);
   const postsStatus = useSelector((state) => state.posts.status);
   const isLoading = postsStatus === "loading";
   const dispatch = useDispatch();

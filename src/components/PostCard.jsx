@@ -4,7 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import { AvatarImage, AvatarName, PostCardLoading } from "./index";
 import { useSelector } from "react-redux";
 
-function PostCard({ post }, uploadedBy = true) {
+function PostCard({ post, uploadedBy = true }) {
   const creatorInfo = post.creator;
   const user = useSelector((state) => state.auth.userData);
 
@@ -83,8 +83,8 @@ function PostCard({ post }, uploadedBy = true) {
           </p>
         </Link>
 
-        <div className="flex justify-between items-center mt-8">
-          {uploadedBy ? (
+        {uploadedBy ? (
+          <div className="flex justify-between items-center mt-8">
             <div className="author flex items-center -ml-3 my-3">
               <AvatarImage
                 src={creatorInfo ? creatorInfo.profileImg : ""}
@@ -100,7 +100,6 @@ function PostCard({ post }, uploadedBy = true) {
                 ) : (
                   "Unknown"
                 )}
-                {/* </Link> */}
                 <br></br>
                 <span className="text-gray-600 dark:text-gray-200">
                   {new Date(post.$createdAt).toLocaleDateString(undefined, {
@@ -115,67 +114,55 @@ function PostCard({ post }, uploadedBy = true) {
                 </span>
               </h2>
             </div>
-          ) : (
-            <div className="author flex items-center -ml-3 my-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 1024 1024"
-              >
-                <path
-                  fill="grey"
-                  d="M945 412H689c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h256c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8M811 548H689c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h122c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8M477.3 322.5H434c-6.2 0-11.2 5-11.2 11.2v248c0 3.6 1.7 6.9 4.6 9l148.9 108.6c5 3.6 12 2.6 15.6-2.4l25.7-35.1v-.1c3.6-5 2.5-12-2.5-15.6l-126.7-91.6V333.7c.1-6.2-5-11.2-11.1-11.2"
-                ></path>
-                <path
-                  fill="grey"
-                  d="M804.8 673.9H747c-5.6 0-10.9 2.9-13.9 7.7c-12.7 20.1-27.5 38.7-44.5 55.7c-29.3 29.3-63.4 52.3-101.3 68.3c-39.3 16.6-81 25-124 25c-43.1 0-84.8-8.4-124-25c-37.9-16-72-39-101.3-68.3s-52.3-63.4-68.3-101.3c-16.6-39.2-25-80.9-25-124s8.4-84.7 25-124c16-37.9 39-72 68.3-101.3s63.4-52.3 101.3-68.3c39.2-16.6 81-25 124-25c43.1 0 84.8 8.4 124 25c37.9 16 72 39 101.3 68.3c17 17 31.8 35.6 44.5 55.7c3 4.8 8.3 7.7 13.9 7.7h57.8c6.9 0 11.3-7.2 8.2-13.3c-65.2-129.7-197.4-214-345-215.7c-216.1-2.7-395.6 174.2-396 390.1C71.6 727.5 246.9 903 463.2 903c149.5 0 283.9-84.6 349.8-215.8c3.1-6.1-1.4-13.3-8.2-13.3"
-                ></path>
-              </svg>
-              <h2 className="text-lg tracking-tight text-gray-800 dark:text-neutral-100">
-                By{" "}
-                <Link to={`/profile/${creatorInfo.username}`}>
-                  {creatorInfo ? (
-                    <AvatarName
-                      name={"@" + creatorInfo.username}
-                      className="hover:underline"
-                    />
-                  ) : (
-                    "Unknown"
-                  )}
-                </Link>
-                <br></br>
-                <span className="text-gray-600 dark:text-gray-200">
-                  {new Date(post.$createdAt).toLocaleDateString(undefined, {
-                    month: "long",
-                    day: "numeric",
-                  })}
-                  {" ("}
-                  {formatDistanceToNow(new Date(post.$createdAt), {
-                    addSuffix: true,
-                  })}
-                  {")"}
-                </span>
-              </h2>
-            </div>
-          )}
 
-          <div className="mt-6 lg:mt-8">
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32px"
-                height="32px"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="white"
-                  d="M5 21V5q0-.825.588-1.412T7 3h6v2H7v12.95l5-2.15l5 2.15V11h2v10l-7-3zM7 5h6zm10 4V7h-2V5h2V3h2v2h2v2h-2v2z"
-                ></path>
-              </svg>
-            </button>
+            <div className="mt-6 lg:mt-8">
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32px"
+                  height="32px"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="white"
+                    d="M5 21V5q0-.825.588-1.412T7 3h6v2H7v12.95l5-2.15l5 2.15V11h2v10l-7-3zM7 5h6zm10 4V7h-2V5h2V3h2v2h2v2h-2v2z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="author flex items-center gap-2 mt-2 ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2em"
+              height="2em"
+              viewBox="0 0 1024 1024"
+            >
+              <path
+                fill="grey"
+                d="M945 412H689c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h256c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8M811 548H689c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h122c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8M477.3 322.5H434c-6.2 0-11.2 5-11.2 11.2v248c0 3.6 1.7 6.9 4.6 9l148.9 108.6c5 3.6 12 2.6 15.6-2.4l25.7-35.1v-.1c3.6-5 2.5-12-2.5-15.6l-126.7-91.6V333.7c.1-6.2-5-11.2-11.1-11.2"
+              ></path>
+              <path
+                fill="grey"
+                d="M804.8 673.9H747c-5.6 0-10.9 2.9-13.9 7.7c-12.7 20.1-27.5 38.7-44.5 55.7c-29.3 29.3-63.4 52.3-101.3 68.3c-39.3 16.6-81 25-124 25c-43.1 0-84.8-8.4-124-25c-37.9-16-72-39-101.3-68.3s-52.3-63.4-68.3-101.3c-16.6-39.2-25-80.9-25-124s8.4-84.7 25-124c16-37.9 39-72 68.3-101.3s63.4-52.3 101.3-68.3c39.2-16.6 81-25 124-25c43.1 0 84.8 8.4 124 25c37.9 16 72 39 101.3 68.3c17 17 31.8 35.6 44.5 55.7c3 4.8 8.3 7.7 13.9 7.7h57.8c6.9 0 11.3-7.2 8.2-13.3c-65.2-129.7-197.4-214-345-215.7c-216.1-2.7-395.6 174.2-396 390.1C71.6 727.5 246.9 903 463.2 903c149.5 0 283.9-84.6 349.8-215.8c3.1-6.1-1.4-13.3-8.2-13.3"
+              ></path>
+            </svg>
+            <h2 className="text-lg tracking-tight text-gray-800 dark:text-neutral-100">
+              <span className="text-gray-600 dark:text-gray-200">
+                {new Date(post.$createdAt).toLocaleDateString(undefined, {
+                  month: "long",
+                  day: "numeric",
+                })}
+                {" ("}
+                {formatDistanceToNow(new Date(post.$createdAt), {
+                  addSuffix: true,
+                })}
+                {")"}
+              </span>
+            </h2>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { ProfileAvatar, UserInformation } from "../components/index";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  ProfileAvatar,
+  UserInformation,
+  PostCardLoading,
+  PostCard,
+} from "../components/index";
+import { fetchMyPosts } from "../features/postSlice";
 
 function Profile() {
   const [userInfo, setUserInfo] = useState(null);
   const { username } = useParams();
+  const postsStatus = useSelector((state) => state.posts.status);
+  const isLoading = postsStatus === "loading";
+  const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.myPosts);
   const currentUserInfo = useSelector((state) => state.auth.userData);
 
@@ -21,6 +30,7 @@ function Profile() {
     if (user) {
       setUserInfo(user);
     }
+    dispatch(fetchMyPosts(user.accountId));
   }, [allUsers, username]);
 
   return userInfo ? (
@@ -31,7 +41,7 @@ function Profile() {
         <div className="mx-auto max-w-screen-xl px-4 md:px-8">
           <div className="mb-2 md:mb-8">
             <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 dark:text-white md:mb-6 lg:text-3xl">
-              My Posts
+              {isUser ? "My Posts" : `${userInfo.name}'s Posts`}
             </h2>
           </div>
 
@@ -39,9 +49,10 @@ function Profile() {
             {isLoading ? (
               <PostCardLoading />
             ) : (
-              recentPosts.map((recentPost) => (
-                <div key={recentPost.$id}>
-                  <PostCard post={recentPost} />
+              posts &&
+              posts.map((post) => (
+                <div key={post.$id}>
+                  <PostCard post={post} uploadedBy={false} />
                 </div>
               ))
             )}
