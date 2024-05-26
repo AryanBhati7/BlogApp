@@ -21,17 +21,17 @@ export default function Post() {
   const dispatch = useDispatch();
   const publicPosts = useSelector((state) => state.posts.publicPosts);
   const myPosts = useSelector((state) => state.posts.myPosts);
-  console.log(publicPosts, "All Posts");
+
   const userData = useSelector((state) => state.auth.userData);
-  console.log(userData, "User Data");
+
   const post =
     myPosts.find((post) => post.$id === postId) ||
     publicPosts.find((post) => post.$id === postId);
-  console.log(post, "Post");
+
   const creatorInfo = post ? post.creator : undefined;
-  console.log(creatorInfo, "Creator Info");
+
   const isAuthor = creatorInfo.accountId === userData.accountId ? true : false;
-  console.log(isAuthor, "Is Author");
+
   const deletePost = async () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       const actionResult = await dispatch(deletePostAction(post.$id));
@@ -42,9 +42,6 @@ export default function Post() {
       }
     }
   };
-  useEffect(() => {
-    dispatch(fetchPublicPosts());
-  }, [dispatch]);
 
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800">

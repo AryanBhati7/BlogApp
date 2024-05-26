@@ -18,6 +18,7 @@ function App() {
         if (userData) {
           dispatch(login({ userData }));
           dispatch(fetchPublicPosts());
+          dispatch(fetchUsers());
         } else {
           dispatch(logout());
         }

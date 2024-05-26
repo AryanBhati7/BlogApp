@@ -8,7 +8,7 @@ import authService from "../../appwrite/auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
-import { updateUser } from "../../features/usersSlice";
+import { fetchUsers, updateUser } from "../../features/usersSlice";
 
 function EditProfile({ profile }) {
   const dispatch = useDispatch();
@@ -106,6 +106,8 @@ function EditProfile({ profile }) {
       if (userData) {
         dispatch(updateUser(userData));
         dispatch(updateUserData({ userData }));
+        dispatch(fetchUsers());
+        dispatch(login({ userData }));
         navigate(`/profile/${userData.username}`);
       }
     }

@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login as authLogin } from "../features/authSlice";
 import { useDispatch } from "react-redux";
-import { Input, Logo, Button } from "./index";
+import { Input, Logo, Button, LoadingSpinner } from "./index";
 import { useForm } from "react-hook-form";
 import authService from "../appwrite/auth";
 import { createUser } from "../features/usersSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 
 function Signup() {
   const { register, handleSubmit, watch } = useForm();
+  const loading = useSelector((state) => state.users.loading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -27,10 +30,9 @@ function Signup() {
       } else {
         data.profileImg = authService.createAvatar(data.name);
       }
-      console.log(data);
-      const userData = await authService.createAccount(data);
+      const actionResult = await dispatch(createUser(data));
+      const userData = unwrapResult(actionResult);
       if (userData) {
-        dispatch(createUser(userData));
         dispatch(authLogin({ userData }));
         navigate("/");
       }
@@ -50,18 +52,7 @@ function Signup() {
       console.log(error.message);
     }
   };
-
-  // const facebookAuth = async (e) => {
-  //   e.preventDefault();
-  //   setError("");
-
-  //   try {
-  //     authService.facebookLogin();
-  //   } catch (error) {
-  //     setError(error.message);
-  //     console.log(error.message);
-  //   }
-  // };
+  if (loading) return <LoadingSpinner />;
   return (
     <section className=" flex items-center justify-center w-full">
       <div className=" bg-dark-bg dark:bg-background flex items-center w-full max-w-3xl p-4 mx-auto  rounded-xl border-black/10 lg:px-12 lg:w-3/5">

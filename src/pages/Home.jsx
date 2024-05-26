@@ -16,6 +16,8 @@ function Home() {
   const posts = useSelector((state) => state.posts.publicPosts);
   const authStatus = useSelector((state) => state.auth.status);
   const authors = useSelector((state) => state.users.users);
+  const currentUser = useSelector((state) => state.auth.userData);
+  console.log(currentUser);
   const postsStatus = useSelector((state) => state.posts.status);
   const authorsStatus = useSelector((state) => state.users.status);
   const isLoading = postsStatus === "loading" || authorsStatus === "loading";

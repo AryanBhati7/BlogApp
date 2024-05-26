@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 function LogoutBtn({ className = "" }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const logoutHandler = () => {
-    authService.logOut().then(() => {
-      dispatch(logout());
-      navigate("/");
-    });
+  const logoutHandler = async () => {
+    await authService.logOut();
+    dispatch(logout());
+    navigate("/");
   };
   return (
     <button

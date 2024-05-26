@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login as authLogin } from "../features/authSlice";
-import { Button, Input, Logo } from "./index";
-import { useDispatch } from "react-redux";
+import { loginAction as authLogin } from "../features/authSlice";
+import { Button, Input, LoadingSpinner, Logo } from "./index";
+import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
+
 import "../index.css";
 
 function Login() {
@@ -12,21 +13,18 @@ function Login() {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
+  const loading = useSelector((state) => state.auth.loading);
 
   const login = async (data) => {
     setError("");
     try {
-      const session = await authService.login(data);
-      if (session) {
-        const userData = await authService.getCurrentUser();
-        dispatch(authLogin({ userData }));
-        navigate("/");
-      }
+      await dispatch(authLogin(data));
+      navigate("/");
     } catch (error) {
       setError(error.message);
-      console.log(error);
     }
   };
+
   const googleAuth = async (e) => {
     e.preventDefault();
     setError("");
@@ -38,6 +36,9 @@ function Login() {
       console.log(error.message);
     }
   };
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex items-center justify-center w-full ">

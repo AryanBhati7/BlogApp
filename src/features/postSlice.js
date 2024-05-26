@@ -11,6 +11,7 @@ export const fetchPublicPosts = createAsyncThunk(
   "fetchPublicPosts",
   async () => {
     const response = await appwriteService.getPosts();
+    console.log(response);
     return response.documents;
   }
 );
@@ -159,7 +160,5 @@ const postSlice = createSlice({
       });
   },
 });
-
-export const { createPost, deletePost } = postSlice.actions;
 
 export default postSlice.reducer;

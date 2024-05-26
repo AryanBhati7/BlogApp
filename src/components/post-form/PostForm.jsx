@@ -2,7 +2,15 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Input, Select, RTE, FileUploader } from "../index";
+import {
+  Button,
+  Input,
+  Select,
+  RTE,
+  FileUploader,
+  LoadingSpinner,
+  PostLoading,
+} from "../index";
 import { useDispatch } from "react-redux";
 import { createPostAction, editPost } from "../../features/postSlice";
 import { fileService, postService } from "../../appwrite/config";
@@ -10,6 +18,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 function PostForm({ post }) {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.posts.loading);
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
@@ -52,8 +61,9 @@ function PostForm({ post }) {
         })
       );
       const newPost = unwrapResult(actionResult);
-      console.log("Post Form after dispatched editPost", newPost);
-      navigate(`/post/${newPost.$id}`);
+      if (newPost) {
+        navigate(`/post/${newPost.$id}`);
+      }
     } else {
       const file = await fileService.uploadFile(featuredImg);
       const fileId = file.$id;
@@ -67,6 +77,7 @@ function PostForm({ post }) {
       //   userId: userData.$id,
       //   featuredImageURL,
       // });
+      console.log(userData, "User Data");
       const actionResult = await dispatch(
         createPostAction({
           ...data,
@@ -76,11 +87,13 @@ function PostForm({ post }) {
         })
       );
       const newPost = unwrapResult(actionResult);
-      console.log("Post Form after dispatched", newPost);
-      navigate(`/post/${newPost.$id}`);
+      if (newPost) {
+        navigate(`/post/${newPost.$id}`);
+      }
       // if (dbPost.status === "Public") dispatch(createPost(dbPost));
     }
   };
+  if (loading) return <PostLoading />;
 
   return (
     <>
@@ -137,6 +150,7 @@ function PostForm({ post }) {
                 {...register("status", { required: true })}
               />
             </div>
+
             <Button
               type="submit"
               bgColor={post ? "bg-green-500" : undefined}

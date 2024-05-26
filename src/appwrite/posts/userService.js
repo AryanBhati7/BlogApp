@@ -56,14 +56,13 @@ export class UserService {
     );
   }
 
-  async savePost(user, post) {
-    return await this.databases.createDocument(
+  async savePost(userId, saved) {
+    return await this.databases.updateDocument(
       conf.appwriteDatabaseID,
-      conf.appwriteSavesCollectionID,
-      ID.unique(),
+      conf.appwriteUsersCollectionID,
+      userId,
       {
-        user,
-        post,
+        saved,
       }
     );
   }
