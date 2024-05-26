@@ -6,7 +6,7 @@ import { Footer, Header, LoadingSpinner } from "./components/index";
 import { Outlet } from "react-router-dom";
 import { fetchUsers } from "./features/usersSlice";
 
-import { fetchAllPosts } from "./features/postSlice";
+import { fetchPublicPosts } from "./features/postSlice";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -17,6 +17,7 @@ function App() {
       .then((userData) => {
         if (userData) {
           dispatch(login({ userData }));
+          dispatch(fetchPublicPosts());
         } else {
           dispatch(logout());
         }

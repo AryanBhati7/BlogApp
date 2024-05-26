@@ -1,45 +1,50 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import appwriteService from "../appwrite/config";
+import { postService, fileService } from "../appwrite/config";
 import { Button, Container, PostStats, SharePost } from "../components/index";
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
-import { fetchAllPosts } from "../features/postSlice";
+import { fetchPublicPosts } from "../features/postSlice";
 import {
   AvatarImage,
   AvatarName,
   PostLoading,
   RecentPosts,
 } from "../components/index";
-import { deletePost as deletePostAction } from "../features/postSlice";
+import { deletePostAction } from "../features/postSlice";
+
 export default function Post() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const postUrl = window.location.href;
   const dispatch = useDispatch();
-  const allPosts = useSelector((state) => state.posts.allPosts);
-  const allUsers = useSelector((state) => state.users.users);
+  const publicPosts = useSelector((state) => state.posts.publicPosts);
+  const myPosts = useSelector((state) => state.posts.myPosts);
+  console.log(publicPosts, "All Posts");
   const userData = useSelector((state) => state.auth.userData);
-
-  const post = allPosts.find((post) => post.$id === postId);
-  console.log(post);
+  console.log(userData, "User Data");
+  const post =
+    myPosts.find((post) => post.$id === postId) ||
+    publicPosts.find((post) => post.$id === postId);
+  console.log(post, "Post");
   const creatorInfo = post ? post.creator : undefined;
-  console.log(creatorInfo);
+  console.log(creatorInfo, "Creator Info");
   const isAuthor = creatorInfo.accountId === userData.accountId ? true : false;
-
-  const deletePost = () => {
-    appwriteService.deletePost(post.$id).then((status) => {
-      if (status) {
-        dispatch(deletePostAction(post.$id));
-        appwriteService.deleteFile(post.featuredImage);
+  console.log(isAuthor, "Is Author");
+  const deletePost = async () => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      const actionResult = await dispatch(deletePostAction(post.$id));
+      if (actionResult) {
+        await fileService.deleteFile(post.featuredImage);
+        dispatch(fetchPublicPosts());
         navigate("/");
       }
-    });
+    }
   };
   useEffect(() => {
-    if (allPosts.length === 0) dispatch(fetchAllPosts());
-  }, [dispatch, postId]);
+    dispatch(fetchPublicPosts());
+  }, [dispatch]);
 
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800">

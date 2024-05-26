@@ -3,21 +3,20 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, Input, Select, RTE, FileUploader } from "../index";
-import appwriteService from "../../appwrite/config";
 import { useDispatch } from "react-redux";
-import { createPost } from "../../features/postSlice";
+import { createPostAction, editPost } from "../../features/postSlice";
 import { fileService, postService } from "../../appwrite/config";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 function PostForm({ post }) {
   const dispatch = useDispatch();
-
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
         title: post?.title || "",
         content: post?.content || "",
         status: post?.status || "Public",
-        tags: post?.tags.tagName ? post.tags.tagName.join(", ") : " ",
+        tags: post?.tags ? post.tags.map((tag) => tag).join(", ") : " ",
       },
     });
 
@@ -42,14 +41,19 @@ function PostForm({ post }) {
       }
 
       data.tags = data.tags.split(",").map((tag) => tag.trim());
-      const dbPost = await postService.updatePost(post.$id, {
-        ...data,
-        featuredImage: file ? file.$id : undefined,
-        featuredImageURL,
-      });
-      if (dbPost) {
-        navigate(`/post/${dbPost.$id}`);
-      }
+      const actionResult = await dispatch(
+        editPost({
+          postId: post.$id,
+          post: {
+            ...data,
+            featuredImage: file ? file.$id : undefined,
+            featuredImageURL: featuredImageURL || post.featuredImageURL,
+          },
+        })
+      );
+      const newPost = unwrapResult(actionResult);
+      console.log("Post Form after dispatched editPost", newPost);
+      navigate(`/post/${newPost.$id}`);
     } else {
       const file = await fileService.uploadFile(featuredImg);
       const fileId = file.$id;
@@ -58,16 +62,23 @@ function PostForm({ post }) {
 
       data.tags = data.tags.split(",").map((tag) => tag.trim());
 
-      const dbPost = await postService.createPost({
-        ...data,
-        userId: userData.$id,
-        featuredImageURL,
-      });
-      if (dbPost) {
-        console.log("dbPost", dbPost);
-        if (dbPost.status === "Public") dispatch(createPost(dbPost));
-        navigate(`/post/${dbPost.$id}`);
-      }
+      // const dbPost = await postService.createPost({
+      //   ...data,
+      //   userId: userData.$id,
+      //   featuredImageURL,
+      // });
+      const actionResult = await dispatch(
+        createPostAction({
+          ...data,
+          creatorId: userData.$id,
+          userId: userData.accountId,
+          featuredImageURL,
+        })
+      );
+      const newPost = unwrapResult(actionResult);
+      console.log("Post Form after dispatched", newPost);
+      navigate(`/post/${newPost.$id}`);
+      // if (dbPost.status === "Public") dispatch(createPost(dbPost));
     }
   };
 

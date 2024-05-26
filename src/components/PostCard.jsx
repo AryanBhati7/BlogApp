@@ -1,13 +1,12 @@
 import React from "react";
-import appwriteService from "../appwrite/config";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { AvatarImage, AvatarName, PostCardLoading } from "./index";
 import { useSelector } from "react-redux";
 
 function PostCard({ post }) {
+  console.log(post, "Post - PostCard");
   const creatorInfo = post.creator;
-  // const creatorInfo = users.find((user) => user.accountId === userId);
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -51,21 +50,18 @@ function PostCard({ post }) {
           <div className="flex gap-2 flex-wrap mt-2">
             {post.tags &&
               post.tags.map((tag) => {
-                console.log(tag.tagName);
                 return (
                   <span
-                    key={tag.$id}
+                    key={tag}
                     className="bg-gray-200 px-2 py-0.5 flex items-center text-xs font-semibold uppercase rounded-full"
                   >
-                    {tag.tagName}
+                    {tag}
                   </span>
                 );
               })}
           </div>
           <p className="mt-3 text-gray-600 dark:text-neutral-300">
-            {/* {parse(content, options)} */}
             {truncateHtmlContent(post.content, 180)}
-            {/* {content.length > 400 ? `${content.substring(0, 400)}...` : content} */}
           </p>
           <p className="mt-2 inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
             Read more

@@ -19,93 +19,67 @@ export class PostService {
     featuredImage,
     featuredImageURL,
     status,
+    creatorId,
     userId,
     tags,
   }) {
-    const post = await this.databases.createDocument(
-      conf.appwriteDatabaseID,
-      conf.appwritePostsCollectionID,
-      ID.unique(),
-      {
-        title,
-        content,
-        featuredImage,
-        featuredImageURL,
-        status,
-        creator: userId,
-      }
-    );
-    await this.handleTags(tags, post.$id);
+    try {
+      const post = await this.databases.createDocument(
+        conf.appwriteDatabaseID,
+        conf.appwritePostsCollectionID,
+        ID.unique(),
+        {
+          title,
+          content,
+          featuredImage,
+          featuredImageURL,
+          status,
+          tags,
+          userId,
+          creator: creatorId,
+        }
+      );
 
-    return post;
+      return post;
+    } catch (error) {
+      console.log("Appwrite Service Error : Create Post :", error);
+    }
   }
 
-  async updatePost({
+  async updatePost(
     postId,
-    title,
-    content,
-    featuredImage,
-    featuredImageURL,
-    status,
-    tags,
-  }) {
-    const post = await this.databases.updateDocument(
-      conf.appwriteDatabaseID,
-      conf.appwritePostsCollectionID,
-      postId,
-      {
-        title,
-        content,
-        featuredImage,
-        featuredImageURL,
-        status,
-      }
-    );
+    { title, content, featuredImage, featuredImageURL, status, tags }
+  ) {
+    try {
+      const post = await this.databases.updateDocument(
+        conf.appwriteDatabaseID,
+        conf.appwritePostsCollectionID,
+        postId,
+        {
+          title,
+          content,
+          featuredImage,
+          featuredImageURL,
+          status,
+          tags,
+        }
+      );
 
-    await this.handleTags(tags, postId);
-
-    return post;
+      return post;
+    } catch (error) {
+      console.log("Appwrite Service Error : Update Post :", error);
+    }
   }
 
   async deletePost(postId) {
-    await this.databases.deleteDocument(
-      conf.appwriteDatabaseID,
-      conf.appwritePostsCollectionID,
-      postId
-    );
-  }
-  async handleTags(tags, postId) {
-    for (let tag of tags) {
-      // Check if a tag document already exists
-      const existingTag = await this.databases.listDocuments(
+    try {
+      await this.databases.deleteDocument(
         conf.appwriteDatabaseID,
-        conf.appwriteTagsCollectionID,
-        [Query.equal("tagName", tag)]
+        conf.appwritePostsCollectionID,
+        postId
       );
-
-      if (existingTag.documents.length > 0) {
-        // If the tag document exists, add the post's ID to its posts array
-        await this.databases.updateDocument(
-          conf.appwriteDatabaseID,
-          conf.appwriteTagsCollectionID,
-          existingTag.documents[0].$id,
-          {
-            ...existingTag.documents[0],
-            posts: [...existingTag.documents[0].posts, postId],
-          }
-        );
-      } else {
-        // If the tag document doesn't exist, create a new one
-        await this.databases.createDocument(
-          conf.appwriteDatabaseID,
-          conf.appwriteTagsCollectionID,
-          ID.unique(),
-          {
-            tagName: tag,
-            posts: [postId],
-          }
-        );
-      }
+    } catch (error) {
+      console.log("Appwrite Service Error : Delete Post :", error);
     }
   }
 }

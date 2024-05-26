@@ -1,18 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../appwrite/auth";
-import appwriteService from "../appwrite/config";
 
 const initialState = {
   users: [],
   status: "idle",
   error: null,
 };
-// export const fetchCurrentUser = createAsyncThunk("users/fetchCurrentUser",async()=>{
-//   const user = await authService.getCurrentUser();
-//   if(user){
-//     const
-//   }
-// })
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   const allUsers = await authService.getAllUsers();

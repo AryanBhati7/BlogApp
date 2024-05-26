@@ -18,7 +18,6 @@ function Home() {
   const authors = useSelector((state) => state.users.users);
   const postsStatus = useSelector((state) => state.posts.status);
   const authorsStatus = useSelector((state) => state.users.status);
-
   const isLoading = postsStatus === "loading" || authorsStatus === "loading";
 
   if (authStatus === false) {
@@ -26,7 +25,6 @@ function Home() {
   }
 
   useEffect(() => {
-    if (posts.length === 0) dispatch(fetchPublicPosts());
     if (authors.length === 0) dispatch(fetchUsers());
   }, [dispatch]);
 

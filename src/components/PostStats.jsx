@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import appwriteService from "../appwrite/config";
+import { userService } from "../appwrite/config";
 import authService from "../appwrite/auth";
 
 import save from "../assets/img/save.svg";
@@ -50,7 +50,7 @@ function PostStats({ post }) {
     }
 
     setLikes(likesArray);
-    appwriteService.likePost(post.$id, likesArray).then((res) => {
+    userService.likePost(post.$id, likesArray).then((res) => {
       console.log(res, "LikePost");
     });
     authService.getCurrentUser().then((userData) => {
@@ -67,9 +67,9 @@ function PostStats({ post }) {
         setUser(userData);
         dispatch(updateUserData({ userData }));
       });
-      return appwriteService.unsavePost(savedPostRecord.$id);
+      return userService.unsavePost(savedPostRecord.$id);
     }
-    appwriteService.savePost(user.$id, post.$id).then((res) => {
+    userService.savePost(user.$id, post.$id).then((res) => {
       console.log(res, "SavePost");
     });
     setIsSaved(true);
