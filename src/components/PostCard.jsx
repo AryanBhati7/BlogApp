@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
+import { FaHeart } from "react-icons/fa";
+import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { AvatarImage, AvatarName, PostCardLoading } from "./index";
 import { useSelector } from "react-redux";
+import { checkAuthStatus } from "../features/authSlice";
+import { userService } from "../appwrite/config";
+import { useDispatch } from "react-redux";
+import { fetchPublicPosts } from "../features/postSlice";
 
 function PostCard({ post, uploadedBy = true }) {
+  const dispatch = useDispatch();
   const creatorInfo = post.creator;
   const user = useSelector((state) => state.auth.userData);
+  console.log(user);
 
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
@@ -14,10 +23,31 @@ function PostCard({ post, uploadedBy = true }) {
     const text = div.textContent || div.innerText || "";
     return text.length > length ? `${text.substring(0, length)}...` : text;
   }
+
+  const savedList = user.saved.map((post) => post.$id);
+  const [saves, setSaves] = useState(savedList);
+  const checkIfSaved = (saves, postId) => {
+    return saves.includes(postId) ? true : false;
+  };
+  const handleSavePost = (e) => {
+    let savedArray = [...saves];
+    if (savedArray.includes(post.$id)) {
+      savedArray = savedArray.filter((Id) => Id !== post.$id);
+    } else {
+      savedArray.push(post.$id);
+    }
+    setSaves(savedArray);
+    userService.savePost(user.$id, savedArray).then((res) => {
+      console.log(res, "SavePost");
+      dispatch(checkAuthStatus());
+      dispatch(fetchPublicPosts());
+    });
+  };
+
   return (
     <div className="group p-3 w-full rounded-xl overflow-hidden flex flex-col md:flex-row bg-gray-100 dark:bg-[#262f40] border border-gray-400">
       <Link to={`/post/${post.$id}`}>
-        <div className="relative rounded-xl overflow-hidden w-full md:w-[18rem] lg:w-56 h-60 flex-none">
+        <div className="relative rounded-xl overflow-hidden w-full md:w-[20rem] lg:w-64 h-60 flex-none ">
           <img
             src={post.featuredImageURL}
             alt={post.title}
@@ -31,19 +61,11 @@ function PostCard({ post, uploadedBy = true }) {
             <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-600 dark:text-neutral-100 dark:group-hover:text-white">
               {post.title}
             </h3>
-            <div className="flex flex-row gap-1 items-center justify-center ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30px"
-                height="30px"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="#ff0000"
-                  d="m12.75 20.66l6.184-7.098c2.677-2.884 2.559-6.506.754-8.705c-.898-1.095-2.206-1.816-3.72-1.855c-1.293-.034-2.652.43-3.963 1.442c-1.315-1.012-2.678-1.476-3.973-1.442c-1.515.04-2.825.76-3.724 1.855c-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a1 1 0 0 0 .743-.34Z"
-                ></path>
-              </svg>
-              <span className="text-md text-neutral-100">
+            <div className="flex flex-row gap-2 items-center justify-center ">
+              <IconContext.Provider value={{ size: "1.5em" }}>
+                <FaHeart className="text-gray-500 dark:text-gray-200" />
+              </IconContext.Provider>
+              <span className="text-md dark:text-neutral-100 text-gray-900">
                 {post.likes.length}
               </span>
             </div>
@@ -61,30 +83,18 @@ function PostCard({ post, uploadedBy = true }) {
                 );
               })}
           </div>
-          <p className="mt-3 text-gray-600 dark:text-neutral-300">
-            {truncateHtmlContent(post.content, 180)}
-          </p>
-          <p className="mt-2 inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
-            Read more
-            <svg
-              className="flex-shrink-0 size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </p>
+          <div className="min-h-[6rem]">
+            <p className="mt-3 text-gray-600 dark:text-neutral-300">
+              {truncateHtmlContent(post.content, 180)}
+            </p>
+            <p className="inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
+              Read more {">"}
+            </p>
+          </div>
         </Link>
 
         {uploadedBy ? (
-          <div className="flex justify-between items-center mt-8">
+          <div className="flex justify-between items-center">
             <div className="author flex items-center -ml-3 my-3">
               <AvatarImage
                 src={creatorInfo ? creatorInfo.profileImg : ""}
@@ -116,19 +126,19 @@ function PostCard({ post, uploadedBy = true }) {
             </div>
 
             <div className="mt-6 lg:mt-8">
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="32px"
-                  height="32px"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="white"
-                    d="M5 21V5q0-.825.588-1.412T7 3h6v2H7v12.95l5-2.15l5 2.15V11h2v10l-7-3zM7 5h6zm10 4V7h-2V5h2V3h2v2h2v2h-2v2z"
-                  ></path>
-                </svg>
-              </button>
+              <IconContext.Provider value={{ size: "1.5em" }}>
+                {checkIfSaved(saves, post.$id) ? (
+                  <BsFillBookmarkFill
+                    className="cursor-pointer text-gray-800 dark:text-neutral-100"
+                    onClick={handleSavePost}
+                  />
+                ) : (
+                  <BsBookmark
+                    className="cursor-pointer text-gray-800 dark:text-neutral-100"
+                    onClick={handleSavePost}
+                  />
+                )}
+              </IconContext.Provider>
             </div>
           </div>
         ) : (

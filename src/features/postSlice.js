@@ -136,26 +136,26 @@ const postSlice = createSlice({
       })
       //fetch My Posts Cases
       .addCase(fetchMyPosts.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchMyPosts.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.loading = false;
         state.myPosts = action.payload;
       })
       .addCase(fetchMyPosts.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.error.message;
       })
       //fetch Public Posts Cases
       .addCase(fetchPublicPosts.pending, (state) => {
-        state.status = "loading";
+        state.status = true;
       })
       .addCase(fetchPublicPosts.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.loading = false;
         state.publicPosts = action.payload;
       })
       .addCase(fetchPublicPosts.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.error.message;
       });
   },

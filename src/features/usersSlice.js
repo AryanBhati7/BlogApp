@@ -3,7 +3,6 @@ import authService from "../appwrite/auth";
 
 const initialState = {
   users: [],
-  status: "idle",
   loading: false,
   error: null,
 };
@@ -38,25 +37,27 @@ const usersSlice = createSlice({
     builder
       //fetch users cases
       .addCase(fetchUsers.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.error.message;
       })
 
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.users = action.payload; // update the 'users' field
-        state.status = "succeeded"; // update the status
+        state.loading = false; // update the status
       })
       //create user cases
       .addCase(createUser.fulfilled, (state, action) => {
         state.users.push(action.payload);
+        state.loading = false;
       })
       .addCase(createUser.pending, (state) => {
         state.loading = true;
       })
       .addCase(createUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.error.message;
       })
       //update user cases
@@ -64,9 +65,11 @@ const usersSlice = createSlice({
         state.loading = true;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.error.message;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
         const index = state.users.findIndex(
           (user) => user.accountId === action.payload.accountId
         );

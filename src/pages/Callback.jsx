@@ -1,35 +1,37 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { login as authLogin } from "../features/authSlice";
+import { login as authLogin, getGoogleAccInfo } from "../features/authSlice";
 import authService from "../appwrite/auth";
 import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 function Callback({ provider }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (provider === "google") {
-      authService.getGoogleAccountInfo().then((userData) => {
-        if (userData) {
-          dispatch(authLogin({ userData }));
-          navigate("/");
-        } else {
-          console.log("Error");
-        }
-      });
-    } else if (provider === "facebook") {
-      authService.getFacebookAccountInfo().then((data) => {
-        if (data) {
-          console.log(data);
-          dispatch(authLogin(data));
-          navigate("/");
-        } else {
-          console.log("Error");
-        }
-      });
-    }
+    const fetchData = async () => {
+      const actionResult = await dispatch(getGoogleAccInfo());
+      const userData = unwrapResult(actionResult);
+      if (userData) {
+        dispatch(authLogin({ userData }));
+        navigate("/");
+      } else {
+        console.log("Error - Google Login");
+      }
+    };
+
+    fetchData();
   }, [provider, dispatch, navigate]);
+
+  // authService.getGoogleAccountInfo().then((userData) => {
+  //   if (userData) {
+  //     dispatch(authLogin({ userData }));
+  //     navigate("/");
+  //   } else {
+  //     console.log("Error");
+  //   }
+  // });
 
   return <div>Loading...</div>;
 }

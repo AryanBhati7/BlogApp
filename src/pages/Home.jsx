@@ -18,17 +18,17 @@ function Home() {
   const authors = useSelector((state) => state.users.users);
   const currentUser = useSelector((state) => state.auth.userData);
   console.log(currentUser);
-  const postsStatus = useSelector((state) => state.posts.status);
-  const authorsStatus = useSelector((state) => state.users.status);
-  const isLoading = postsStatus === "loading" || authorsStatus === "loading";
+  const postsStatus = useSelector((state) => state.posts.loading);
+  const currentUserStatus = useSelector((state) => state.auth.loading);
+  const authorsStatus = useSelector((state) => state.users.loading);
+  const isLoading = postsStatus || authorsStatus || currentUserStatus;
+  useEffect(() => {
+    if (authors.length === 0) dispatch(fetchUsers());
+  }, [dispatch]);
 
   if (authStatus === false) {
     return <Landingpage />;
   }
-
-  useEffect(() => {
-    if (authors.length === 0) dispatch(fetchUsers());
-  }, [dispatch]);
 
   return (
     <div className="maincontainer overflow-x-hidden flex  px-5 lg:px-16 py-4 gap-6 w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-col sm:flex-col">

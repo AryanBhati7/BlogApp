@@ -24,7 +24,6 @@ function Profile() {
     userInfo && currentUserInfo
       ? userInfo.accountId === currentUserInfo.accountId
       : false;
-
   useEffect(() => {
     const user = allUsers.find((user) => user.username === username);
     if (user) {

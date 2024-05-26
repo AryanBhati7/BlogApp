@@ -13,6 +13,7 @@ import {
   RecentPosts,
 } from "../components/index";
 import { deletePostAction } from "../features/postSlice";
+import { fetchUsers } from "../features/usersSlice";
 
 export default function Post() {
   const { postId } = useParams();
@@ -20,6 +21,7 @@ export default function Post() {
   const postUrl = window.location.href;
   const dispatch = useDispatch();
   const publicPosts = useSelector((state) => state.posts.publicPosts);
+  const postFetchingStatus = useSelector((state) => state.posts.status);
   const myPosts = useSelector((state) => state.posts.myPosts);
 
   const userData = useSelector((state) => state.auth.userData);
@@ -38,10 +40,14 @@ export default function Post() {
       if (actionResult) {
         await fileService.deleteFile(post.featuredImage);
         dispatch(fetchPublicPosts());
+        dispatch(fetchUsers());
         navigate("/");
       }
     }
   };
+  if (postFetchingStatus === "loading") {
+    return <PostLoading />;
+  }
 
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800">

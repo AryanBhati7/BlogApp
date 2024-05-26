@@ -29,8 +29,8 @@ function Header({ loading }) {
       active: !authStatus,
     },
     {
-      name: "My Posts",
-      slug: "/all-posts",
+      name: "Saved Posts",
+      slug: "/saves",
       active: authStatus,
     },
     {
@@ -80,7 +80,7 @@ function Header({ loading }) {
           </div>
 
           <div
-            className={` mt-3 fixed transform top-0 left-0 w-80 bg-gray-200  dark:bg-gray-900 h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${
+            className={`fixed transform top-0 left-0 w-80 bg-gray-200  dark:bg-gray-900 h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${
               isOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >
@@ -145,7 +145,7 @@ function Header({ loading }) {
                 <div className="flex items-center space-x-4 mt-6 w-full">
                   <Link
                     to={`/profile/${userData.username}`}
-                    className="flex items-center space-x-4"
+                    className="flex items-center space-x-4 mt-3"
                   >
                     <AvatarImage
                       src={userData.profileImg}
@@ -186,7 +186,7 @@ function Header({ loading }) {
               <li key={item.name}>
                 <button
                   onClick={() => navigate(item.slug)}
-                  className=" dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-blue-100 rounded-full"
+                  className=" dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-gray-400 rounded-full"
                 >
                   {item.name}
                 </button>
@@ -195,7 +195,7 @@ function Header({ loading }) {
           )}
           {authStatus && (
             <li>
-              <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-blue-100 rounded-full" />
+              <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-gray-400 rounded-full" />
             </li>
           )}
           <li>

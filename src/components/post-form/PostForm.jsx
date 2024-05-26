@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { createPostAction, editPost } from "../../features/postSlice";
 import { fileService, postService } from "../../appwrite/config";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { checkAuthStatus } from "../../features/authSlice";
+import { fetchUsers } from "../../features/usersSlice";
 
 function PostForm({ post }) {
   const dispatch = useDispatch();
@@ -88,6 +90,7 @@ function PostForm({ post }) {
       );
       const newPost = unwrapResult(actionResult);
       if (newPost) {
+        dispatch(fetchUsers());
         navigate(`/post/${newPost.$id}`);
       }
       // if (dbPost.status === "Public") dispatch(createPost(dbPost));

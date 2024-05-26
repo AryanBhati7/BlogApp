@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userService } from "../appwrite/config";
-import authService from "../appwrite/auth";
-
-import save from "../assets/img/save.svg";
-import saved from "../assets/img/saved.svg";
-import like from "../assets/img/like.svg";
-import liked from "../assets/img/liked.svg";
+import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
+import { IoMdHeartEmpty, IoIosHeart } from "react-icons/io";
+import { IconContext } from "react-icons";
 import { checkAuthStatus, updateUserData } from "../features/authSlice";
+import { fetchMyPosts, fetchPublicPosts } from "../features/postSlice";
 function PostStats({ post }) {
   const userData = useSelector((state) => state.auth.userData);
   const [user, setUser] = useState(userData);
@@ -22,7 +20,6 @@ function PostStats({ post }) {
 
   const checkIfLiked = (likes, userId) => {
     return likes.includes(userId) ? true : false;
-    // likes.includes(userData.accountId) ? setLikes(likes.filter((id) => id !== userData.accountId)) : setLikes([...likes, userData.accountId]);
   };
   const checkIfSaved = (saves, postId) => {
     return saves.includes(postId) ? true : false;
@@ -37,10 +34,10 @@ function PostStats({ post }) {
     }
 
     setLikes(likesArray);
-    userService.likePost(post.$id, likesArray).then((res) => {
-      console.log(res, "LikePost");
-      dispatch(checkAuthStatus());
-    });
+    await userService.likePost(post.$id, likesArray);
+    dispatch(checkAuthStatus());
+    dispatch(fetchPublicPosts());
+    dispatch(fetchMyPosts());
   };
   const handleSavePost = (e) => {
     let savedArray = [...saves];
@@ -57,27 +54,38 @@ function PostStats({ post }) {
   };
 
   return (
-    <div className="stats   border-t-neutral-100 border-b-neutral-100 border-t-2 border-b-2 flex justify-between items-center py-2">
-      <div className="likes-comment">
-        <img
-          src={checkIfLiked(likes, user.$id) ? liked : like}
-          alt="save"
-          width={"30px"}
-          height={"30px"}
-          className="cursor-pointer"
-          onClick={handleLikePost}
-        />
-        <span>{likes ? likes.length : 0}</span>{" "}
+    <div className="stats px-3   border-t-neutral-100 border-b-neutral-100 border-t-2 border-b-2 flex justify-between items-center py-2">
+      <div className="likes-comment flex justify-center items-center gap-2">
+        <button onClick={handleLikePost}>
+          <IconContext.Provider value={{ size: "1.5em" }}>
+            {checkIfLiked(likes, user.$id) ? (
+              <IoIosHeart className="text-red-500" /> // Change this to the icon you want to display when the post is liked
+            ) : (
+              <IoMdHeartEmpty className="text-gray-900 dark:text-gray-200" />
+            )}
+          </IconContext.Provider>
+        </button>
+        <span className="dark:text-gray-200 text-gray-900">
+          {likes ? likes.length : 0}
+        </span>{" "}
       </div>
-      <div>
-        <img
-          src={checkIfSaved(saves, post.$id) ? saved : save}
-          alt="save"
-          width={"30px"}
-          height={"30px"}
-          className="cursor-pointer"
-          onClick={handleSavePost}
-        />
+      <div className="savepost flex justify-center items-center gap-3">
+        <IconContext.Provider value={{ size: "1.5em" }}>
+          {checkIfSaved(saves, post.$id) ? (
+            <BsFillBookmarkFill
+              className="cursor-pointer text-gray-800 dark:text-neutral-100"
+              onClick={handleSavePost}
+            />
+          ) : (
+            <BsBookmark
+              className="cursor-pointer text-gray-800 dark:text-neutral-100"
+              onClick={handleSavePost}
+            />
+          )}
+        </IconContext.Provider>
+        <span className="dark:text-gray-200 text-gray-900">
+          {checkIfSaved(saves, post.$id) ? "Post Saved" : "Save Post"}{" "}
+        </span>
       </div>
     </div>
   );
