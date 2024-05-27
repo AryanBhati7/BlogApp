@@ -11,7 +11,6 @@ export const fetchPublicPosts = createAsyncThunk(
   "fetchPublicPosts",
   async () => {
     const response = await appwriteService.getPosts();
-    console.log(response);
     return response.documents;
   }
 );
@@ -21,7 +20,7 @@ export const createPostAction = createAsyncThunk("createPost", async (post) => {
     const response = await postService.createPost(post);
     return response;
   } catch (error) {
-    console.log("Post Slice : CreatePost : Error : ", error);
+    throw error;
   }
 });
 
@@ -29,11 +28,10 @@ export const editPost = createAsyncThunk(
   "editPost",
   async ({ postId, post }) => {
     try {
-      console.log(post, postId, "editPOst SLice");
       const response = await postService.updatePost(postId, post);
       return response;
     } catch (error) {
-      console.log("Post Slice : Edit Post : Error : ", error);
+      throw error;
     }
   }
 );

@@ -14,7 +14,6 @@ import AddPost from "./pages/AddPost.jsx";
 import Login from "./pages/Login.jsx";
 import { AuthLayout } from "./components/index.js";
 import Error from "./pages/Error.jsx";
-import Onboarding from "./pages/Onboarding.jsx";
 import Callback from "./pages/Callback.jsx";
 import Profile from "./pages/Profile.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
@@ -26,10 +25,6 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-      },
-      {
-        path: "/onboarding",
-        element: <Onboarding />,
       },
       {
         path: "/login",
@@ -76,7 +71,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/post/:postId",
-        element: <Post />,
+        element: (
+          <AuthLayout authentication>
+            <Post />,
+          </AuthLayout>
+        ),
       },
       {
         path: "/error",
@@ -96,11 +95,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile/:username",
-        element: <Profile />,
+        element: (
+          <AuthLayout authentication>
+            <Profile />,
+          </AuthLayout>
+        ),
       },
       {
         path: "/edit-profile",
-        element: <EditProfile />,
+        element: (
+          <AuthLayout authentication>
+            <EditProfile />,
+          </AuthLayout>
+        ),
       },
     ],
   },

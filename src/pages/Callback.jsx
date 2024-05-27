@@ -24,15 +24,6 @@ function Callback({ provider }) {
     fetchData();
   }, [provider, dispatch, navigate]);
 
-  // authService.getGoogleAccountInfo().then((userData) => {
-  //   if (userData) {
-  //     dispatch(authLogin({ userData }));
-  //     navigate("/");
-  //   } else {
-  //     console.log("Error");
-  //   }
-  // });
-
   return <div>Loading...</div>;
 }
 

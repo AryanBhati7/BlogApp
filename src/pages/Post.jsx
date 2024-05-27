@@ -39,7 +39,6 @@ export default function Post() {
   const post =
     myPosts.find((post) => post.$id === postId) ||
     publicPosts.find((post) => post.$id === postId);
-  console.log(post);
   const creatorInfo = post ? post.creator : undefined;
   const isAuthor =
     creatorInfo && creatorInfo.accountId === userData.accountId ? true : false;

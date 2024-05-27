@@ -59,7 +59,6 @@ function Signup() {
     try {
       if (data.profileImg && data.profileImg.length > 0) {
         const profile = await authService.uploadProfile(data.profileImg[0]);
-        console.log(profile);
         const profileView = authService.getProfilePreview(profile.$id);
         data.profileImg = profileView;
         data.profileId = profile.$id;

@@ -9,7 +9,6 @@ function EditPost() {
   const navigate = useNavigate();
 
   const post = posts.find((post) => post.$id === postId);
-  console.log(post, "Edit Post");
   if (!post) {
     navigate("/");
   }

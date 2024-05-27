@@ -193,8 +193,10 @@ function Header({ loading }) {
               <li key={item.name}>
                 <button
                   onClick={() => handleNaigation(item.slug)}
-                  className={`dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-[#405479] rounded-full ${
-                    item.slug === activeItem ? "bg-[#253657]" : ""
+                  className={`dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-gray-300 dark:hover:bg-[#2f4a80] rounded-full ${
+                    item.slug === activeItem
+                      ? "dark:bg-[#2f4a80] bg-gray-300"
+                      : ""
                   }`}
                 >
                   {item.name}
@@ -205,7 +207,7 @@ function Header({ loading }) {
 
           {authStatus && (
             <li>
-              <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-gray-400 rounded-full" />
+              <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-gray-300 dark:hover:bg-[#2f4a80] rounded-full" />
             </li>
           )}
           <li>

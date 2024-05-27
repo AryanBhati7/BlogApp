@@ -6,9 +6,7 @@ import { checkAuthStatus } from "../features/authSlice";
 
 function Saves() {
   const currentUser = useSelector((state) => state.auth.userData);
-  console.log(currentUser);
   const posts = currentUser.saved;
-  console.log(posts);
   const postsStatus = useSelector((state) => state.posts.loading);
   const currentUserStatus = useSelector((state) => state.auth.loading);
   const authorsStatus = useSelector((state) => state.users.loading);

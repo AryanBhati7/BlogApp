@@ -25,7 +25,6 @@ function Comments({ userId, postId }) {
 
   const handleAddComment = async (comment) => {
     const newComment = await userService.addComment(userId, postId, comment);
-    console.log(newComment);
     setComments([...comments, newComment]);
     dispatch(fetchMyPosts());
     dispatch(fetchPublicPosts());
@@ -39,7 +38,6 @@ function Comments({ userId, postId }) {
   };
 
   const handleUpdateComment = async (commentId, comment) => {
-    console.log(commentId, comment);
     const updatedComment = await userService.updateComment(commentId, comment);
     setComments(
       comments.map((c) => (c.$id === commentId ? updatedComment : c))

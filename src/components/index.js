@@ -12,7 +12,6 @@ import PostForm from "./post-form/PostForm";
 import Container from "./Container/Container";
 import PostCard from "./PostCard";
 import AuthLayout from "./AuthLayout";
-import Onboarding from "./Onboarding";
 import Textarea from "./Textarea";
 import { Avatar, AvatarName, AvatarImage } from "./Avatar";
 import Landingpage from "./Landingpage";
@@ -44,7 +43,6 @@ export {
   UserInformation,
   ProfileAvatar,
   Landingpage,
-  Onboarding,
   Avatar,
   AvatarName,
   AvatarImage,

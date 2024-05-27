@@ -46,7 +46,6 @@ function Login() {
     try {
       authService.googleLogin();
     } catch (error) {
-      console.log(error.message);
       setError(error.message);
     }
   };
