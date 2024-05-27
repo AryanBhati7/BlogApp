@@ -9,6 +9,7 @@ import {
   PostCardLoading,
 } from "../components/index";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchPublicPosts } from "../features/postSlice";
 
 function Home() {
   const dispatch = useDispatch();
@@ -27,6 +28,10 @@ function Home() {
   if (authStatus === false) {
     return <Landingpage />;
   }
+
+  useEffect(() => {
+    dispatch(fetchPublicPosts());
+  }, [dispatch]);
 
   return (
     <div className="maincontainer overflow-x-hidden flex  px-5 lg:px-20 py-4  w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-col sm:flex-col">
@@ -50,7 +55,7 @@ function Home() {
 
       <div className="lg:w-[28rem] w-full  mx-0 lg:block px-2">
         <div className="lg:px-8">
-          <div className="w-full flex  ml-3 lg:ml-1">
+          <div className="w-full flex mt-2 lg:ml-1">
             <h1 className="mb-3 text-2xl font-bold text-gray-800 dark:text-gray-200 md:text-2xl">
               Authors
             </h1>

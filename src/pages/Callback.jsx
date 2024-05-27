@@ -5,7 +5,7 @@ import authService from "../appwrite/auth";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 
-function Callback({ provider }) {
+function Callback() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

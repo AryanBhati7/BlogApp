@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
-import { login, logout } from "./features/authSlice";
+import { checkAuthStatus, login, logout } from "./features/authSlice";
 import { Footer, Header, LoadingSpinner } from "./components/index";
 import { Outlet } from "react-router-dom";
 import { fetchUsers } from "./features/usersSlice";
@@ -19,6 +19,7 @@ function App() {
           dispatch(login({ userData }));
           dispatch(fetchPublicPosts());
           dispatch(fetchUsers());
+          dispatch(checkAuthStatus());
         } else {
           dispatch(logout());
         }

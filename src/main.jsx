@@ -86,12 +86,8 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/callback/google",
-        element: <Callback provider="google" />,
-      },
-      {
-        path: "/callback/facebook",
-        element: <Callback provider="facebook" />,
+        path: "/callback",
+        element: <Callback />,
       },
       {
         path: "/profile/:username",

@@ -22,7 +22,7 @@ function Logo({ textColor = "primary", darkTextColor = "white" }) {
         </svg>
       </div>
       <div
-        className={`text-2.5xl z-50 font-bold tracking-widest text-theme-color
+        className={`text-2.5xl font-bold tracking-widest text-theme-color
 rounded-lg focus:outline-none focus:shadow-outline`}
       >
         Blog

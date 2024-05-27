@@ -87,7 +87,7 @@ function Header({ loading }) {
           </div>
 
           <div
-            className={`fixed transform top-0 left-0 w-80 bg-gray-200  dark:bg-gray-900 h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${
+            className={`fixed transform top-0 left-0 w-80 bg-gray-200  dark:bg-gray-900 h-full overflow-auto ease-in-out transition-all duration-300 z-50 ${
               isOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >
