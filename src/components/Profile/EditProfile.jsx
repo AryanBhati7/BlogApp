@@ -363,6 +363,7 @@ function EditProfile({ profile }) {
                   <h3 className="dark:text-gray-300 mb-2">Gender</h3>
                   <select
                     {...register("gender", { required: false })}
+                    defaultValue={data.gender}
                     className="w-full text-grey border-2 rounded-lg p-4  dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
                   >
                     <option disabled value="">
