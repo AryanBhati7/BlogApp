@@ -23,20 +23,22 @@ function Saves() {
     );
   }
   return (
-    <div className="px-5 lg:px-24 mt-4 flex flex-col justify-center">
-      <h1 className="mb-3 ml-8 text-2xl font-bold text-gray-800 dark:text-gray-200  md:text-2xl">
-        Saved Posts
-      </h1>
-      <div className="px-6  lg:ml-2 lg:w-full flex flex-col gap-8">
-        {isLoading ? (
-          <PostCardLoading />
-        ) : (
-          posts.map((post) => (
-            <div key={post.$id}>
-              <PostCard post={post} />
-            </div>
-          ))
-        )}
+    <div className="w-screen lg:pr-48">
+      <div className="px-5 lg:px-24 mt-4 flex flex-col justify-center">
+        <h1 className="mb-3 ml-8 text-2xl font-bold text-gray-800 dark:text-gray-200  md:text-2xl">
+          Saved Posts
+        </h1>
+        <div className="px-6  lg:ml-2 lg:w-full flex flex-col gap-8">
+          {isLoading ? (
+            <PostCardLoading />
+          ) : (
+            posts.map((post) => (
+              <div key={post.$id}>
+                <PostCard post={post} contentLength={200} />
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

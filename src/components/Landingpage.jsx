@@ -12,7 +12,7 @@ function Landingpage() {
   }, []);
 
   return (
-    <div className="h-auto bg-background dark:bg-dark-bg">
+    <div className="bg-background dark:bg-dark-bg">
       <div className="max-w-screen-xl px-8 mx-auto flex flex-col lg:flex-row items-center">
         <div className="flex flex-col w-full lg:w-6/12 justify-center lg:pt-24 items-start text-center lg:text-left mb-5 md:mb-0">
           <h1

@@ -5,14 +5,28 @@ import { Button, Input, LoadingSpinner, Logo } from "./index";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
-
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import "../index.css";
+import { toast } from "react-toastify";
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
   const loading = useSelector((state) => state.auth.loading);
 
   const login = async (data) => {
@@ -21,19 +35,20 @@ function Login() {
       await dispatch(authLogin(data));
       navigate("/");
     } catch (error) {
-      setError(error.message);
+      setError("root", {
+        message: "Login failed. Please check your email and password.",
+      });
     }
   };
 
   const googleAuth = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
       authService.googleLogin();
     } catch (error) {
-      setError(error.message);
       console.log(error.message);
+      setError(error.message);
     }
   };
   if (loading) {
@@ -58,7 +73,22 @@ function Login() {
             Sign Up
           </Link>
         </p>
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+        {errors.root && (
+          <div className="mx-auto text-center font-bold text-red-500">
+            {errors.root.message}
+          </div>
+        )}
+        {errors.email && (
+          <div className="mx-auto text-center font-bold text-red-500">
+            {errors.email.message}
+          </div>
+        )}
+        {errors.password && (
+          <div className="mx-auto text-center font-bold text-red-500">
+            {errors.password.message}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(login)} className="mt-8">
           <div className="space-y-5">
             <Input
@@ -66,31 +96,25 @@ function Login() {
               label="Email: "
               placeholder="Enter your email"
               type="email"
-              {...register("email", {
-                required: true,
-                validate: {
-                  matchPatern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                    "Email address must be a valid address",
-                },
-              })}
+              {...register("email")}
             />
             <Input
               labelClasses="dark:text-black text-white"
               label="Password: "
               type="password"
               placeholder="Enter your password"
-              {...register("password", {
-                required: true,
-              })}
+              {...register("password")}
             />
 
             <div className="mb-3">
               <Button
+                disabled={isSubmitting}
                 type="submit"
-                className="mb-1.5 block w-full text-center text-white bg-primary hover:bg-blue-600 px-2 py-1.5 rounded-md"
+                className={`mb-1.5 block w-full text-center text-white bg-primary hover:bg-blue-600 px-2 py-1.5 rounded-md ${
+                  isSubmitting ? "animate-pulse" : ""
+                }`}
               >
-                Sign in
+                {isSubmitting ? "Logging in" : "Sign In"}
               </Button>
 
               <div className="flex items-center justify-center mt-4">

@@ -10,7 +10,14 @@ function Header({ loading }) {
   const authStatus = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState("/");
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleNaigation = (slug) => {
+    navigate(slug);
+    setIsOpen(false);
+    setActiveItem(slug);
+  };
 
   const navItems = [
     {
@@ -34,7 +41,7 @@ function Header({ loading }) {
       active: authStatus,
     },
     {
-      name: "New Post",
+      name: "+ New Post",
       slug: "/add-post",
       active: authStatus,
     },
@@ -42,7 +49,7 @@ function Header({ loading }) {
 
   return (
     <header className="py-3 shadow bg-background dark:bg-dark-bg">
-      <div className="ml-2">
+      <div className="">
         <nav className="flex md:hidden ">
           {authStatus && (
             <button onClick={() => setIsOpen(!isOpen)} className="ml-4">
@@ -174,8 +181,8 @@ function Header({ loading }) {
           </div>
         </nav>
       </div>
-      <nav className="hidden md:flex pr-14 mt-4 mr-4">
-        <div className="ml-36 mt-1">
+      <nav className="hidden md:flex  mt-4 px-20">
+        <div className="mt-1">
           <Link to="/">
             <Logo textColor="primary" darkTextColor="white" />
           </Link>
@@ -185,14 +192,17 @@ function Header({ loading }) {
             item.active ? (
               <li key={item.name}>
                 <button
-                  onClick={() => navigate(item.slug)}
-                  className=" dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-gray-400 rounded-full"
+                  onClick={() => handleNaigation(item.slug)}
+                  className={`dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-[#405479] rounded-full ${
+                    item.slug === activeItem ? "bg-[#253657]" : ""
+                  }`}
                 >
                   {item.name}
                 </button>
               </li>
             ) : null
           )}
+
           {authStatus && (
             <li>
               <LogoutBtn className="dark:text-white font-mono inline-bock px-6 py-2 text-2xl text-darken duration-200 hover:bg-gray-400 rounded-full" />
@@ -206,7 +216,7 @@ function Header({ loading }) {
               <Link to={`/profile/${userData.username}`}>
                 <AvatarImage
                   src={userData.profileImg}
-                  className="w-12 h-12 object-cover rounded-full mx-4"
+                  className="w-12 h-12 object-cover rounded-full"
                 />
               </Link>
             </li>

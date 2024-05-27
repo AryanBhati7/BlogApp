@@ -15,13 +15,13 @@ function CommentForm({ onAddComment }) {
   return (
     <form className="mb-6 overflow-hidden" onSubmit={submit}>
       <div className="py-1 px-2 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        <label htmlFor="comment" className="text-white">
+        <label htmlFor="comment" className="text-white text-lg">
           Your comment
         </label>
         <textarea
           id="comment"
           rows="6"
-          className="p-3 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+          className="p-3 w-full text-lg text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
           placeholder="Write a comment..."
           required
           value={comment}

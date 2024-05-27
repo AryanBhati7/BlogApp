@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { postService, fileService } from "../appwrite/config";
+import { checkAuthStatus } from "../features/authSlice";
 import {
   Button,
   CommentsSection,
@@ -10,7 +11,7 @@ import {
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
-import { fetchPublicPosts } from "../features/postSlice";
+import { fetchMyPosts, fetchPublicPosts } from "../features/postSlice";
 import {
   AvatarImage,
   AvatarName,
@@ -26,10 +27,14 @@ export default function Post() {
   const postUrl = window.location.href;
   const dispatch = useDispatch();
   const publicPosts = useSelector((state) => state.posts.publicPosts);
-  const postFetchingStatus = useSelector((state) => state.posts.status);
+  const postFetchingStatus = useSelector((state) => state.posts.loading);
   const myPosts = useSelector((state) => state.posts.myPosts);
+  const myPostsFetchingStatus = useSelector(
+    (state) => state.posts.myPostsLoading
+  );
 
   const userData = useSelector((state) => state.auth.userData);
+  const userDataStatus = useSelector((state) => state.auth.loading);
 
   const post =
     myPosts.find((post) => post.$id === postId) ||
@@ -50,10 +55,12 @@ export default function Post() {
       }
     }
   };
-  if (postFetchingStatus === "loading") {
-    return <PostLoading />;
-  }
+  const isLoading =
+    userDataStatus || postFetchingStatus || myPostsFetchingStatus;
 
+  // if (isLoading) {
+  //   return <PostLoading />;
+  // }
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800 w-screen">
       <div className="flex flex-col max-w-6xl max-h-2xl mx-auto  rounded">

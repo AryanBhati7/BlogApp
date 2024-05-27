@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.4.2",
     "@reduxjs/toolkit": "^2.2.3",
     "@tinymce/tinymce-react": "^5.0.1",
     "alpinejs": "^3.13.10",

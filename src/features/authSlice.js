@@ -11,8 +11,12 @@ export const checkAuthStatus = createAsyncThunk(
 );
 
 export const loginAction = createAsyncThunk("auth/login", async (data) => {
-  const session = await authService.login(data);
-  return session;
+  try {
+    const session = await authService.login(data);
+    return session;
+  } catch (error) {
+    throw error
+  }
 });
 export const getGoogleAccInfo = createAsyncThunk(
   "auth/getGoogleAccInfo",

@@ -73,7 +73,7 @@ export class AuthService {
       }
       return newUser;
     } catch (error) {
-      console.log("Appwrite Service Error :: createAccount :: Error", error);
+      throw error;
     }
   }
 
@@ -124,7 +124,7 @@ export class AuthService {
       );
       return login;
     } catch (error) {
-      console.log("Appwrite Service Error :: login :: Error", error);
+      throw error;
     }
   }
 

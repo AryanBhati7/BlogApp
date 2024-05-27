@@ -8,16 +8,54 @@ import authService from "../appwrite/auth";
 import { createUser } from "../features/usersSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
 function Signup() {
-  const { register, handleSubmit, watch } = useForm();
+  const schema = z
+    .object({
+      email: z.string().email(),
+      username: z
+        .string()
+        .min(4)
+        .refine((value) => value === value.toLowerCase(), {
+          message: "Username must be all lowercase",
+        })
+        .refine(
+          (value) => {
+            const isUnique = users.every((user) => user.username !== value);
+            return isUnique;
+          },
+          {
+            message: "Username already exists",
+          }
+        ),
+      name: z.string().min(6),
+      password: z.string().min(6),
+      confirmPassword: z.string().min(6),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords should match",
+      path: ["confirmPassword"],
+    });
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
   const loading = useSelector((state) => state.users.loading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const users = useSelector((state) => state.users.users);
 
-  const password = watch("password");
-
+  // if(data.username && users.some((user) => user.username === data.username)){
+  //   setError("username", {
+  //     message: "Username already exists",
+  //   });
   const create = async (data) => {
     setError("");
     try {
@@ -37,7 +75,9 @@ function Signup() {
         navigate("/");
       }
     } catch (error) {
-      setError(error.message);
+      setError("root", {
+        message: "Account Creation Failed Please try again",
+      });
     }
   };
 
@@ -48,11 +88,12 @@ function Signup() {
     try {
       authService.googleLogin();
     } catch (error) {
-      setError(error.message);
-      console.log(error.message);
+      setError("root", {
+        message: "Account Creation Failed Please try again",
+      });
     }
   };
-  if (loading) return <LoadingSpinner />;
+
   return (
     <section className=" flex items-center justify-center w-full">
       <div className=" bg-dark-bg dark:bg-background flex items-center w-full max-w-3xl p-4 mx-auto  rounded-xl border-black/10 lg:px-12 lg:w-3/5">
@@ -72,8 +113,32 @@ function Signup() {
               </Link>
             </p>
           </div>
-          {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
 
+          {errors.root && (
+            <div className="mx-auto text-center font-bold text-red-500">
+              {errors.root.message}
+            </div>
+          )}
+          {errors.password && (
+            <div className="mx-auto text-center font-bold text-red-500">
+              {errors.password.message}
+            </div>
+          )}
+          {errors.confirmPassword && (
+            <div className="mx-auto text-center font-bold text-red-500">
+              {errors.confirmPassword.message}
+            </div>
+          )}
+          {errors.email && (
+            <div className="mx-auto text-center font-bold text-red-500">
+              {errors.email.message}
+            </div>
+          )}
+          {errors.username && (
+            <div className="mx-auto text-center font-bold text-red-500">
+              {errors.username.message}
+            </div>
+          )}
           <form onSubmit={handleSubmit(create)} className="mt-4">
             <div className="grid grid-cols-2 gap-6">
               <div>
@@ -94,10 +159,7 @@ function Signup() {
                 type="text"
                 placeholder="John Wick"
                 className="block w-full px-5 py-3  text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md  dark:bg-gray-900  dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                {...register("name", {
-                  required: true, //this is for react hook form
-                })}
-                required
+                {...register("name")}
               />
             </div>
             <div className="grid grid-cols-2 gap-6">
@@ -117,7 +179,6 @@ function Signup() {
                         "Username should not contain spaces",
                     }, //this is for react hook form
                   })}
-                  required
                 />
               </div>
 
@@ -130,14 +191,7 @@ function Signup() {
                   className="block w-full px-5 py-3  text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md  dark:bg-gray-900  dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                   {...register("email", {
                     required: true,
-                    validate: {
-                      matchPatern: (value) =>
-                        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
-                          value
-                        ) || "Email address must be a valid address",
-                    }, //this is for react hook form
                   })}
-                  required
                 />
               </div>
             </div>
@@ -152,7 +206,6 @@ function Signup() {
                   {...register("password", {
                     required: true, //this is for react hook form
                   })}
-                  required
                 />
               </div>
 
@@ -170,15 +223,19 @@ function Signup() {
                         value === password || "Passwords should match", // validate that confirmPassword matches password
                     },
                   })}
-                  required
                 />
               </div>
             </div>
             <Button
               type="submit"
-              className="flex mt-6 items-center text-lg justify-center w-full px-6 py-3  tracking-wide text-white capitalize transition-colors duration-300 transform bg-primary hover:bg-blue-600 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+              disabled={isSubmitting}
+              className={`flex mt-6 items-center text-lg justify-center w-full px-6 py-3 tracking-wide text-white capitalize transition-colors duration-300 transform bg-primary hover:bg-blue-600 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 ${
+                isSubmitting ? "animate-pulse" : ""
+              }`}
             >
-              <span>Create Account </span>
+              <span>
+                {isSubmitting ? "Creating Your Account.." : "Create Account"}{" "}
+              </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-5 h-5 rtl:-scale-x-100"
@@ -208,16 +265,6 @@ function Signup() {
               />
               Sign in with Google
             </Button>
-            {/* <Button
-              onClick={(e) => facebookAuth(e)}
-              className="flex mt-1 text-lg bg-white flex-wrap justify-center items-center w-full border border-gray-300 hover:border-gray-600 px-2 py-1.5 rounded-md text-gray-800"
-            >
-              <img
-                className="w-6 mr-2"
-                src="https://i.pinimg.com/564x/b2/ef/68/b2ef689d1f387dfc949d0f63c3865441.jpg"
-              />
-              Sign in with Facebook
-            </Button> */}
           </form>
         </div>
       </div>

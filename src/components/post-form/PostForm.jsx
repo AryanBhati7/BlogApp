@@ -73,13 +73,6 @@ function PostForm({ post }) {
       const featuredImageURL = fileService.getFilePreview(file.$id);
 
       data.tags = data.tags.split(",").map((tag) => tag.trim());
-
-      // const dbPost = await postService.createPost({
-      //   ...data,
-      //   userId: userData.$id,
-      //   featuredImageURL,
-      // });
-      console.log(userData, "User Data");
       const actionResult = await dispatch(
         createPostAction({
           ...data,

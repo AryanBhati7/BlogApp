@@ -8,6 +8,7 @@ import { AvatarImage, AvatarName } from "./index";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { savePost } from "../features/authSlice";
+import { fetchMyPosts, fetchPublicPosts } from "../features/postSlice";
 
 function PostCard({ post, uploadedBy = true, contentLength = 180 }) {
   const dispatch = useDispatch();
