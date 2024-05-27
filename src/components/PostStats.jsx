@@ -4,8 +4,16 @@ import { userService } from "../appwrite/config";
 import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
 import { IoMdHeartEmpty, IoIosHeart } from "react-icons/io";
 import { IconContext } from "react-icons";
-import { checkAuthStatus, updateUserData } from "../features/authSlice";
-import { fetchMyPosts, fetchPublicPosts } from "../features/postSlice";
+import {
+  checkAuthStatus,
+  updateUserData,
+  savePost,
+} from "../features/authSlice";
+import {
+  fetchMyPosts,
+  fetchPublicPosts,
+  likePost,
+} from "../features/postSlice";
 function PostStats({ post }) {
   const userData = useSelector((state) => state.auth.userData);
   const [user, setUser] = useState(userData);
@@ -34,10 +42,7 @@ function PostStats({ post }) {
     }
 
     setLikes(likesArray);
-    await userService.likePost(post.$id, likesArray);
-    dispatch(checkAuthStatus());
-    dispatch(fetchPublicPosts());
-    dispatch(fetchMyPosts());
+    dispatch(likePost({ postId: post.$id, likesArray }));
   };
   const handleSavePost = (e) => {
     let savedArray = [...saves];
@@ -47,10 +52,7 @@ function PostStats({ post }) {
       savedArray.push(post.$id);
     }
     setSaves(savedArray);
-    userService.savePost(user.$id, savedArray).then((res) => {
-      console.log(res, "SavePost");
-      dispatch(checkAuthStatus());
-    });
+    dispatch(savePost({ userId: user.$id, savedArray }));
   };
 
   return (

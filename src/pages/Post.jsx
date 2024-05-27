@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { postService, fileService } from "../appwrite/config";
-import { Button, Container, PostStats, SharePost } from "../components/index";
+import {
+  Button,
+  Container,
+  PostStats,
+  SharePost,
+  Comments,
+} from "../components/index";
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
@@ -50,8 +56,8 @@ export default function Post() {
   }
 
   return post && creatorInfo ? (
-    <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800">
-      <div className="flex flex-col max-w-6xl max-h-2xl mx-auto overflow-hidden rounded">
+    <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800 h-screen w-screen">
+      <div className="flex flex-col max-w-6xl max-h-2xl mx-auto  rounded">
         <div
           className="rounded-md h-60 sm:h-96 w-full"
           style={{
@@ -143,6 +149,7 @@ export default function Post() {
         </div>
       </div>
 
+      <Comments />
       <RecentPosts currentPostId={postId} />
     </div>
   ) : (

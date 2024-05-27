@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import appwriteService, { postService } from "../appwrite/config";
+import appwriteService, { postService, userService } from "../appwrite/config";
 
 // Async thunk for fetching all posts
 export const fetchMyPosts = createAsyncThunk("fetchMyPosts", async (userId) => {
@@ -47,6 +47,14 @@ export const deletePostAction = createAsyncThunk(
     } catch (error) {
       console.log("Post Slice : DeletePost : Error : ", error);
     }
+  }
+);
+
+export const likePost = createAsyncThunk(
+  "posts/likePost",
+  async ({ postId, likesArray }) => {
+    const post = await userService.likePost(postId, likesArray);
+    return post;
   }
 );
 
@@ -155,6 +163,34 @@ const postSlice = createSlice({
         state.publicPosts = action.payload;
       })
       .addCase(fetchPublicPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      //Like Post Cases
+      .addCase(likePost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedPost = action.payload;
+
+        if (updatedPost.status === "Public") {
+          const publicIndex = state.publicPosts.findIndex(
+            (post) => post.$id === updatedPost.$id
+          );
+
+          if (publicIndex === -1) return;
+
+          state.publicPosts[publicIndex] = updatedPost;
+        }
+        const index = state.myPosts.findIndex(
+          (post) => post.$id === updatedPost.$id
+        );
+
+        if (index === -1) return;
+        state.myPosts[index] = updatedPost;
+      })
+      .addCase(likePost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

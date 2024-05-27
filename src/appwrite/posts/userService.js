@@ -66,12 +66,4 @@ export class UserService {
       }
     );
   }
-
-  async unsavePost(saveId) {
-    await this.databases.deleteDocument(
-      conf.appwriteDatabaseID,
-      conf.appwriteSavesCollectionID,
-      saveId
-    );
-  }
 }
