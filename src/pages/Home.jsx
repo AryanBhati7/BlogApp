@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { fetchPublicPosts } from "../features/postSlice";
+import React, { useEffect } from "react";
+
 import { fetchUsers } from "../features/usersSlice";
 import {
-  Container,
   PostCard,
   Landingpage,
   Author,
@@ -20,7 +19,7 @@ function Home() {
   const postsStatus = useSelector((state) => state.posts.loading);
   const currentUserStatus = useSelector((state) => state.auth.loading);
   const authorsStatus = useSelector((state) => state.users.loading);
-  const isLoading = postsStatus || authorsStatus || currentUserStatus;
+  const isLoading = postsStatus;
   useEffect(() => {
     if (authors.length === 0) dispatch(fetchUsers());
   }, [dispatch, authors, currentUser]);

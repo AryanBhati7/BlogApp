@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import "../index.css";
-import { toast } from "react-toastify";
 
 const schema = z.object({
   email: z.string().email(),

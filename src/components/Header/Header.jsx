@@ -216,7 +216,7 @@ function Header({ loading }) {
               <Link to={`/profile/${userData.username}`}>
                 <AvatarImage
                   src={userData.profileImg}
-                  className="w-12 h-12 object-cover rounded-full"
+                  className="w-12 h-12 object-cover rounded-full ml-6"
                 />
               </Link>
             </li>

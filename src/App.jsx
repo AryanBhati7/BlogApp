@@ -5,7 +5,6 @@ import { login, logout } from "./features/authSlice";
 import { Footer, Header, LoadingSpinner } from "./components/index";
 import { Outlet } from "react-router-dom";
 import { fetchUsers } from "./features/usersSlice";
-import { ToastContainer } from "react-toastify";
 
 import { fetchPublicPosts } from "./features/postSlice";
 

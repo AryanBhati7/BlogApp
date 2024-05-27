@@ -28,8 +28,8 @@ function Profile() {
     const user = allUsers.find((user) => user.username === username);
     if (user) {
       setUserInfo(user);
+      dispatch(fetchMyPosts(user.accountId));
     }
-    dispatch(fetchMyPosts(user.accountId));
   }, [allUsers, username]);
 
   return userInfo ? (

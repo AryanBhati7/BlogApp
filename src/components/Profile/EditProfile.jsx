@@ -1,16 +1,49 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login, updateUserData } from "../../features/authSlice";
+import { updateUserData } from "../../features/authSlice";
 import { useNavigate } from "react-router-dom";
 import authService from "../../appwrite/auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { toast } from "react-toastify";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSelector } from "react-redux";
 import { fetchUsers, updateUser } from "../../features/usersSlice";
 
 function EditProfile({ profile }) {
+  const schema = z.object({
+    username: z
+      .string()
+      .min(4)
+      .max(15)
+      .refine((value) => !value.includes(" "), {
+        message: "Username must not contain spaces",
+      })
+      .refine((value) => value === value.toLowerCase(), {
+        message: "Username must be all lowercase",
+      })
+      .refine(
+        (value) => {
+          if (value === currentUsername) {
+            return true;
+          }
+          const isUnique = users.every((user) => user.username !== value);
+          return isUnique;
+        },
+        {
+          message: "Username already exists",
+        }
+      ),
+    name: z.string().min(6),
+    bio: z.string().max(150),
+    location: z.string().max(60),
+    instaLink: z.string().max(50),
+    fbLink: z.string().max(50),
+    twitterLink: z.string().max(50),
+  });
+  const users = useSelector((state) => state.users.users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [DOB, setDOB] = useState(() => {
@@ -20,13 +53,16 @@ function EditProfile({ profile }) {
     }
     return new Date();
   });
+  const currentUsername = profile.username;
 
   const {
     register,
-    handleSubmit,
     control,
-    formState: { errors },
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm({
+    resolver: zodResolver(schema),
     defaultValues: {
       name: profile?.name || "",
       username: profile?.username || "",
@@ -39,77 +75,61 @@ function EditProfile({ profile }) {
       fbLink: profile?.socials[2] || "",
     },
   });
-  // function extractFileId(url) {
-  //   if (!url.startsWith("https://lh3.googleusercontent.com")) {
-  //     const regex = /files\/(.*)\/preview/;
-  //     const match = url.match(regex);
-  //     if (match && match[1]) {
-  //       return match[1];
-  //     } else {
-  //       return null;
-  //     }
-  //   } else {
-  //     return null;
-  //   }
-  // }
 
   const submit = async (data) => {
     const socials = [data.instaLink, data.twitterLink, data.fbLink];
 
-    if (Object.keys(errors).length > 0) {
-      for (const error in errors) {
-        toast.error(errors[error].message);
-      }
+    data.dob = DOB.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    if (data.profileImg && data.profileImg.length > 0) {
+      const profile = await authService.uploadProfile(data.profileImg[0]);
+      const profileView = authService.getProfilePreview(profile.$id);
+      data.profileImg = profileView;
+      data.profileId = profile.$id;
     } else {
-      data.dob = DOB.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
+      data.profileImg = profile.profileImg;
+      data.profileId = profile.profileId;
+    }
+    if (data.coverphoto && data.coverphoto.length > 0) {
+      const cover = await authService.uploadCoverPhoto(data.coverphoto[0]);
+      const coverView = authService.getCoverPhotoPreview(cover.$id);
+      data.coverphoto = coverView;
+      data.coverphotoId = cover.$id;
+    } else {
+      data.coverphoto = profile.coverphoto;
+      data.coverphotoId = profile.coverphotoId;
+    }
 
-      if (data.profileImg && data.profileImg.length > 0) {
-        const profile = await authService.uploadProfile(data.profileImg[0]);
-        const profileView = authService.getProfilePreview(profile.$id);
-        data.profileImg = profileView;
-        data.profileId = profile.$id;
-      } else {
-        data.profileImg = profile.profileImg;
-        data.profileId = profile.profileId;
+    // Delete profile from storage if new profile is uploaded
+    if (data.profileImg !== profile.profileImg && data.profileImg) {
+      if (profile.profileId) {
+        authService.deleteProfile(profile.profileId);
       }
-      if (data.coverphoto && data.coverphoto.length > 0) {
-        const cover = await authService.uploadCoverPhoto(data.coverphoto[0]);
-        const coverView = authService.getCoverPhotoPreview(cover.$id);
-        data.coverphoto = coverView;
-        data.coverphotoId = cover.$id;
-      } else {
-        data.coverphoto = profile.coverphoto;
-        data.coverphotoId = profile.coverphotoId;
-      }
-      console.log(profile, data.profileImg, data.coverphoto);
-      // Delete profile from storage if new profile is uploaded
-      if (data.profileImg !== profile.profileImg && data.profileImg) {
-        if (profile.profileId) {
-          authService.deleteProfile(profile.profileId);
-        }
-      }
+    }
 
-      // Delete cover photo from storage if new cover photo is uploaded
-      if (data.coverphoto !== profile.coverphoto && data.coverphoto) {
-        if (profile.coverphotoId) {
-          authService.deleteCoverPhoto(coverphotoId);
-        }
+    // Delete cover photo from storage if new cover photo is uploaded
+    if (data.coverphoto !== profile.coverphoto && data.coverphoto) {
+      if (profile.coverphotoId) {
+        authService.deleteCoverPhoto(coverphotoId);
       }
-      const userData = await authService.updateProfile(profile.$id, {
-        ...data,
-        socials,
+    }
+    const userData = await authService.updateProfile(profile.$id, {
+      ...data,
+      socials,
+    });
+    if (userData) {
+      dispatch(updateUser(userData));
+      dispatch(updateUserData({ userData }));
+      dispatch(fetchUsers());
+      navigate(`/profile/${userData.username}`);
+    } else {
+      setError("root", {
+        message: "Profile Updation Failed Please try again",
       });
-      if (userData) {
-        dispatch(updateUser(userData));
-        dispatch(updateUserData({ userData }));
-        dispatch(fetchUsers());
-        dispatch(login({ userData }));
-        navigate(`/profile/${userData.username}`);
-      }
     }
   };
 
@@ -144,6 +164,46 @@ function EditProfile({ profile }) {
             <h1 className="lg:text-3xl md:text-2xl sm:text-xl xs:text-xl font-serif font-extrabold mb-2 dark:text-white">
               Edit Profile
             </h1>
+            {errors.root && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.root.message}
+              </div>
+            )}
+            {errors.name && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.name.message}
+              </div>
+            )}
+            {errors.username && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.username.message}
+              </div>
+            )}
+            {errors.bio && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.bio.message}
+              </div>
+            )}
+            {errors.location && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.location.message}
+              </div>
+            )}
+            {errors.instaLink && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.instaLink.message}
+              </div>
+            )}
+            {errors.fbLink && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.fbLink.message}
+              </div>
+            )}
+            {errors.twitterLink && (
+              <div className="mx-auto text-center font-bold text-red-500 my-2">
+                {errors.twitterLink.message}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit(submit)}>
               <div
@@ -376,8 +436,14 @@ function EditProfile({ profile }) {
               </div>
 
               <div className="w-full rounded-lg bg-blue-500 hover:bg-blue-400 mt-4 text-white text-lg font-semibold">
-                <button type="submit" className="w-full p-4">
-                  Submit
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full p-4 ${
+                    isSubmitting ? "animate-pulse" : ""
+                  }`}
+                >
+                  {isSubmitting ? "Updating Your Profile.." : "Update"}
                 </button>
               </div>
             </form>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login as authLogin } from "../features/authSlice";
 import { useDispatch } from "react-redux";
-import { Input, Logo, Button, LoadingSpinner } from "./index";
+import { Input, Button } from "./index";
 import { useForm } from "react-hook-form";
 import authService from "../appwrite/auth";
 import { createUser } from "../features/usersSlice";
@@ -10,7 +10,6 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-toastify";
 
 function Signup() {
   const schema = z
@@ -19,6 +18,9 @@ function Signup() {
       username: z
         .string()
         .min(4)
+        .refine((value) => !value.includes(" "), {
+          message: "Username must not contain spaces",
+        })
         .refine((value) => value === value.toLowerCase(), {
           message: "Username must be all lowercase",
         })
@@ -52,10 +54,6 @@ function Signup() {
   const navigate = useNavigate();
   const users = useSelector((state) => state.users.users);
 
-  // if(data.username && users.some((user) => user.username === data.username)){
-  //   setError("username", {
-  //     message: "Username already exists",
-  //   });
   const create = async (data) => {
     setError("");
     try {
