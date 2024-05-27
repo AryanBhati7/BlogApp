@@ -10,6 +10,7 @@ import {
 } from "../components/index";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPublicPosts } from "../features/postSlice";
+import { checkAuthStatus } from "../features/authSlice";
 
 function Home() {
   const dispatch = useDispatch();
@@ -32,6 +33,9 @@ function Home() {
   useEffect(() => {
     dispatch(fetchPublicPosts());
   }, [dispatch]);
+  if (isLoading) {
+    return <PostCardLoading />;
+  }
 
   return (
     <div className="maincontainer overflow-x-hidden flex  px-5 lg:px-20 py-4  w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-col sm:flex-col">

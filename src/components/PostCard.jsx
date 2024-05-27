@@ -21,7 +21,7 @@ function PostCard({ post, uploadedBy = true, contentLength = 180 }) {
     return text.length > length ? `${text.substring(0, length)}...` : text;
   }
 
-  const savedList = user.saved.map((post) => post.$id);
+  const savedList = user && user.saved.map((post) => post.$id);
   const [saves, setSaves] = useState(savedList);
   const checkIfSaved = (saves, postId) => {
     return saves.includes(postId) ? true : false;

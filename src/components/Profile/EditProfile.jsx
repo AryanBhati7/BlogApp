@@ -1,16 +1,16 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { updateUserData } from "../../features/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import authService from "../../appwrite/auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers, updateUser } from "../../features/usersSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 function EditProfile({ profile }) {
   const schema = z.object({
@@ -44,6 +44,8 @@ function EditProfile({ profile }) {
     twitterLink: z.string().max(50),
   });
   const users = useSelector((state) => state.users.users);
+  const [profilePic, setProfilePic] = useState(null);
+  const [coverPic, setCoverPic] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [DOB, setDOB] = useState(() => {
@@ -78,15 +80,14 @@ function EditProfile({ profile }) {
 
   const submit = async (data) => {
     const socials = [data.instaLink, data.twitterLink, data.fbLink];
-
+    console.log(data);
     data.dob = DOB.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     });
-
-    if (data.profileImg && data.profileImg.length > 0) {
-      const profile = await authService.uploadProfile(data.profileImg[0]);
+    if (profilePic) {
+      const profile = await authService.uploadProfile(profilePic);
       const profileView = authService.getProfilePreview(profile.$id);
       data.profileImg = profileView;
       data.profileId = profile.$id;
@@ -94,8 +95,8 @@ function EditProfile({ profile }) {
       data.profileImg = profile.profileImg;
       data.profileId = profile.profileId;
     }
-    if (data.coverphoto && data.coverphoto.length > 0) {
-      const cover = await authService.uploadCoverPhoto(data.coverphoto[0]);
+    if (coverPic) {
+      const cover = await authService.uploadCoverPhoto(coverPic);
       const coverView = authService.getCoverPhotoPreview(cover.$id);
       data.coverphoto = coverView;
       data.coverphotoId = cover.$id;
@@ -117,15 +118,17 @@ function EditProfile({ profile }) {
         authService.deleteCoverPhoto(coverphotoId);
       }
     }
-    const userData = await authService.updateProfile(profile.$id, {
-      ...data,
-      socials,
-    });
-    if (userData) {
-      dispatch(updateUser(userData));
-      dispatch(updateUserData({ userData }));
+    const actionResult = await dispatch(
+      updateUser({
+        userId: profile.$id,
+        updatedUser: { ...data, socials },
+      })
+    );
+    const newUser = unwrapResult(actionResult);
+    if (newUser) {
+      dispatch(updateUserData({ newUser }));
       dispatch(fetchUsers());
-      navigate(`/profile/${userData.username}`);
+      navigate(`/profile/${newUser.username}`);
     } else {
       setError("root", {
         message: "Profile Updation Failed Please try again",
@@ -138,6 +141,7 @@ function EditProfile({ profile }) {
   function handleImageSelect(e) {
     const file = e.target.files[0];
     if (file) {
+      setProfilePic(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedImage(reader.result);
@@ -149,6 +153,7 @@ function EditProfile({ profile }) {
   function handleCoverSelect(e) {
     const file = e.target.files[0];
     if (file) {
+      setCoverPic(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedCover(reader.result);

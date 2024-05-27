@@ -12,6 +12,7 @@ function Header({ loading }) {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState("/");
   const [isOpen, setIsOpen] = useState(false);
+  const userStatus = useSelector((state) => state.auth.loading);
 
   const handleNaigation = (slug) => {
     navigate(slug);
@@ -51,7 +52,7 @@ function Header({ loading }) {
     <header className="py-3 shadow bg-background dark:bg-dark-bg">
       <div className="">
         <nav className="flex md:hidden ">
-          {authStatus && (
+          {authStatus && userData && (
             <button onClick={() => setIsOpen(!isOpen)} className="ml-4">
               <AvatarImage
                 src={userData.profileImg}
@@ -148,7 +149,7 @@ function Header({ loading }) {
                   </button>
                 </li>
               )}
-              {authStatus && !loading && userData && (
+              {authStatus && !loading && userData && !userStatus && (
                 <div className="flex items-center space-x-4 mt-6 w-full">
                   <Link
                     to={`/profile/${userData.username}`}
@@ -213,7 +214,7 @@ function Header({ loading }) {
           <li>
             <ThemeToggler />
           </li>
-          {authStatus && !loading && userData && (
+          {authStatus && !loading && !userStatus && userData && (
             <li>
               <Link to={`/profile/${userData.username}`}>
                 <AvatarImage

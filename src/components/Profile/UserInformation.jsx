@@ -31,7 +31,6 @@ function UserInformation({ userInfo }) {
                 Gender
               </div>
               <div className="text-lg font-semibold">
-                {" "}
                 {userInfo.gender ? userInfo.gender : "-"}
               </div>
             </div>
