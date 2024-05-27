@@ -28,9 +28,9 @@ import FileUploader from "./FileUploader";
 import SharePost from "./SharePost";
 import LoadingSpinner from "./Loading/LoadingSpinner";
 import PostStats from "./PostStats";
-import Comments from "./Comments";
+import CommentsSection from "./Comments/CommentsSection";
 export {
-  Comments,
+  CommentsSection,
   PostStats,
   LoadingSpinner,
   SharePost,

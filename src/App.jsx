@@ -32,9 +32,9 @@ function App() {
   }, []);
 
   return !loading ? (
-    <div className="w-full block h-screen overflow-x-hidden bg-background dark:bg-dark-bg ">
+    <div className="w-full block overflow-x-hidden bg-background dark:bg-dark-bg  ">
       <Header loading={loading} />
-      <main>
+      <main className="">
         <Outlet />
       </main>
       <Footer />

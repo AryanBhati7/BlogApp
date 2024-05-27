@@ -17,8 +17,7 @@ import {
 function PostStats({ post }) {
   const userData = useSelector((state) => state.auth.userData);
   const [user, setUser] = useState(userData);
-  console.log(userData, "User");
-  console.log(post, "Post");
+
   const dispatch = useDispatch();
   const likesList = post.likes.map((user) => user.$id);
   const savedList = user.saved.map((post) => post.$id);

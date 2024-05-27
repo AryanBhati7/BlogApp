@@ -2,13 +2,9 @@ import React from "react";
 import { PostCardLoading, PostCard } from "./index";
 import { useSelector } from "react-redux";
 function RecentPosts({ currentPostId }) {
-  console.log(currentPostId);
   const posts = useSelector((state) => state.posts.publicPosts);
-  console.log(posts, "Posts Recent Posts");
   const postsStatus = useSelector((state) => state.posts.status);
-  console.log(postsStatus, "Posts Status");
   const recentPosts = posts.filter((post) => post.$id !== currentPostId);
-  console.log(recentPosts, "Recent Posts");
   const isLoading = postsStatus === "loading";
 
   return (
@@ -20,13 +16,13 @@ function RecentPosts({ currentPostId }) {
           </h2>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 sm:gap-12 lg:grid-cols-2 xl:grid-cols-2 xl:gap-16">
+        <div className="grid gap-2 sm:grid-cols-2 sm:gap-12 lg:grid-cols-2 xl:grid-cols-2 xl:gap-12">
           {isLoading ? (
             <PostCardLoading />
           ) : (
             recentPosts.map((recentPost) => (
               <div key={recentPost.$id}>
-                <PostCard post={recentPost} />
+                <PostCard post={recentPost} contentLength={60} />
               </div>
             ))
           )}

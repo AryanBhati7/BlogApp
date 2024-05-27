@@ -3,10 +3,9 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { postService, fileService } from "../appwrite/config";
 import {
   Button,
-  Container,
+  CommentsSection,
   PostStats,
   SharePost,
-  Comments,
 } from "../components/index";
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
@@ -35,10 +34,10 @@ export default function Post() {
   const post =
     myPosts.find((post) => post.$id === postId) ||
     publicPosts.find((post) => post.$id === postId);
-
+  console.log(post);
   const creatorInfo = post ? post.creator : undefined;
-
-  const isAuthor = creatorInfo.accountId === userData.accountId ? true : false;
+  const isAuthor =
+    creatorInfo && creatorInfo.accountId === userData.accountId ? true : false;
 
   const deletePost = async () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
@@ -56,7 +55,7 @@ export default function Post() {
   }
 
   return post && creatorInfo ? (
-    <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800 h-screen w-screen">
+    <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800 w-screen">
       <div className="flex flex-col max-w-6xl max-h-2xl mx-auto  rounded">
         <div
           className="rounded-md h-60 sm:h-96 w-full"
@@ -148,8 +147,14 @@ export default function Post() {
           </div>
         </div>
       </div>
+      {post && post.comments && (
+        <CommentsSection
+          userId={userData.$id}
+          postComments={post.comments}
+          postId={post.$id}
+        />
+      )}
 
-      <Comments />
       <RecentPosts currentPostId={postId} />
     </div>
   ) : (

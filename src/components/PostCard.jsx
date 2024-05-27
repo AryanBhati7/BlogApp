@@ -4,19 +4,15 @@ import { FaHeart } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { AvatarImage, AvatarName, PostCardLoading } from "./index";
+import { AvatarImage, AvatarName } from "./index";
 import { useSelector } from "react-redux";
-import { checkAuthStatus } from "../features/authSlice";
-import { userService } from "../appwrite/config";
 import { useDispatch } from "react-redux";
-import { fetchPublicPosts } from "../features/postSlice";
+import { savePost } from "../features/authSlice";
 
-function PostCard({ post, uploadedBy = true }) {
+function PostCard({ post, uploadedBy = true, contentLength = 180 }) {
   const dispatch = useDispatch();
   const creatorInfo = post.creator;
   const user = useSelector((state) => state.auth.userData);
-  console.log(user);
-
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -37,17 +33,13 @@ function PostCard({ post, uploadedBy = true }) {
       savedArray.push(post.$id);
     }
     setSaves(savedArray);
-    userService.savePost(user.$id, savedArray).then((res) => {
-      console.log(res, "SavePost");
-      dispatch(checkAuthStatus());
-      dispatch(fetchPublicPosts());
-    });
+    dispatch(savePost({ userId: user.$id, savedArray }));
   };
 
   return (
     <div className="group p-3 w-full rounded-xl overflow-hidden flex flex-col md:flex-row bg-gray-100 dark:bg-[#262f40] border border-gray-400">
       <Link to={`/post/${post.$id}`}>
-        <div className="relative rounded-xl overflow-hidden w-full md:w-[20rem] lg:w-64 h-60 flex-none ">
+        <div className="relative rounded-xl overflow-hidden w-full md:w-[20rem] lg:w-60 h-60 flex-none ">
           <img
             src={post.featuredImageURL}
             alt={post.title}
@@ -55,7 +47,7 @@ function PostCard({ post, uploadedBy = true }) {
           />
         </div>
       </Link>
-      <div className="mt-4 sm:mt-0 sm:ms-6 sm:px-2 w-full">
+      <div className="mt-4 sm:mt-0 sm:ms-2 sm:px-2 w-full ">
         <Link to={`/post/${post.$id}`}>
           <div className="flex items-center justify-between mt-1 lg:mt-0 mr-1">
             <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-600 dark:text-neutral-100 dark:group-hover:text-white">
@@ -85,7 +77,7 @@ function PostCard({ post, uploadedBy = true }) {
           </div>
           <div className="min-h-[6rem]">
             <p className="mt-3 text-gray-600 dark:text-neutral-300">
-              {truncateHtmlContent(post.content, 180)}
+              {truncateHtmlContent(post.content, contentLength)}
             </p>
             <p className="inline-flex items-center gap-x-1 dark:text-blue-300  text-blue-600 decoration-2 hover:underline font-medium">
               Read more {">"}
