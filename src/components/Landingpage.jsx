@@ -1,45 +1,24 @@
 import React from "react";
 import heroImg from "../assets/img/hero.png";
 import "../assets/css/landingpage.css";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Landingpage() {
-  useEffect(() => {
-    AOS.init();
-  }, []);
-
   return (
     <div className="bg-background dark:bg-dark-bg">
       <div className="max-w-screen-xl px-8 mx-auto flex flex-col lg:flex-row items-center">
         <div className="flex flex-col w-full lg:w-6/12 justify-center lg:pt-24 items-start text-center lg:text-left mb-5 md:mb-0">
-          <h1
-            data-aos="fade-right"
-            data-aos-once="true"
-            className="my-4 text-5xl font-bold leading-tight text-primary dark:text-dark-primary"
-          >
+          <h1 className="my-4 text-5xl font-bold leading-tight text-primary dark:text-dark-primary">
             <span className="text-theme-color">Blogging</span> Online is now
             much easier
           </h1>
-          <p
-            data-aos="fade-down"
-            data-aos-once="true"
-            data-aos-delay="300"
-            className="leading-normal mb-8 text-justify text-2.5xl text-primary dark:text-dark-primary"
-          >
+          <p className="leading-normal mb-8 text-justify text-2.5xl text-primary dark:text-dark-primary">
             Write Blogs on various topics and start your journey as a impactful{" "}
             <span className="text-theme-color font-bold">Content Creator</span>,
             exploring your passions, sharing your knowledge and experiences with
             the world.
           </p>
-          <div
-            data-aos="fade-up"
-            data-aos-once="true"
-            data-aos-delay="700"
-            className="w-full md:flex items-center justify-center lg:justify-start md:space-x-5"
-          >
+          <div className="w-full md:flex items-center justify-center lg:justify-start md:space-x-5">
             <Link to="/signup">
               <button className="lg:mx-0 bg-[#e10112] text-white text-xl font-bold rounded-full py-4 px-9 focus:outline-none transform transition hover:scale-110 duration-300 ease-in-out">
                 Join Now
@@ -48,19 +27,9 @@ function Landingpage() {
           </div>
         </div>
         <div className="w-full lg:w-6/12 lg:-mt-10 relative pt-16" id="hero">
-          <img
-            data-aos="fade-up"
-            data-aos-once="true"
-            className="w-8/12 mx-auto 2xl:-mb-20"
-            src={heroImg}
-          />
+          <img className="w-8/12 mx-auto 2xl:-mb-20" src={heroImg} />
 
-          <div
-            data-aos="fade-up"
-            data-aos-delay="300"
-            data-aos-once="true"
-            className="absolute top-20 left-6 sm:top-32 sm:left-18 md:top-40 md:left-32 lg:left-12 lg:top-32 floating-4"
-          >
+          <div className="absolute top-20 left-6 sm:top-32 sm:left-18 md:top-40 md:left-32 lg:left-12 lg:top-32 floating-4">
             <div className="card card-side bg-white shadow-xl  w-12 h-12 rounded-xl flex justify-center items-center">
               <figure className="flex  items-center justify-center">
                 <svg
@@ -79,12 +48,7 @@ function Landingpage() {
           </div>
 
           {/* {Second Floating Card} */}
-          <div
-            data-aos="fade-up"
-            data-aos-delay="400"
-            data-aos-once="true"
-            className="absolute top-20 right-10 sm:right-24 sm:top-28 md:top-36 md:right-32 lg:top-32 lg:right-16 floating"
-          >
+          <div className="absolute top-20 right-10 sm:right-24 sm:top-28 md:top-36 md:right-32 lg:top-32 lg:right-16 floating">
             <div className="card card-side bg-white shadow-xl  w-12 h-12 rounded-xl flex justify-center items-center">
               <figure className="flex  items-center justify-center">
                 <svg
@@ -102,12 +66,7 @@ function Landingpage() {
             </div>
           </div>
 
-          <div
-            data-aos="fade-up"
-            data-aos-delay="500"
-            data-aos-once="true"
-            className="absolute bottom-14 left-4 sm:left-2 sm:bottom-20 lg:bottom-12 lg:left-20 floating"
-          >
+          <div className="absolute bottom-14 left-4 sm:left-2 sm:bottom-20 lg:bottom-12 lg:left-20 floating">
             <div className="card card-side bg-white shadow-xl  w-12 h-12 rounded-xl flex justify-center items-center">
               <figure className="flex  items-center justify-center">
                 <svg
@@ -124,12 +83,7 @@ function Landingpage() {
               </figure>
             </div>
           </div>
-          <div
-            data-aos="fade-up"
-            data-aos-delay="600"
-            data-aos-once="true"
-            className="absolute bottom-20 md:bottom-48 lg:bottom-24 -right-6 lg:right-8 floating-4"
-          >
+          <div className="absolute bottom-20 md:bottom-48 lg:bottom-24 -right-6 lg:right-8 floating-4">
             <div className="card card-side bg-white shadow-xl  w-12 h-12 rounded-xl flex justify-center items-center">
               <figure className="flex  items-center justify-center">
                 <svg

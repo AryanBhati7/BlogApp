@@ -32,7 +32,7 @@ function Home() {
 
   useEffect(() => {
     dispatch(fetchPublicPosts());
-  }, [dispatch]);
+  }, [dispatch, JSON.stringify(posts)]);
   if (isLoading) {
     return <PostCardLoading />;
   }

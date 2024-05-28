@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
 
 function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
-  console.log(comment);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(comment.comment);
