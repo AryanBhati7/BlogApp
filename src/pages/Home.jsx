@@ -12,7 +12,6 @@ import { fetchPublicPosts } from "../features/postSlice";
 function Home() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.publicPosts);
-  console.log(posts);
   const postsStatus = useSelector((state) => state.posts.loading);
   const authStatus = useSelector((state) => state.auth.status);
   const isLoading = postsStatus;

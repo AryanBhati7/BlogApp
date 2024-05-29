@@ -32,6 +32,7 @@ export class UserService {
       conf.appwriteCommentsCollectionID,
       commentId
     );
+    return true;
   }
 
   async updateComment(commentId, comment) {

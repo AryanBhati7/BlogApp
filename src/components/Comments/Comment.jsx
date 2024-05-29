@@ -101,6 +101,7 @@ function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
             </li>
             <li
               onClick={(e) => {
+                e.stopPropagation();
                 e.preventDefault();
                 onDeleteComment(comment.$id);
               }}

@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import appwriteService, { postService, userService } from "../appwrite/config";
+import { comment } from "postcss";
+
+export const fetchPost = createAsyncThunk("fetchPost", async (postId) => {
+  const response = await appwriteService.getPost(postId);
+  return response;
+});
 
 // Async thunk for fetching all posts
 export const fetchMyPosts = createAsyncThunk("fetchMyPosts", async (userId) => {
@@ -60,6 +66,7 @@ export const addComment = createAsyncThunk(
   "posts/addComment",
   async ({ userId, postId, comment }) => {
     const newComment = await userService.addComment(userId, postId, comment);
+    console.log(newComment);
     return newComment;
   }
 );
@@ -75,8 +82,10 @@ export const editComment = createAsyncThunk(
 export const deleteComment = createAsyncThunk(
   "posts/deleteComment",
   async (commentId) => {
-    await userService.deleteComment(commentId);
-    return commentId;
+    console.log(commentId, "CommnetID delete");
+    const DeleteComment = await userService.deleteComment(commentId);
+    console.log(DeleteComment);
+    if (DeleteComment) return commentId;
   }
 );
 
@@ -191,6 +200,34 @@ const postSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      //Fetch Post Cases
+      .addCase(fetchPost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchPost.fulfilled, (state, action) => {
+        state.loading = false;
+        const post = action.payload;
+
+        // Find the post in publicPosts and replace it
+        const publicPostIndex = state.publicPosts.findIndex(
+          (p) => p.$id === post.$id
+        );
+        if (publicPostIndex !== -1) {
+          state.publicPosts[publicPostIndex] = post;
+        } else if (post.status === "Public") {
+          // If the post is not found and it's a public post, add it to the start of the array
+          state.publicPosts = [post, ...state.publicPosts];
+        }
+
+        // Find the post in myPosts and replace it
+        const myPostIndex = state.myPosts.findIndex((p) => p.$id === post.$id);
+        if (myPostIndex !== -1) {
+          state.myPosts[myPostIndex] = post;
+        } else {
+          // If the post is not found, add it to the start of the array
+          state.myPosts = [post, ...state.myPosts];
+        }
+      })
       //Like Post Cases
       .addCase(likePost.pending, (state) => {
         state.loading = true;
@@ -227,7 +264,7 @@ const postSlice = createSlice({
         state.loading = false;
         const newComment = action.payload;
         const postIndex = state.publicPosts.findIndex(
-          (post) => post.$id === newComment.post
+          (post) => post.$id === newComment.post.$id
         );
         if (postIndex === -1) return;
         state.publicPosts[postIndex].comments.push(newComment);
@@ -244,7 +281,7 @@ const postSlice = createSlice({
         state.loading = false;
         const updatedComment = action.payload;
         const postIndex = state.publicPosts.findIndex(
-          (post) => post.$id === updatedComment.post
+          (post) => post.$id === updatedComment.post.$id
         );
         if (postIndex === -1) return;
         const commentIndex = state.publicPosts[postIndex].comments.findIndex(
@@ -270,6 +307,14 @@ const postSlice = createSlice({
           );
         });
       })
+      // .addCase(deletePostAction.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   const postId = action.payload;
+      //   state.myPosts = state.myPosts.filter((post) => post.$id !== postId);
+      //   state.publicPosts = state.publicPosts.filter(
+      //     (post) => post.$id !== postId
+      //   );
+      // })
       .addCase(deleteComment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;

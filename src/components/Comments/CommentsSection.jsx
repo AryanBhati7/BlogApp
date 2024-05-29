@@ -3,6 +3,7 @@ import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import { userService } from "../../appwrite/config";
 import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import {
   addComment,
   deleteComment,
@@ -26,23 +27,22 @@ function Comments({ userId, postId }) {
   const dispatch = useDispatch();
 
   const handleAddComment = async (comment) => {
-    const newComment = await userService.addComment(userId, postId, comment);
+    const actionResult = dispatch(addComment({ userId, postId, comment }));
+    const newComment = unwrapResult(actionResult);
     setComments([...comments, newComment]);
-    dispatch(addComment({ userId, postId, comment }));
   };
 
   const handleDeleteComment = async (commentId) => {
-    await userService.deleteComment(commentId);
+    await dispatch(deleteComment(commentId));
     setComments(comments.filter((comment) => comment.$id !== commentId));
-    dispatch(deleteComment(commentId));
   };
 
   const handleUpdateComment = async (commentId, comment) => {
-    const updatedComment = await userService.updateComment(commentId, comment);
+    const actionResult = dispatch(editComment({ commentId, comment }));
+    const updatedComment = unwrapResult(actionResult);
     setComments(
       comments.map((c) => (c.$id === commentId ? updatedComment : c))
     );
-    dispatch(editComment({ commentId, comment }));
   };
 
   return (
