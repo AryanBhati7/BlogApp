@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers, updateUser } from "../../features/usersSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import Select from "../Select";
 
 function EditProfile({ profile }) {
   const schema = z.object({
@@ -39,9 +40,28 @@ function EditProfile({ profile }) {
     name: z.string().min(6),
     bio: z.string().max(150),
     location: z.string().max(60),
-    instaLink: z.string().max(50),
-    fbLink: z.string().max(50),
-    twitterLink: z.string().max(50),
+    instaLink: z
+      .string()
+      .url()
+      .max(50)
+      .refine((value) => value.includes("instagram.com"), {
+        message: "A valid Instagram URL is required",
+      }),
+    fbLink: z
+      .string()
+      .url()
+      .max(50)
+      .refine((value) => value.includes("facebook.com"), {
+        message: "A valid Facebook URL is required",
+      }),
+    twitterLink: z
+      .string()
+      .url()
+      .max(50)
+      .refine((value) => value.includes("twitter.com" || "x.com"), {
+        message: "A valid Twitter/X URL is required",
+      }),
+    gender: z.string(),
   });
   const users = useSelector((state) => state.users.users);
   const [profilePic, setProfilePic] = useState(null);
@@ -69,7 +89,7 @@ function EditProfile({ profile }) {
       name: profile?.name || "",
       username: profile?.username || "",
       bio: profile?.bio || "",
-      gender: profile?.gender || "",
+      gender: profile?.gender || "null",
       dob: profile?.dob || "",
       location: profile?.location || "",
       instaLink: profile?.socials[0] || "",
@@ -118,6 +138,7 @@ function EditProfile({ profile }) {
         authService.deleteCoverPhoto(coverphotoId);
       }
     }
+    console.log(data);
     const actionResult = await dispatch(
       updateUser({
         userId: profile.$id,
@@ -169,46 +190,15 @@ function EditProfile({ profile }) {
             <h1 className="lg:text-3xl md:text-2xl sm:text-xl xs:text-xl font-serif font-extrabold mb-2 dark:text-white">
               Edit Profile
             </h1>
-            {errors.root && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.root.message}
-              </div>
-            )}
-            {errors.name && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.name.message}
-              </div>
-            )}
-            {errors.username && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.username.message}
-              </div>
-            )}
-            {errors.bio && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.bio.message}
-              </div>
-            )}
-            {errors.location && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.location.message}
-              </div>
-            )}
-            {errors.instaLink && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.instaLink.message}
-              </div>
-            )}
-            {errors.fbLink && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.fbLink.message}
-              </div>
-            )}
-            {errors.twitterLink && (
-              <div className="mx-auto text-center font-bold text-red-500 my-2">
-                {errors.twitterLink.message}
-              </div>
-            )}
+            {errors &&
+              Object.entries(errors).map(([key, value]) => (
+                <div
+                  key={key}
+                  className="mx-auto text-center font-bold text-red-500 my-2"
+                >
+                  {value.message}
+                </div>
+              ))}
 
             <form onSubmit={handleSubmit(submit)}>
               <div
@@ -361,12 +351,19 @@ function EditProfile({ profile }) {
               <div className="flex flex-col mb-3 sm:flex-row md:flex-row lg:flex-row gap-2 justify-center w-full">
                 <div className="flex-1 mb-2">
                   <h3 className="dark:text-gray-300 mb-2">Gender</h3>
-                  <select
+                  {/* <Select
+                    options={["Male", "Female"]}
+                    className="w-full text-grey border-2 rounded-lg p-4  dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
                     {...register("gender", { required: false })}
-                    defaultValue={data.gender}
+                  /> */}
+
+                  <select
+                    {...register("gender", {
+                      required: false,
+                    })}
                     className="w-full text-grey border-2 rounded-lg p-4  dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
                   >
-                    <option disabled value="">
+                    <option disabled value="null">
                       Select Gender
                     </option>
                     <option value="Male">Male</option>
