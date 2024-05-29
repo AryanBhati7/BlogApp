@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "../appwrite/auth";
 import { userService } from "../appwrite/config";
 
-export const checkAuthStatus = createAsyncThunk(
-  "auth/checkAuthStatus",
+export const fetchUserInfo = createAsyncThunk(
+  "auth/fetchUserInfo",
   async () => {
     const data = await authService.getCurrentUser();
     return data;
@@ -15,7 +15,7 @@ export const loginAction = createAsyncThunk("auth/login", async (data) => {
     const session = await authService.login(data);
     return session;
   } catch (error) {
-    throw error
+    throw error;
   }
 });
 export const getGoogleAccInfo = createAsyncThunk(
@@ -57,15 +57,15 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(checkAuthStatus.pending, (state) => {
+      .addCase(fetchUserInfo.pending, (state) => {
         state.loading = true;
       })
-      .addCase(checkAuthStatus.fulfilled, (state, action) => {
+      .addCase(fetchUserInfo.fulfilled, (state, action) => {
         state.loading = false;
         state.status = true;
         state.userData = action.payload;
       })
-      .addCase(checkAuthStatus.rejected, (state, action) => {
+      .addCase(fetchUserInfo.rejected, (state, action) => {
         state.loading = false;
         state.userData = null;
       })

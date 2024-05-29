@@ -1,41 +1,29 @@
 import React, { useEffect } from "react";
-
-import { fetchUsers } from "../features/usersSlice";
 import {
   PostCard,
   Landingpage,
-  Author,
+  AuthorsBox,
   AuthorsLoading,
   PostCardLoading,
 } from "../components/index";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPublicPosts } from "../features/postSlice";
-import { checkAuthStatus } from "../features/authSlice";
 
 function Home() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.publicPosts);
-  const authStatus = useSelector((state) => state.auth.status);
-  const authors = useSelector((state) => state.users.users);
-  const currentUser = useSelector((state) => state.auth.userData);
+  console.log(posts);
   const postsStatus = useSelector((state) => state.posts.loading);
-  const currentUserStatus = useSelector((state) => state.auth.loading);
-  const authorsStatus = useSelector((state) => state.users.loading);
+  const authStatus = useSelector((state) => state.auth.status);
   const isLoading = postsStatus;
-  useEffect(() => {
-    if (authors.length === 0) dispatch(fetchUsers());
-  }, [dispatch, authors, currentUser]);
 
   if (authStatus === false) {
     return <Landingpage />;
   }
 
   useEffect(() => {
-    dispatch(fetchPublicPosts());
-  }, [dispatch, JSON.stringify(posts)]);
-  if (isLoading) {
-    return <PostCardLoading />;
-  }
+    if (posts.length === 0) dispatch(fetchPublicPosts());
+  }, [dispatch]);
 
   return (
     <div className="maincontainer overflow-x-hidden flex  px-5 lg:px-20 py-4  w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-col sm:flex-col">
@@ -64,24 +52,7 @@ function Home() {
               Authors
             </h1>
           </div>
-
-          <div className="flex flex-col py-4  lg:w-full gap-8 lg:mx-auto bg-gray-100 dark:bg-[#262f40] border border-gray-400 rounded-lg shadow-md md:w-full">
-            <ul className="lg:-mx-4 -ml-4 mx-0">
-              {authors.length === 0 ? (
-                <AuthorsLoading />
-              ) : (
-                authors.map((author) => (
-                  <li key={author.accountId} className="flex items-center p-2">
-                    <Author
-                      authorusername={author.username}
-                      numberOfPosts={author.posts.length}
-                      profileImg={author.profileImg}
-                    />
-                  </li>
-                ))
-              )}
-            </ul>
-          </div>
+          {isLoading ? <AuthorsLoading /> : <AuthorsBox />}
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { postService, fileService } from "../appwrite/config";
-import { checkAuthStatus } from "../features/authSlice";
+import React from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { fileService } from "../appwrite/config";
 import {
   Button,
   CommentsSection,
@@ -11,7 +10,6 @@ import {
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
-import { fetchMyPosts, fetchPublicPosts } from "../features/postSlice";
 import {
   AvatarImage,
   AvatarName,
@@ -19,7 +17,6 @@ import {
   RecentPosts,
 } from "../components/index";
 import { deletePostAction } from "../features/postSlice";
-import { fetchUsers } from "../features/usersSlice";
 
 export default function Post() {
   const { postId } = useParams();
@@ -27,18 +24,13 @@ export default function Post() {
   const postUrl = window.location.href;
   const dispatch = useDispatch();
   const publicPosts = useSelector((state) => state.posts.publicPosts);
-  const postFetchingStatus = useSelector((state) => state.posts.loading);
   const myPosts = useSelector((state) => state.posts.myPosts);
-  const myPostsFetchingStatus = useSelector(
-    (state) => state.posts.myPostsLoading
-  );
 
   const userData = useSelector((state) => state.auth.userData);
-  const userDataStatus = useSelector((state) => state.auth.loading);
-
   const post =
-    myPosts.find((post) => post.$id === postId) ||
-    publicPosts.find((post) => post.$id === postId);
+    publicPosts.find((post) => post.$id === postId) ||
+    myPosts.find((post) => post.$id === postId);
+
   const creatorInfo = post ? post.creator : undefined;
   const isAuthor =
     creatorInfo && creatorInfo.accountId === userData.accountId ? true : false;
@@ -48,18 +40,11 @@ export default function Post() {
       const actionResult = await dispatch(deletePostAction(post.$id));
       if (actionResult) {
         await fileService.deleteFile(post.featuredImage);
-        dispatch(fetchPublicPosts());
-        dispatch(fetchUsers());
         navigate("/");
       }
     }
   };
-  const isLoading =
-    userDataStatus || postFetchingStatus || myPostsFetchingStatus;
 
-  // if (isLoading) {
-  //   return <PostLoading />;
-  // }
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800 w-screen">
       <div className="flex flex-col max-w-6xl max-h-2xl mx-auto  rounded">

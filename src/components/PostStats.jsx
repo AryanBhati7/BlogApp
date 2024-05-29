@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userService } from "../appwrite/config";
 import PostStatsLoading from "./Loading/PostStatsLoading";
 import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
 import { IoMdHeartEmpty, IoIosHeart } from "react-icons/io";
 import { IconContext } from "react-icons";
-import {
-  checkAuthStatus,
-  updateUserData,
-  savePost,
-} from "../features/authSlice";
-import {
-  fetchMyPosts,
-  fetchPublicPosts,
-  likePost,
-} from "../features/postSlice";
+import { savePost } from "../features/authSlice";
+import { likePost } from "../features/postSlice";
 function PostStats({ post }) {
-  const userData = useSelector((state) => state.auth.userData);
-  const [user, setUser] = useState(userData);
+  const user = useSelector((state) => state.auth.userData);
   const postFetchingStatus = useSelector((state) => state.posts.loading);
   const myPostsFetchingStatus = useSelector(
     (state) => state.posts.myPostsLoading
@@ -44,7 +34,6 @@ function PostStats({ post }) {
     } else {
       likesArray.push(user.$id);
     }
-
     setLikes(likesArray);
     dispatch(likePost({ postId: post.$id, likesArray }));
   };
@@ -58,11 +47,6 @@ function PostStats({ post }) {
     setSaves(savedArray);
     dispatch(savePost({ userId: user.$id, savedArray }));
   };
-  const isLoading = postFetchingStatus || myPostsFetchingStatus;
-
-  if (isLoading) {
-    return <PostStatsLoading />;
-  }
 
   return (
     <div className="stats px-3   border-t-neutral-100 border-b-neutral-100 border-t-2 border-b-2 flex justify-between items-center py-2">

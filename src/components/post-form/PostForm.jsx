@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { createPostAction, editPost } from "../../features/postSlice";
 import { fileService, postService } from "../../appwrite/config";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { checkAuthStatus } from "../../features/authSlice";
 import { fetchUsers } from "../../features/usersSlice";
 
 function PostForm({ post }) {

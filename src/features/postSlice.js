@@ -41,7 +41,7 @@ export const deletePostAction = createAsyncThunk(
   async (postId) => {
     try {
       const response = await postService.deletePost(postId);
-      return response;
+      if (response) return postId;
     } catch (error) {
       console.log("Post Slice : DeletePost : Error : ", error);
     }
@@ -56,10 +56,33 @@ export const likePost = createAsyncThunk(
   }
 );
 
+export const addComment = createAsyncThunk(
+  "posts/addComment",
+  async ({ userId, postId, comment }) => {
+    const newComment = await userService.addComment(userId, postId, comment);
+    return newComment;
+  }
+);
+
+export const editComment = createAsyncThunk(
+  "posts/editComment",
+  async ({ commentId, comment }) => {
+    const updatedComment = await userService.updateComment(commentId, comment);
+    return updatedComment;
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "posts/deleteComment",
+  async (commentId) => {
+    await userService.deleteComment(commentId);
+    return commentId;
+  }
+);
+
 const initialState = {
   myPosts: [],
   publicPosts: [],
-  status: "idle",
   loading: false,
   error: null,
 };
@@ -93,9 +116,9 @@ const postSlice = createSlice({
       })
       .addCase(createPostAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.myPosts.push(action.payload);
+        state.myPosts = [action.payload, ...state.myPosts];
         if (action.payload.status === "Public") {
-          state.publicPosts.push(action.payload);
+          state.publicPosts = [action.payload, ...state.publicPosts];
         }
       })
       .addCase(createPostAction.rejected, (state, action) => {
@@ -146,7 +169,9 @@ const postSlice = createSlice({
       })
       .addCase(fetchMyPosts.fulfilled, (state, action) => {
         state.loading = false;
-        state.myPosts = action.payload;
+        state.myPosts = action.payload.sort(
+          (a, b) => new Date(b.$createdAt) - new Date(a.$createdAt)
+        );
       })
       .addCase(fetchMyPosts.rejected, (state, action) => {
         state.loading = false;
@@ -154,11 +179,13 @@ const postSlice = createSlice({
       })
       //fetch Public Posts Cases
       .addCase(fetchPublicPosts.pending, (state) => {
-        state.status = true;
+        state.loading = true;
       })
       .addCase(fetchPublicPosts.fulfilled, (state, action) => {
         state.loading = false;
-        state.publicPosts = action.payload;
+        state.publicPosts = action.payload.sort(
+          (a, b) => new Date(b.$createdAt) - new Date(a.$createdAt)
+        );
       })
       .addCase(fetchPublicPosts.rejected, (state, action) => {
         state.loading = false;
@@ -189,6 +216,61 @@ const postSlice = createSlice({
         state.myPosts[index] = updatedPost;
       })
       .addCase(likePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // Add Comment Cases
+      .addCase(addComment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addComment.fulfilled, (state, action) => {
+        state.loading = false;
+        const newComment = action.payload;
+        const postIndex = state.publicPosts.findIndex(
+          (post) => post.$id === newComment.post
+        );
+        if (postIndex === -1) return;
+        state.publicPosts[postIndex].comments.push(newComment);
+      })
+      .addCase(addComment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      //Edit comment cases
+      .addCase(editComment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editComment.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedComment = action.payload;
+        const postIndex = state.publicPosts.findIndex(
+          (post) => post.$id === updatedComment.post
+        );
+        if (postIndex === -1) return;
+        const commentIndex = state.publicPosts[postIndex].comments.findIndex(
+          (comment) => comment.$id === updatedComment.$id
+        );
+        if (commentIndex === -1) return;
+        state.publicPosts[postIndex].comments[commentIndex] = updatedComment;
+      })
+      .addCase(editComment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      //Delete Comment Cases
+      .addCase(deleteComment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        state.loading = false;
+        const commentId = action.payload;
+        state.publicPosts.forEach((post) => {
+          post.comments = post.comments.filter(
+            (comment) => comment.$id !== commentId
+          );
+        });
+      })
+      .addCase(deleteComment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

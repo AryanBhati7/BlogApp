@@ -78,8 +78,10 @@ export class PostService {
         conf.appwritePostsCollectionID,
         postId
       );
+      return true;
     } catch (error) {
       console.log("Appwrite Service Error : Delete Post :", error);
+      return false;
     }
   }
 }

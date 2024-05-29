@@ -1,41 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { AvatarImage, AvatarName } from "./index";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { savePost } from "../features/authSlice";
-import { fetchMyPosts, fetchPublicPosts } from "../features/postSlice";
 
 function PostCard({ post, uploadedBy = true, contentLength = 180 }) {
-  const dispatch = useDispatch();
   const creatorInfo = post.creator;
-  const user = useSelector((state) => state.auth.userData);
   function truncateHtmlContent(html, length) {
     const div = document.createElement("div");
     div.innerHTML = html;
     const text = div.textContent || div.innerText || "";
     return text.length > length ? `${text.substring(0, length)}...` : text;
   }
-
-  const savedList = user && user.saved.map((post) => post.$id);
-  const [saves, setSaves] = useState(savedList);
-  const checkIfSaved = (saves, postId) => {
-    return saves.includes(postId) ? true : false;
-  };
-  const handleSavePost = (e) => {
-    let savedArray = [...saves];
-    if (savedArray.includes(post.$id)) {
-      savedArray = savedArray.filter((Id) => Id !== post.$id);
-    } else {
-      savedArray.push(post.$id);
-    }
-    setSaves(savedArray);
-    dispatch(savePost({ userId: user.$id, savedArray }));
-  };
 
   return (
     <div className="group p-3 w-full rounded-xl overflow-hidden flex flex-col md:flex-row bg-gray-100 dark:bg-[#262f40] border border-gray-400">
@@ -116,22 +94,6 @@ function PostCard({ post, uploadedBy = true, contentLength = 180 }) {
                   {")"}
                 </span>
               </h2>
-            </div>
-
-            <div className="mt-6 lg:mt-8">
-              <IconContext.Provider value={{ size: "1.5em" }}>
-                {checkIfSaved(saves, post.$id) ? (
-                  <BsFillBookmarkFill
-                    className="cursor-pointer text-gray-800 dark:text-neutral-100"
-                    onClick={handleSavePost}
-                  />
-                ) : (
-                  <BsBookmark
-                    className="cursor-pointer text-gray-800 dark:text-neutral-100"
-                    onClick={handleSavePost}
-                  />
-                )}
-              </IconContext.Provider>
             </div>
           </div>
         ) : (

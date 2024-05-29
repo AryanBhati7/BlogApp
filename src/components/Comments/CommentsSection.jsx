@@ -3,7 +3,11 @@ import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import { userService } from "../../appwrite/config";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMyPosts, fetchPublicPosts } from "../../features/postSlice";
+import {
+  addComment,
+  deleteComment,
+  editComment,
+} from "../../features/postSlice";
 import CommentLoading from "../Loading/CommentLoading";
 
 function Comments({ userId, postId }) {
@@ -13,9 +17,7 @@ function Comments({ userId, postId }) {
   const myPostsFetchingStatus = useSelector(
     (state) => state.posts.myPostsLoading
   );
-  const isLoading = postFetchingStatus || myPostsFetchingStatus;
 
-  // const post = posts.find((post) => post.id === postId);
   const post =
     myPosts.find((post) => post.$id === postId) ||
     publicPosts.find((post) => post.$id === postId);
@@ -26,15 +28,13 @@ function Comments({ userId, postId }) {
   const handleAddComment = async (comment) => {
     const newComment = await userService.addComment(userId, postId, comment);
     setComments([...comments, newComment]);
-    dispatch(fetchMyPosts());
-    dispatch(fetchPublicPosts());
+    dispatch(addComment({ userId, postId, comment }));
   };
 
   const handleDeleteComment = async (commentId) => {
     await userService.deleteComment(commentId);
     setComments(comments.filter((comment) => comment.$id !== commentId));
-    dispatch(fetchMyPosts());
-    dispatch(fetchPublicPosts());
+    dispatch(deleteComment(commentId));
   };
 
   const handleUpdateComment = async (commentId, comment) => {
@@ -42,12 +42,8 @@ function Comments({ userId, postId }) {
     setComments(
       comments.map((c) => (c.$id === commentId ? updatedComment : c))
     );
-    dispatch(fetchMyPosts());
-    dispatch(fetchPublicPosts());
+    dispatch(editComment({ commentId, comment }));
   };
-  if (isLoading) {
-    return <CommentLoading />;
-  }
 
   return (
     <section className="not-format px-16 mt-5">

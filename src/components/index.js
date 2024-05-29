@@ -18,7 +18,7 @@ import Landingpage from "./Landingpage";
 import ProfileAvatar from "./Profile/ProfileAvatar";
 import UserInformation from "./Profile/UserInformation";
 import EditProfile from "./Profile/EditProfile";
-import Author from "./Author";
+import Author from "./Authors/Author";
 import PostCardLoading from "./Loading/PostCardLoading";
 import AuthorsLoading from "./Loading/AuthorsLoading";
 import PostLoading from "./Loading/PostLoading";
@@ -28,7 +28,9 @@ import SharePost from "./SharePost";
 import LoadingSpinner from "./Loading/LoadingSpinner";
 import PostStats from "./PostStats";
 import CommentsSection from "./Comments/CommentsSection";
+import AuthorsBox from "./Authors/AuthorsBox";
 export {
+  AuthorsBox,
   CommentsSection,
   PostStats,
   LoadingSpinner,
