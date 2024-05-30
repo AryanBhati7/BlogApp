@@ -23,6 +23,8 @@ import { deletePostAction } from "../features/postSlice";
 Modal.setAppElement("#root");
 
 export default function Post() {
+  a;
+  const postfetchingStatus = useSelector((state) => state.posts.loading);
   const { postId } = useParams();
   const navigate = useNavigate();
   const postUrl = window.location.href;
@@ -54,6 +56,7 @@ export default function Post() {
   function closeModal() {
     setModalIsOpen(false);
   }
+  if (postfetchingStatus) return <PostLoading />;
 
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800 w-screen">

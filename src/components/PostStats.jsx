@@ -9,9 +9,6 @@ import { likePost } from "../features/postSlice";
 function PostStats({ post }) {
   const user = useSelector((state) => state.auth.userData);
   const postFetchingStatus = useSelector((state) => state.posts.loading);
-  const myPostsFetchingStatus = useSelector(
-    (state) => state.posts.myPostsLoading
-  );
 
   const dispatch = useDispatch();
   const likesList = post?.likes?.map((user) => user.$id);
