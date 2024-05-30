@@ -4,6 +4,9 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        railway: ["Railway", "sans-serif"],
+      },
       fontSize: {
         "2.5xl": "1.6875rem", // This is the average of 1.5rem and 1.875rem
       },

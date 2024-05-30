@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fileService } from "../appwrite/config";
 import Modal from "react-modal";
+import { MdEdit, MdDelete } from "react-icons/md";
+
 import {
   Button,
   CommentsSection,
@@ -17,7 +19,7 @@ import {
   PostLoading,
   RecentPosts,
 } from "../components/index";
-import { deletePostAction, fetchPost } from "../features/postSlice";
+import { deletePostAction } from "../features/postSlice";
 Modal.setAppElement("#root");
 
 export default function Post() {
@@ -70,7 +72,7 @@ export default function Post() {
 
         <div className="content-container border border-gray-400 p-6 pb-12 m-4 lg:mx-12 -mt-16 mx-5 space-y-6 lg:min-w-4xl sm:px-12 sm:mx-12 rounded-md dark:bg-[#262f40] bg-gray-200">
           <div className=" flex  justify-between">
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col lg:gap-3 gap-5 lg:w-6/12 w-8/12">
               <h2
                 rel="noopener noreferrer"
                 href="#"
@@ -117,24 +119,26 @@ export default function Post() {
                 </Link>
               </div>
             </div>
-            <div className="flex flex-col  gap-5 justify-between h-full">
+            <div className="flex flex-col gap-4 w-4/12 justify-between h-full">
               <SharePost postLink={postUrl} postTitle={post.title} />
 
               <div className="justify-end">
                 {isAuthor && (
-                  <div className="flex">
-                    <Link to={`/edit-post/${post.$id}`}>
-                      <Button className="mr-3 w-20 px-4 py-2 bg-green-600 text-white font-bold rounded hover:bg-green-700">
-                        Edit
-                      </Button>
+                  <div className="flex justify-end lg:gap-6 gap-2">
+                    <Link to={`/edit-post/${post.$id}`} className="">
+                      <button className=" p-2 flex gap-2 lg:px-5 px-3 justify-center items-center bg-green-600 text-white font-bold rounded hover:bg-green-700">
+                        <MdEdit className="text-white" size={24} />
+                        <span className="sm:block hidden">Edit</span>
+                      </button>
                     </Link>
 
-                    <Button
+                    <button
                       onClick={openModal}
-                      className=" w-20 px-4 py-2 text-white font-bold rounded bg-red-500 hover:bg-red-700"
+                      className=" p-2 px-3 flex justify-center items-center gap-2 text-white font-bold rounded bg-red-500 hover:bg-red-700"
                     >
-                      Delete
-                    </Button>
+                      <MdDelete className="text-white" size={24} />
+                      <span className="sm:block hidden">Delete</span>
+                    </button>
                     <Modal
                       isOpen={modalIsOpen}
                       onRequestClose={closeModal}
@@ -172,7 +176,7 @@ export default function Post() {
             </div>
           </div>
           <PostStats post={post} />
-          <div className="text-gray-600 dark:text-neutral-300 text-xl text-justify leading-relaxed">
+          <div className="text-gray-600 dark:text-neutral-100 text-xl sm:text-justify text-center  leading-relaxed">
             {parse(post.content)}
           </div>
         </div>

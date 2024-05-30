@@ -7,12 +7,12 @@ function Landingpage() {
   return (
     <div className="bg-background dark:bg-dark-bg">
       <div className="max-w-screen-xl px-8 mx-auto flex flex-col lg:flex-row items-center">
-        <div className="flex flex-col w-full lg:w-6/12 justify-center lg:pt-24 items-start text-center lg:text-left mb-5 md:mb-0">
+        <div className="flex flex-col  w-full lg:w-6/12 justify-center lg:pt-24 pt-5 items-start text-center lg:text-left mb-5 md:mb-0">
           <h1 className="my-4 text-5xl font-bold leading-tight text-primary dark:text-dark-primary">
             <span className="text-theme-color">Blogging</span> Online is now
             much easier
           </h1>
-          <p className="leading-normal mb-8 text-justify text-2.5xl text-primary dark:text-dark-primary">
+          <p className="leading-normal mb-8 text-center lg:text-left text-2.5xl text-primary dark:text-dark-primary">
             Write Blogs on various topics and start your journey as a impactful{" "}
             <span className="text-theme-color font-bold">Content Creator</span>,
             exploring your passions, sharing your knowledge and experiences with

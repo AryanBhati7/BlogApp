@@ -11,7 +11,9 @@ import {
 import CommentLoading from "../Loading/CommentLoading";
 
 function CommentsSection({ userId, postId, postComments }) {
-  const comments = postComments;
+  const comments = [...postComments].sort(
+    (a, b) => new Date(b.$createdAt) - new Date(a.$createdAt)
+  );
   const dispatch = useDispatch();
 
   const handleAddComment = async (comment) => {
@@ -27,7 +29,7 @@ function CommentsSection({ userId, postId, postComments }) {
   };
 
   return (
-    <section className="not-format px-16 mt-5">
+    <section className="not-format lg:px-16 px-7  mt-5">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
           Discussion ({comments.length})

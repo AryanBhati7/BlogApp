@@ -30,7 +30,6 @@ function Home() {
           Posts
         </h1>
         <div className="lg:w-full flex flex-col gap-8">
-          <PostCardLoading />
           {isLoading ? (
             <PostCardLoading />
           ) : (

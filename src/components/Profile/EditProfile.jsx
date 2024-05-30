@@ -11,14 +11,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers, updateUser } from "../../features/usersSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
-import Select from "../Select";
 
 function EditProfile({ profile }) {
   const schema = z.object({
     username: z
       .string()
       .min(4)
-      .max(15)
+      .max(25)
       .refine((value) => !value.includes(" "), {
         message: "Username must not contain spaces",
       })
@@ -139,10 +138,10 @@ function EditProfile({ profile }) {
     // Delete cover photo from storage if new cover photo is uploaded
     if (data.coverphoto !== profile.coverphoto && data.coverphoto) {
       if (profile.coverphotoId) {
-        authService.deleteCoverPhoto(coverphotoId);
+        authService.deleteCoverPhoto(profile.coverphotoId);
       }
     }
-    console.log(data);
+
     const actionResult = await dispatch(
       updateUser({
         userId: profile.$id,

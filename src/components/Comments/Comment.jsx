@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { Link } from "react-router-dom";
 
 function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -41,16 +42,19 @@ function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
   return (
     <article className="p-6 mb-6 text-lg bg-white rounded-lg dark:bg-gray-800">
       <footer className="relative flex justify-between items-center mb-2">
-        <div className="flex items-center">
-          <p className="inline-flex items-center mr-3 font-semibold text-lg text-gray-900 dark:text-white">
-            <img
-              className="mr-2 w-6 h-6 rounded-full"
-              src={user.profileImg}
-              alt="profile image"
-            />
-            {user.username}
-          </p>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+        <div className="flex items-center flex-col sm:flex-row">
+          <Link to={`/profile/${user.username}`}>
+            <p className="inline-flex items-center mr-3 text-xl hover:underline text-gray-900 dark:text-white">
+              <img
+                className="mr-2 w-8 h-8 rounded-full"
+                src={user.profileImg}
+                alt="profile image"
+              />
+              {user.username}
+            </p>
+          </Link>
+
+          <p className="text-md text-gray-600 dark:text-gray-400">
             {new Date(comment.$createdAt).toLocaleDateString(undefined, {
               month: "long",
               day: "numeric",
@@ -128,7 +132,9 @@ function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
           </button>
         </div>
       ) : (
-        <p className="dark:text-gray-200 text-gray-900">{currentComment}</p>
+        <p className="dark:text-gray-200 text-gray-900 font-bold">
+          {currentComment}
+        </p>
       )}
     </article>
   );
