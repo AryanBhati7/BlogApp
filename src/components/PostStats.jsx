@@ -18,10 +18,11 @@ function PostStats({ post }) {
   const [saves, setSaves] = useState(savedList);
 
   const checkIfLiked = (likes, userId) => {
-    return likes.includes(userId) ? true : false;
+    return likes && likes.includes(userId) ? true : false;
   };
+
   const checkIfSaved = (saves, postId) => {
-    return saves.includes(postId) ? true : false;
+    return saves && saves.includes(postId) ? true : false;
   };
   const handleLikePost = async (e) => {
     let likesArray = [...likes];
