@@ -23,7 +23,6 @@ import { deletePostAction } from "../features/postSlice";
 Modal.setAppElement("#root");
 
 export default function Post() {
-  a;
   const postfetchingStatus = useSelector((state) => state.posts.loading);
   const { postId } = useParams();
   const navigate = useNavigate();
