@@ -36,8 +36,7 @@ export default function Post() {
     myPosts.find((post) => post.$id === postId);
 
   const creatorInfo = post ? post.creator : undefined;
-  const isAuthor =
-    creatorInfo && creatorInfo.accountId === userData.accountId ? true : false;
+  const isAuthor = post && post.userId === userData.accountId ? true : false;
 
   const deletePost = async () => {
     const actionResult = await dispatch(deletePostAction(post.$id));
