@@ -16,13 +16,12 @@ function Home() {
   const authStatus = useSelector((state) => state.auth.status);
   const isLoading = postsStatus;
 
-  if (authStatus === false) {
-    return <Landingpage />;
-  }
-
   useEffect(() => {
     if (posts.length === 0) dispatch(fetchPublicPosts());
   }, [dispatch]);
+  if (authStatus === false) {
+    return <Landingpage />;
+  }
 
   return (
     <div className="maincontainer overflow-x-hidden flex  px-5 lg:px-20 py-4  w-screen dark:bg-dark-bg bg-background flex-col lg:flex-row md:flex-col sm:flex-col">

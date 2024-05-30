@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
-import { updateUserData } from "../../features/authSlice";
+import { fetchUserInfo, updateUserData } from "../../features/authSlice";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import authService from "../../appwrite/auth";
 import DatePicker from "react-datepicker";
@@ -42,25 +42,30 @@ function EditProfile({ profile }) {
     location: z.string().max(60),
     instaLink: z
       .string()
-      .url()
-      .max(50)
-      .refine((value) => value.includes("instagram.com"), {
+
+      .nullable()
+      .optional()
+      .refine((value) => !value || value.includes("instagram.com"), {
         message: "A valid Instagram URL is required",
       }),
     fbLink: z
       .string()
-      .url()
-      .max(50)
-      .refine((value) => value.includes("facebook.com"), {
+      .nullable()
+      .optional()
+      .refine((value) => !value || value.includes("facebook.com"), {
         message: "A valid Facebook URL is required",
       }),
     twitterLink: z
       .string()
-      .url()
-      .max(50)
-      .refine((value) => value.includes("twitter.com" || "x.com"), {
-        message: "A valid Twitter/X URL is required",
-      }),
+      .nullable()
+      .optional()
+      .refine(
+        (value) =>
+          !value || value.includes("twitter.com") || value.includes("x.com"),
+        {
+          message: "A valid Twitter/X URL is required",
+        }
+      ),
     gender: z.string(),
   });
   const users = useSelector((state) => state.users.users);
@@ -100,7 +105,6 @@ function EditProfile({ profile }) {
 
   const submit = async (data) => {
     const socials = [data.instaLink, data.twitterLink, data.fbLink];
-    console.log(data);
     data.dob = DOB.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
@@ -147,7 +151,7 @@ function EditProfile({ profile }) {
     );
     const newUser = unwrapResult(actionResult);
     if (newUser) {
-      dispatch(updateUserData({ newUser }));
+      dispatch(fetchUserInfo());
       dispatch(fetchUsers());
       navigate(`/profile/${newUser.username}`);
     } else {

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
-import { FaHeart } from "react-icons/fa";
+import React from "react";
+import { FaHeart, FaComments } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
@@ -94,6 +93,14 @@ function PostCard({ post, uploadedBy = true, contentLength = 180 }) {
                   {")"}
                 </span>
               </h2>
+            </div>
+            <div className="mt-4 flex  items-center justify-center gap-2">
+              <IconContext.Provider value={{ size: "1.8em" }}>
+                <FaComments className="text-gray-500 dark:text-gray-200" />
+              </IconContext.Provider>
+              <span className="text-md dark:text-neutral-100 text-gray-900">
+                {post.comments.length}
+              </span>
             </div>
           </div>
         ) : (

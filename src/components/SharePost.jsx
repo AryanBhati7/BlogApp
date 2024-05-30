@@ -6,7 +6,6 @@ import {
   TelegramShareButton,
   WhatsappShareButton,
   RedditShareButton,
-  RedditShareCount,
   RedditIcon,
 } from "react-share";
 

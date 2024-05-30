@@ -14,8 +14,8 @@ function PostStats({ post }) {
   );
 
   const dispatch = useDispatch();
-  const likesList = post.likes.map((user) => user.$id);
-  const savedList = user.saved.map((post) => post.$id);
+  const likesList = post?.likes?.map((user) => user.$id);
+  const savedList = user?.saved?.map((post) => post.$id);
 
   const [likes, setLikes] = useState(likesList);
   const [saves, setSaves] = useState(savedList);

@@ -66,7 +66,6 @@ export const addComment = createAsyncThunk(
   "posts/addComment",
   async ({ userId, postId, comment }) => {
     const newComment = await userService.addComment(userId, postId, comment);
-    console.log(newComment);
     return newComment;
   }
 );
@@ -82,9 +81,8 @@ export const editComment = createAsyncThunk(
 export const deleteComment = createAsyncThunk(
   "posts/deleteComment",
   async (commentId) => {
-    console.log(commentId, "CommnetID delete");
     const DeleteComment = await userService.deleteComment(commentId);
-    console.log(DeleteComment);
+
     if (DeleteComment) return commentId;
   }
 );
@@ -215,7 +213,6 @@ const postSlice = createSlice({
         if (publicPostIndex !== -1) {
           state.publicPosts[publicPostIndex] = post;
         } else if (post.status === "Public") {
-          // If the post is not found and it's a public post, add it to the start of the array
           state.publicPosts = [post, ...state.publicPosts];
         }
 
@@ -224,7 +221,6 @@ const postSlice = createSlice({
         if (myPostIndex !== -1) {
           state.myPosts[myPostIndex] = post;
         } else {
-          // If the post is not found, add it to the start of the array
           state.myPosts = [post, ...state.myPosts];
         }
       })

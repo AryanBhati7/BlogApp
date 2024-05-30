@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import { userService } from "../../appwrite/config";
-import { useDispatch, useSelector } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+
 import {
   addComment,
   deleteComment,
@@ -11,38 +10,20 @@ import {
 } from "../../features/postSlice";
 import CommentLoading from "../Loading/CommentLoading";
 
-function Comments({ userId, postId }) {
-  const publicPosts = useSelector((state) => state.posts.publicPosts);
-  const myPosts = useSelector((state) => state.posts.myPosts);
-  const postFetchingStatus = useSelector((state) => state.posts.loading);
-  const myPostsFetchingStatus = useSelector(
-    (state) => state.posts.myPostsLoading
-  );
-
-  const post =
-    myPosts.find((post) => post.$id === postId) ||
-    publicPosts.find((post) => post.$id === postId);
-  const commentsFromPost = post ? post.comments : [];
-  const [comments, setComments] = useState(commentsFromPost);
+function CommentsSection({ userId, postId, postComments }) {
+  const comments = postComments;
   const dispatch = useDispatch();
 
   const handleAddComment = async (comment) => {
-    const actionResult = dispatch(addComment({ userId, postId, comment }));
-    const newComment = unwrapResult(actionResult);
-    setComments([...comments, newComment]);
+    await dispatch(addComment({ userId, postId, comment }));
   };
 
   const handleDeleteComment = async (commentId) => {
     await dispatch(deleteComment(commentId));
-    setComments(comments.filter((comment) => comment.$id !== commentId));
   };
 
   const handleUpdateComment = async (commentId, comment) => {
-    const actionResult = dispatch(editComment({ commentId, comment }));
-    const updatedComment = unwrapResult(actionResult);
-    setComments(
-      comments.map((c) => (c.$id === commentId ? updatedComment : c))
-    );
+    await dispatch(editComment({ commentId, comment }));
   };
 
   return (
@@ -55,19 +36,23 @@ function Comments({ userId, postId }) {
       <CommentForm onAddComment={handleAddComment} />
       <div className="overflow-hidden">
         {comments.length > 0 &&
-          comments.map((comment) => (
-            <Comment
-              key={comment.$id}
-              comment={comment}
-              userId={userId}
-              user={comment.user}
-              onDeleteComment={handleDeleteComment}
-              onUpdateComment={handleUpdateComment}
-            />
-          ))}
+          comments.map((comment) =>
+            comment ? (
+              <Comment
+                key={comment.$id}
+                comment={comment}
+                userId={userId}
+                user={comment.user}
+                onDeleteComment={handleDeleteComment}
+                onUpdateComment={handleUpdateComment}
+              />
+            ) : (
+              <CommentLoading />
+            )
+          )}
       </div>
     </section>
   );
 }
 
-export default Comments;
+export default CommentsSection;

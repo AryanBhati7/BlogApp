@@ -187,7 +187,7 @@ export class AuthService {
     try {
       this.account.createOAuth2Session(
         OAuthProvider.Google, // provider
-        "https://blogapp07.vercel.app//callback/google", // success (optional)
+        "https://blogapp07.vercel.app//callback", // success (optional)
         "https://blogapp07.vercel.app//login" // failure (optional)
       );
     } catch (error) {

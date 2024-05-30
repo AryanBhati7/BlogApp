@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fileService } from "../appwrite/config";
+import Modal from "react-modal";
 import {
   Button,
   CommentsSection,
@@ -16,7 +17,8 @@ import {
   PostLoading,
   RecentPosts,
 } from "../components/index";
-import { deletePostAction } from "../features/postSlice";
+import { deletePostAction, fetchPost } from "../features/postSlice";
+Modal.setAppElement("#root");
 
 export default function Post() {
   const { postId } = useParams();
@@ -36,14 +38,21 @@ export default function Post() {
     creatorInfo && creatorInfo.accountId === userData.accountId ? true : false;
 
   const deletePost = async () => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      const actionResult = await dispatch(deletePostAction(post.$id));
-      if (actionResult) {
-        await fileService.deleteFile(post.featuredImage);
-        navigate("/");
-      }
+    const actionResult = await dispatch(deletePostAction(post.$id));
+    if (actionResult) {
+      await fileService.deleteFile(post.featuredImage);
+      navigate("/");
     }
   };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  function openModal() {
+    setModalIsOpen(true);
+  }
+
+  function closeModal() {
+    setModalIsOpen(false);
+  }
 
   return post && creatorInfo ? (
     <div className="p-2 mx-auto sm:p-10 md:p-16 dark:bg-dark-bg dark:text-gray-800 w-screen">
@@ -109,8 +118,6 @@ export default function Post() {
               </div>
             </div>
             <div className="flex flex-col  gap-5 justify-between h-full">
-              {/* <button className="flex justify-end "> */}
-
               <SharePost postLink={postUrl} postTitle={post.title} />
 
               <div className="justify-end">
@@ -121,12 +128,44 @@ export default function Post() {
                         Edit
                       </Button>
                     </Link>
+
                     <Button
-                      onClick={deletePost}
+                      onClick={openModal}
                       className=" w-20 px-4 py-2 text-white font-bold rounded bg-red-500 hover:bg-red-700"
                     >
                       Delete
                     </Button>
+                    <Modal
+                      isOpen={modalIsOpen}
+                      onRequestClose={closeModal}
+                      contentLabel="Share Post"
+                      className={
+                        " min-h-screen overflow-hidden overflow-y-hidden bg-transparent flex items-center justify-center"
+                      }
+                      overlayClassName="fixed inset-0 bg-transparent"
+                    >
+                      <div className=" w-full mx-4 p-4 rounded-xl md:w-1/2 lg:w-1/3 text-gray-800 dark:text-neutral-200 dark:bg-dark-bg bg-gray-200 border border-gray-200">
+                        <div className="flex flex-col gap-5">
+                          <p className="mx-auto text-xl font-bold text-gray-800 dark:text-neutral-50">
+                            Are you Sure??
+                          </p>
+                          <div className="flex justify-center items-center gap-6">
+                            <Button
+                              onClick={deletePost}
+                              className="w-20 px-4 py-2 bg-red-500 text-white font-bold rounded hover:bg-red-700"
+                            >
+                              Yes
+                            </Button>
+                            <Button
+                              onClick={closeModal}
+                              className="w-20 px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-700"
+                            >
+                              No
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </Modal>
                   </div>
                 )}
               </div>

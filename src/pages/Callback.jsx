@@ -22,7 +22,7 @@ function Callback() {
     };
 
     fetchData();
-  }, [provider, dispatch, navigate]);
+  }, [dispatch, navigate]);
 
   return <div>Loading...</div>;
 }

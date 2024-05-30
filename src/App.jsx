@@ -4,9 +4,8 @@ import authService from "./appwrite/auth";
 import { login, logout } from "./features/authSlice";
 import { Footer, Header, LoadingSpinner } from "./components/index";
 import { Outlet } from "react-router-dom";
-import { fetchUsers } from "./features/usersSlice";
-
 import { fetchPublicPosts } from "./features/postSlice";
+import { fetchUsers } from "./features/usersSlice";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -17,6 +16,8 @@ function App() {
       .then((userData) => {
         if (userData) {
           dispatch(login({ userData }));
+          dispatch(fetchPublicPosts());
+          dispatch(fetchUsers());
         } else {
           dispatch(logout());
         }

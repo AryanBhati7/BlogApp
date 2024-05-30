@@ -6,20 +6,16 @@ import {
   UserInformation,
   PostCardLoading,
   PostCard,
-  LoadingSpinner,
 } from "../components/index";
 import { fetchMyPosts } from "../features/postSlice";
 
 function Profile() {
-  // const [userInfo, setUserInfo] = useState(null);
   const { username } = useParams();
-  const postsStatus = useSelector((state) => state.posts.loading);
-  const usersStatus = useSelector((state) => state.users.loading);
-  const isLoading = postsStatus || usersStatus;
   const dispatch = useDispatch();
+  const postsStatus = useSelector((state) => state.posts.loading);
+  const isLoading = postsStatus;
   const posts = useSelector((state) => state.posts.myPosts);
   const currentUserInfo = useSelector((state) => state.auth.userData);
-
   const allUsers = useSelector((state) => state.users.users);
   const userInfo = allUsers.find((user) => user.username === username);
 
@@ -28,9 +24,7 @@ function Profile() {
       ? userInfo.accountId === currentUserInfo.accountId
       : false;
   useEffect(() => {
-    if (userInfo) {
-      dispatch(fetchMyPosts(userInfo.accountId));
-    }
+    if (posts.length === 0) dispatch(fetchMyPosts(userInfo.accountId));
   }, []);
 
   return userInfo ? (

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,27 +8,25 @@ import {
   Select,
   RTE,
   FileUploader,
-  LoadingSpinner,
   PostLoading,
 } from "../index";
 import { useDispatch } from "react-redux";
 import { createPostAction, editPost } from "../../features/postSlice";
-import { fileService, postService } from "../../appwrite/config";
+import { fileService } from "../../appwrite/config";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { fetchUsers } from "../../features/usersSlice";
 
 function PostForm({ post }) {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.posts.loading);
-  const { register, handleSubmit, watch, setValue, control, getValues } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        content: post?.content || "",
-        status: post?.status || "Public",
-        tags: post?.tags ? post.tags.map((tag) => tag).join(", ") : " ",
-      },
-    });
+  const { register, handleSubmit, control, getValues } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      content: post?.content || "",
+      status: post?.status || "Public",
+      tags: post?.tags ? post.tags.map((tag) => tag).join(", ") : " ",
+    },
+  });
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);

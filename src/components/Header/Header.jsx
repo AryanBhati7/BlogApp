@@ -1,10 +1,9 @@
-import React from "react";
-import { AvatarImage, Container, Logo, LogoutBtn } from "../index";
+import React, { useState } from "react";
+import { AvatarImage, Logo, LogoutBtn } from "../index";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ThemeToggler from "./ThemeToggler";
-import { useEffect, useState } from "react";
 
 function Header({ loading }) {
   const authStatus = useSelector((state) => state.auth.status);
