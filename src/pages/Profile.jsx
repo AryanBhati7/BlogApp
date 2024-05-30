@@ -24,8 +24,10 @@ function Profile() {
       ? userInfo.accountId === currentUserInfo.accountId
       : false;
   useEffect(() => {
-    if (posts.length === 0) dispatch(fetchMyPosts(userInfo.accountId));
-  }, []);
+    if (userInfo && posts.length === 0) {
+      dispatch(fetchMyPosts(userInfo.accountId));
+    }
+  }, [userInfo, posts, dispatch]);
 
   return userInfo ? (
     <>

@@ -26,13 +26,14 @@ function Login() {
     resolver: zodResolver(schema),
   });
 
-  const loading = useSelector((state) => state.auth.loading);
-
   const login = async (data) => {
     setError("");
     try {
-      await dispatch(authLogin(data));
-      navigate("/");
+      const actionResult = await dispatch(authLogin(data));
+      const userData = unwrapResult(actionResult);
+      if (userData) {
+        navigate("/");
+      }
     } catch (error) {
       setError("root", {
         message: "Login failed. Please check your email and password.",
@@ -49,9 +50,6 @@ function Login() {
       setError(error.message);
     }
   };
-  if (loading) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="flex items-center justify-center w-full ">
