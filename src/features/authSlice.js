@@ -6,14 +6,18 @@ export const fetchUserInfo = createAsyncThunk(
   "auth/fetchUserInfo",
   async () => {
     const data = await authService.getCurrentUser();
+    console.log(data);
     return data;
   }
 );
 
 export const loginAction = createAsyncThunk("auth/login", async (data) => {
   try {
-    const session = await authService.login(data);
-    return session;
+    return authService.login(data).then(async (res) => {
+      const userData = await authService.getUserInfo(res.userId);
+      console.log(userData, "userData");
+      return userData;
+    });
   } catch (error) {
     throw error;
   }

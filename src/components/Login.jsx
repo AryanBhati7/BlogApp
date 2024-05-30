@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginAction as authLogin } from "../features/authSlice";
-import { Button, Input, LoadingSpinner, Logo } from "./index";
-import { useDispatch, useSelector } from "react-redux";
+import { loginAction as authLogin, fetchUserInfo } from "../features/authSlice";
+import { Button, Input, Logo } from "./index";
+import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { unwrapResult } from "@reduxjs/toolkit";
 import "../index.css";
 
 const schema = z.object({
@@ -31,6 +32,7 @@ function Login() {
     try {
       const actionResult = await dispatch(authLogin(data));
       const userData = unwrapResult(actionResult);
+      console.log(userData);
       if (userData) {
         navigate("/");
       }

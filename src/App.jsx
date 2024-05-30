@@ -1,35 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import authService from "./appwrite/auth";
-import { login, logout } from "./features/authSlice";
+import { logout, fetchUserInfo } from "./features/authSlice";
 import { Footer, Header, LoadingSpinner } from "./components/index";
 import { Outlet } from "react-router-dom";
 import { fetchPublicPosts } from "./features/postSlice";
 import { fetchUsers } from "./features/usersSlice";
-
+import { unwrapResult } from "@reduxjs/toolkit";
 function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
-    authService
-      .getCurrentUser()
-      .then((userData) => {
+    const fetchData = async () => {
+      try {
+        const actionResult = await dispatch(fetchUserInfo());
+        const userData = unwrapResult(actionResult);
         if (userData) {
-          dispatch(login({ userData }));
           dispatch(fetchPublicPosts());
           dispatch(fetchUsers());
+          setLoading(false);
         } else {
           dispatch(logout());
         }
-      })
-      .catch((error) => {
-        console.error("Error getting current user:", error);
-      })
-      .finally(() => {
+      } catch (error) {
+        console.error("Failed to fetch user info: ", error);
+        dispatch(logout());
         setLoading(false);
-      });
-  }, []);
+      }
+    };
 
+    fetchData();
+  }, [dispatch]);
   return !loading ? (
     <div className="w-full h-screen block overflow-x-hidden bg-background dark:bg-dark-bg  ">
       <Header loading={loading} />
