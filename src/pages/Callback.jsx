@@ -1,30 +1,36 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { login as authLogin, getGoogleAccInfo } from "../features/authSlice";
-import authService from "../appwrite/auth";
-import { useDispatch } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getGoogleAccInfo } from "../features/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { LoadingSpinner } from "../components";
 
 function Callback() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const loginStatus = useSelector((state) => state.auth.loading);
 
   useEffect(() => {
     const fetchData = async () => {
-      const actionResult = await dispatch(getGoogleAccInfo());
-      const userData = unwrapResult(actionResult);
-      if (userData) {
-        dispatch(authLogin({ userData }));
+      try {
+        await dispatch(getGoogleAccInfo());
         navigate("/");
-      } else {
-        console.log("Error - Google Login");
+      } catch (error) {
+        setError("Google Login Failed Please try again");
       }
     };
 
     fetchData();
   }, [dispatch, navigate]);
 
-  return <div>Loading...</div>;
+  return (
+    <div className="flex items-center justify-center w-full h-screen">
+      <div className="mx-auto w-full max-w-lg bg-dark-bg dark:bg-background rounded-xl p-10 border border-black/10">
+        {error && <p className="text-red-500">{error}</p>}
+        {loginStatus && <LoadingSpinner />}
+      </div>
+    </div>
+  );
 }
 
 export default Callback;
