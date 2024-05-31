@@ -15,9 +15,9 @@ function App() {
         const actionResult = await dispatch(fetchUserInfo());
         const userData = unwrapResult(actionResult);
         if (userData) {
+          setLoading(false);
           dispatch(fetchPublicPosts());
           dispatch(fetchUsers());
-          setLoading(false);
         } else {
           dispatch(logout());
         }

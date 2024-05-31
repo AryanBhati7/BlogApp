@@ -8,8 +8,10 @@ function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
   const [editedComment, setEditedComment] = useState(comment.comment);
   const [currentComment, setCurrentComment] = useState(comment.comment);
   const isAuthor = userId === comment.user.$id;
+  const dropdownButtonClicked = useRef(false);
   const handleDropdownClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
+    dropdownButtonClicked.current = true;
   };
   const handleEditClick = () => {
     setIsEditing(true);
@@ -25,12 +27,15 @@ function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
     setCurrentComment(editedComment);
     setIsEditing(false);
   };
-
   const dropdownRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
+        if (!dropdownButtonClicked.current) {
+          setIsDropdownOpen(false);
+        } else {
+          dropdownButtonClicked.current = false;
+        }
       }
     };
 
@@ -91,7 +96,7 @@ function Comment({ comment, onDeleteComment, onUpdateComment, userId, user }) {
           ref={dropdownRef}
           className={`${
             isDropdownOpen ? "" : "hidden"
-          } z-10 w-32 absolute top-2 right-7 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600`}
+          } z-10 w-18 sm:w-18 md:w-24 lg:w-32 xl:w-32 absolute top-2 right-7 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600`}
         >
           <ul
             className="text-md text-gray-700 dark:text-gray-200"

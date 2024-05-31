@@ -5,7 +5,6 @@ import {
   AuthorsBox,
   AuthorsLoading,
   PostCardLoading,
-  LoadingSpinner,
 } from "../components/index";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPublicPosts } from "../features/postSlice";
