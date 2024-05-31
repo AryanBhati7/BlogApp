@@ -32,7 +32,6 @@ function Login() {
     try {
       const actionResult = await dispatch(authLogin(data));
       const userData = unwrapResult(actionResult);
-      console.log(userData);
       if (userData) {
         navigate("/");
       }
