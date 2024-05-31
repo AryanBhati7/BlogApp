@@ -1,8 +1,6 @@
-# BlogApp
+# BlogApp - Blogging Online is now much easier
 
-## Write Blogs on Various Topics and Start Your Journey as an Impactful Content Creator
-
-Blogging Online is now much easier with the help of **BlogApp**. Write blogs on various topics and start your journey as an impactful Content Creator, exploring your passions, sharing your knowledge and experiences with the world.
+Write blogs on various topics and start your journey as an impactful Content Creator, exploring your passions, sharing your knowledge and experiences with the world.
 
 ## Screenshot 📸
 
