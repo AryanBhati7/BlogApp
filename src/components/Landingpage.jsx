@@ -1,5 +1,5 @@
 import React from "react";
-import heroImg from "../assets/img/hero.png";
+import heroImg from "../assets/img/hero.webp";
 import "../assets/css/landingpage.css";
 import { Link } from "react-router-dom";
 
@@ -12,11 +12,13 @@ function Landingpage() {
             <span className="text-theme-color">Blogging</span> Online is now
             much easier
           </h1>
-          <p className="leading-normal mb-8 text-center lg:text-left text-2.5xl text-primary dark:text-dark-primary">
-            Write Blogs on various topics and start your journey as a impactful{" "}
-            <span className="text-theme-color font-bold">Content Creator</span>,
-            exploring your passions, sharing your knowledge and experiences with
-            the world.
+          <p className="leading-normal mb-8 text-center lg:text-left text-2.5xl text-primary dark:text-dark-primary font-sans">
+            Write Blogs on various topics and start your journey as a impactful
+            <span className="text-theme-color font-bold ml-3">
+              Content Creator
+            </span>
+            , exploring your passions, sharing your knowledge and experiences
+            with the world.
           </p>
           <div className="w-full md:flex items-center justify-center lg:justify-start md:space-x-5">
             <Link to="/signup">

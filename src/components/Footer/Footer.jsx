@@ -1,5 +1,6 @@
 import React from "react";
 import githubLogo from "../../assets/img/github.png";
+import { FaGithub } from "react-icons/fa";
 
 function Footer() {
   return (
@@ -13,7 +14,7 @@ function Footer() {
         >
           <div className="flex gap-3">
             <span className="text-sm">Repo Link : </span>
-            <img src={githubLogo} alt="Github logo" className="h-6 w-6" />
+            <FaGithub className="h-5 w-5" />
           </div>
         </a>
       </div>
