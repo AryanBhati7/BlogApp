@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import conf from "../conf/conf";
 import {
   Client,
@@ -164,7 +165,6 @@ export class AuthService {
 
         [Query.equal("accountId", userId)]
       );
-      console.log(userInfo, "getUserInfo");
       return userInfo.documents[0];
     } catch (error) {
       console.log(error);

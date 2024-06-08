@@ -46,9 +46,6 @@ function Header({ loading }) {
       active: authStatus,
     },
   ];
-  React.useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   return (
     <header className="py-3 shadow bg-background dark:bg-dark-bg">
