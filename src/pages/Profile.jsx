@@ -14,20 +14,17 @@ function Profile() {
   const dispatch = useDispatch();
   const postsStatus = useSelector((state) => state.posts.loading);
   const isLoading = postsStatus;
-  const posts = useSelector((state) => state.posts.myPosts);
+
   const currentUserInfo = useSelector((state) => state.auth.userData);
   const allUsers = useSelector((state) => state.users.users);
   const userInfo = allUsers.find((user) => user.username === username);
 
+  const posts = userInfo.posts;
+  console.log(posts);
   const isUser =
     userInfo && currentUserInfo
       ? userInfo.accountId === currentUserInfo.accountId
       : false;
-  useEffect(() => {
-    if (userInfo && posts.length === 0) {
-      dispatch(fetchMyPosts(userInfo.accountId));
-    }
-  }, [userInfo, posts, dispatch]);
 
   return userInfo ? (
     <>

@@ -1,8 +1,5 @@
 import { PostCard, PostCardLoading } from "../components/index";
-import { fetchMyPosts } from "../features/postSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-
 function Saves() {
   const currentUser = useSelector((state) => state.auth.userData);
   const posts = currentUser.saved;
